@@ -1,4 +1,4 @@
-package com.server.Server.entites;
+package com.sender.entites;
 
 import java.util.Date;
 

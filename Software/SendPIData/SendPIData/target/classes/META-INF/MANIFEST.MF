@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Implementation-Title: SendPIData
 Implementation-Version: 0.0.1-SNAPSHOT
-Built-By: z003wftx
+Built-By: Tiberiu
 Implementation-Vendor-Id: SendPIData
 Class-Path: lib/spring-boot-starter-amqp-1.5.6.RELEASE.jar lib/spring-
  boot-starter-1.5.6.RELEASE.jar lib/spring-boot-1.5.6.RELEASE.jar lib/
@@ -42,7 +42,7 @@ Class-Path: lib/spring-boot-starter-amqp-1.5.6.RELEASE.jar lib/spring-
  go.treelayout.core-1.0.1.jar lib/cglib-nodep-3.1.jar lib/pi4j-core-1.
  0.jar lib/amqp-client-4.2.0.jar lib/jackson-mapper-asl-1.9.13.jar lib
  /jackson-core-asl-1.9.13.jar
-Build-Jdk: 1.8.0_191
+Build-Jdk: 1.8.0_201
 Implementation-URL: http://projects.spring.io/spring-boot/SendPIData/
 Created-By: Maven Integration for Eclipse
 Implementation-Vendor: Pivotal Software, Inc.

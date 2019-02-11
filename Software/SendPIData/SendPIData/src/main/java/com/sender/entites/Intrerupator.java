@@ -1,4 +1,4 @@
-package com.server.Server.entites;
+package com.sender.entites;
 
 
 public class Intrerupator extends Consumator {

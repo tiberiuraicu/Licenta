@@ -1,11 +1,10 @@
-package rabbitMQSenderWithSpring;
+package com.sender.main;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.server.Server.entites.Consumator;
-import com.server.Server.entites.Priza;
-
-import obiecte.CEPConstants;
+import com.sender.constants.CEPConstants;
+import com.sender.entites.Consumator;
+import com.sender.entites.Priza;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -21,14 +20,12 @@ public class DataInfoSender {
 	@Autowired
 	DirectExchange exchange;
 
-	CEPConstants cepConstants = new CEPConstants();
-
 	// JSON to POJO and POJO to JSON
 	ObjectMapper mapper = new ObjectMapper();
 
 	public void sendData() throws JsonProcessingException, InterruptedException {
 
-		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(cepConstants.SENSOR_DATA_CSV))) {
+		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(CEPConstants.SENSOR_DATA_CSV))) {
 			String line = "";
 			// iterate trough every line from CSV
 			while ((line = bufferedReader.readLine()) != null) {
@@ -42,23 +39,21 @@ public class DataInfoSender {
 		}
 	}
 
+	
 	public void sendOneLine(String line) throws JsonProcessingException {
 
-		String[] tableHeadValues = null;
+		String[] tableHeadValues = {"Timestamp","priza1","priza2"};
 
 		String cvsSplitBy = ",";
 
 		String[] lineValues = line.split(cvsSplitBy);
 
-		if (line.contains("Timestamp")) {
-			tableHeadValues = lineValues;
-		} else {
-			for (int i = 1; i <= lineValues.length; i++) {
+		if (!line.contains("Timestamp")) {
+		System.out.println(lineValues.length);
+			for (int i = 1; i < lineValues.length; i++) {
 				sendOutletValues(Double.parseDouble(lineValues[i]), tableHeadValues[i]);
 			}
-
 		}
-
 	}
 
 	private void sendOutletValues(Double powerConsumed, String outletName) throws JsonProcessingException {
@@ -69,11 +64,10 @@ public class DataInfoSender {
 
 		String outletAsJSON = mapper.writeValueAsString(outlet);
 
-		String callBackMessage = (String) this.template.convertSendAndReceive(this.exchange.getName(), "consumator_key",
+		String callBackMessage = (String) this.template.convertSendAndReceive(this.exchange.getName(), CEPConstants.CONSUMATOR_KEY,
 				outletAsJSON.toString().getBytes());
 
 		System.out.println(callBackMessage);
-
+		
 	}
-
 }

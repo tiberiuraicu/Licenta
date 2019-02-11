@@ -1,4 +1,4 @@
-package rabbitMQSenderWithSpring;
+package com.sender.main;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -12,7 +12,7 @@ public class SendMain
   {
     while(true)
     {
-      AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(new Class[] { SpringRabbitMQConfig.class });
+      AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(new Class[] { RabbitConfiguration.class });
       DataInfoSender dataInfoSender= (DataInfoSender)context.getBean("procesorMessage");
       
       dataInfoSender.sendData();

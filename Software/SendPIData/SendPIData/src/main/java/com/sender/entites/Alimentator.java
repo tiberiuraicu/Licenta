@@ -1,4 +1,4 @@
-package com.server.Server.entites;
+package com.sender.entites;
 
 import java.util.List;
 
@@ -6,9 +6,7 @@ import java.util.List;
 
 public class Alimentator {
 
-
 	protected Integer id;
-	
 
 	protected List<Circuit> circuite;
 	
