@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jms="http://www.springframework.org/schema/jms"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd "
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa">
+
+	<!-- Process Spring Annotations -->
+	<context:component-scan base-package="com.server.Server" />
+
+<bean id="eventGenerator"
+		class="com.server.Server.cep.generator.LuminaMiscareEventGenerator" />
+        <bean id="eventGenerator1"
+		class="com.server.Server.cep.generator.PrizaNefolositaEventGenerator" />
+         <bean id="eventGenerator2"
+		class="com.server.Server.cep.generator.AdaugaLaConsumEventGenerator" />
+<jpa:repositories base-package="com.server.Server.database.repositories"/>
+
+</beans>
