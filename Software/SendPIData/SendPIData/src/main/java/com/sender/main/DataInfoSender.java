@@ -2,9 +2,9 @@ package com.sender.main;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sender.constants.CEPConstants;
-import com.sender.entites.Consumator;
-import com.sender.entites.Priza;
+import com.sender.constants.Constants;
+import com.sender.entites.Consumer;
+import com.sender.entites.Outlet;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -25,7 +25,7 @@ public class DataInfoSender {
 
 	public void sendData() throws JsonProcessingException, InterruptedException {
 
-		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(CEPConstants.SENSOR_DATA_CSV))) {
+		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(Constants.SENSOR_DATA_CSV))) {
 			String line = "";
 			// iterate trough every line from CSV
 			while ((line = bufferedReader.readLine()) != null) {
@@ -42,7 +42,7 @@ public class DataInfoSender {
 	
 	public void sendOneLine(String line) throws JsonProcessingException {
 
-		String[] tableHeadValues = {"Timestamp","priza1","priza2"};
+		String[] tableHeadValues = {"Timestamp","outlet1","outlet1"};
 
 		String cvsSplitBy = ",";
 
@@ -58,13 +58,13 @@ public class DataInfoSender {
 
 	private void sendOutletValues(Double powerConsumed, String outletName) throws JsonProcessingException {
 
-		Consumator outlet = new Priza();
-		outlet.setNume(outletName);
-		outlet.setPutereConsumata(powerConsumed);
+		Consumer outlet = new Outlet();
+		outlet.setName(outletName);
+		outlet.setPowerConsumed(powerConsumed);
 
 		String outletAsJSON = mapper.writeValueAsString(outlet);
 
-		String callBackMessage = (String) this.template.convertSendAndReceive(this.exchange.getName(), CEPConstants.CONSUMATOR_KEY,
+		String callBackMessage = (String) this.template.convertSendAndReceive(this.exchange.getName(), "consumer_key",
 				outletAsJSON.toString().getBytes());
 
 		System.out.println(callBackMessage);

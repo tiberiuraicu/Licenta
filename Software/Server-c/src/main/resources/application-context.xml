@@ -8,14 +8,14 @@
 	xmlns:jpa="http://www.springframework.org/schema/data/jpa">
 
 	<!-- Process Spring Annotations -->
-	<context:component-scan base-package="com.server.Server" />
+	<context:component-scan base-package="com.server" />
 
 <bean id="eventGenerator"
-		class="com.server.Server.cep.generator.LuminaMiscareEventGenerator" />
+		class="com.server.cep.generator.LuminaMiscareEventGenerator" />
         <bean id="eventGenerator1"
-		class="com.server.Server.cep.generator.PrizaNefolositaEventGenerator" />
+		class="com.server.cep.generator.PrizaNefolositaEventGenerator" />
          <bean id="eventGenerator2"
-		class="com.server.Server.cep.generator.AdaugaLaConsumEventGenerator" />
-<jpa:repositories base-package="com.server.Server.database.repositories"/>
+		class="com.server.cep.generator.AdaugaLaConsumEventGenerator" />
+
 
 </beans>
