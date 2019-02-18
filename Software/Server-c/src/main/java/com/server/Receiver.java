@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.cep.handler.AdaugaLaConsumEventHandler;
 import com.server.entites.Consumer;
 import com.server.entites.Outlet;
+import com.server.entites.Switch;
 
 @Component
 public class Receiver {
@@ -16,27 +17,33 @@ public class Receiver {
 	private AdaugaLaConsumEventHandler adaugaLaConsumEventHandler;
 
 	ObjectMapper mapper = new ObjectMapper();
+
 	final static Logger logger = Logger.getLogger(Receiver.class);
 
 	@RabbitListener(queues = "Consumer")
-	public String procesorDataReceiver(byte[] body) throws Exception {
+	public String consumerDataReceiver(byte[] body) throws Exception {
 		try {
 
-			String procesorMessage = new String(body, "UTF-8");
+			String consumerMessage = new String(body, "UTF-8");
 
+			if (consumerMessage.contains("outlet")) {
 
-			Consumer outlet = mapper.readValue(procesorMessage, Outlet.class);
-			outlet.setState(1);
+				Consumer outlet = mapper.readValue(consumerMessage, Outlet.class);
 
-			adaugaLaConsumEventHandler.handle(outlet);
+				adaugaLaConsumEventHandler.handle(outlet);
 
-			
+			}
+			if (consumerMessage.contains("switch")) {
+
+				Consumer switcher = mapper.readValue(consumerMessage, Switch.class);
+
+				adaugaLaConsumEventHandler.handle(switcher);
+
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "merge";
+		return "Consumer message received.";
 	}
-
-	
 
 }
