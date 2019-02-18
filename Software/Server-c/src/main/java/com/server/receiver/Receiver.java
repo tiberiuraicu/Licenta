@@ -1,4 +1,5 @@
-package com.server;
+package com.server.receiver;
+
 
 import org.apache.log4j.Logger;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

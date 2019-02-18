@@ -1,4 +1,5 @@
-package com.server;
+package com.server.receiver;
+
 
 
 import org.apache.log4j.Logger;
@@ -75,7 +76,4 @@ public class ReceiverConfiguration {
 			return new Receiver();
 		}
 		
-
-	
-
 }
