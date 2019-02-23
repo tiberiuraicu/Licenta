@@ -16,8 +16,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import com.server.cep.processing.FnctiiAjutor;
+
+
 @Configuration
-@ComponentScan(basePackages="com.server.Server")
+@ComponentScan(basePackages="com.server")
 @PropertySource("classpath:config.properties")
 public class ReceiverConfiguration {
 	@Value("${factory.host}")
@@ -32,6 +35,10 @@ public class ReceiverConfiguration {
 	String queueConsumer;
 	@Value("${consumer.key}")
 	String consumerKey;
+	@Value("${queue.sensor}")
+	String queueSensor;
+	@Value("${sensor.key}")
+	String sensorKey;
 
 	final static Logger logger = Logger.getLogger(ReceiverConfiguration.class);
 
@@ -58,6 +65,11 @@ public class ReceiverConfiguration {
 		public Queue queueConsumer() {
 			return new Queue(queueConsumer);
 		}
+		@Bean
+		@Qualifier("queueSensor")
+		public Queue queueSensor() {
+			return new Queue(queueSensor);
+		}
 
 		
 		@Bean
@@ -70,10 +82,20 @@ public class ReceiverConfiguration {
 		public Binding bindingConsumator(DirectExchange exchange, Queue queueConsumer) {
 			return BindingBuilder.bind(queueConsumer).to(exchange).with(consumerKey);
 		}
+		
+		@Bean
+		public Binding bindingSensor(DirectExchange exchange, Queue queueSensor) {
+			return BindingBuilder.bind(queueSensor).to(exchange).with(sensorKey);
+		}
 
 		@Bean
 		public Receiver receiver() {
 			return new Receiver();
 		}
+		@Bean
+		public FnctiiAjutor fnctiiAjutor() {
+			return new FnctiiAjutor();
+		}
+		
 		
 }

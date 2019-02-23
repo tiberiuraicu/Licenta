@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sender.constants.Constants;
 import com.sender.entites.Consumer;
 import com.sender.entites.Outlet;
+import com.sender.entites.Sensor;
 import com.sender.entites.Switch;
 
 import java.io.BufferedReader;
@@ -26,37 +27,40 @@ public class DataInfoSender {
 	// JSON to POJO and POJO to JSON
 	ObjectMapper mapper = new ObjectMapper();
 
+	String[] tableHeadValues;
+
 	public void sendData() throws JsonProcessingException, InterruptedException {
 
+		String cvsSplitBy = ",";
+
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(Constants.SENSOR_DATA_CSV))) {
+
 			String line = "";
 			// iterate trough every line from CSV
 			while ((line = bufferedReader.readLine()) != null) {
-				// send data from sensors at a specified timestamp
-				sendOneLine(line);
-				// send every 0.5s
-				Thread.sleep(500);
+				String[] lineValues = line.split(cvsSplitBy);
+				if (lineValues[0].equals("name"))
+					tableHeadValues = lineValues;
+				if (lineValues[0].equals("values"))
+					sendOneLine(lineValues);
+				// send every 1s
+				Thread.sleep(1000);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void sendOneLine(String line) throws JsonProcessingException {
+	public void sendOneLine(String[] lineValues) throws JsonProcessingException {
 
-		String[] tableHeadValues = { "outlet1", "outlet1", "outlet3", "outlet4", "switch1", "switch2" };
-
-		String cvsSplitBy = ",";
-
-		String[] lineValues = line.split(cvsSplitBy);
-
-		System.out.println(lineValues.length);
-		if (!line.contains("outlet1"))
-			for (int i = 0; i < lineValues.length; i++) {
-				if (i <= 3)
+			for (int i = 1; i <lineValues.length; i++) {
+				System.out.println(tableHeadValues[i]);
+				if (tableHeadValues[i].contains("outlet"))
 					sendOutletValues(Double.parseDouble(lineValues[i]), tableHeadValues[i]);
-				else if (i > 3 && i <= 5)
+				else if (tableHeadValues[i].contains("switch"))
 					sendSwitchValues(Double.parseDouble(lineValues[i]), tableHeadValues[i]);
+				else if(tableHeadValues[i].contains("sensor"))
+					sendSensorValues(lineValues[i], tableHeadValues[i]);
 			}
 
 	}
@@ -85,11 +89,27 @@ public class DataInfoSender {
 		switcher.setPowerConsumed(powerConsumed);
 		switcher.setTimestamp(new Date());
 		switcher.setState(1);
-		
+
 		String switchAsJSON = mapper.writeValueAsString(switcher);
 
 		String callBackMessage = (String) this.template.convertSendAndReceive(this.exchange.getName(),
 				Constants.SWITCH_KEY, switchAsJSON.toString().getBytes());
+
+		System.out.println(callBackMessage);
+
+	}
+	private void sendSensorValues(String motionDetected, String sensorName) throws JsonProcessingException {
+
+		Sensor sensor = new Sensor();
+		sensor.setName(sensorName);
+		sensor.setTimestamp(new Date());
+		sensor.setState(Integer.parseInt(motionDetected));
+		sensor.setType("movement");
+
+		String sensorAsJSON = mapper.writeValueAsString(sensor);
+
+		String callBackMessage = (String) this.template.convertSendAndReceive(this.exchange.getName(),
+				Constants.SENSOR_KEY, sensorAsJSON.toString().getBytes());
 
 		System.out.println(callBackMessage);
 

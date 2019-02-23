@@ -20,18 +20,20 @@ public class Sensor {
 	protected Integer id;
 
 	protected String name;
-
+	
+	protected String type;
+	
 	protected int state;
 
 	protected Date timestamp;
 
-	protected String loaction;
+	protected String location;
 
 	protected String circuit;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "device_id")
-	private Device device;
+	protected Device device;
 	
 	public Sensor() {}
 
@@ -41,14 +43,6 @@ public class Sensor {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public String getNume() {
-		return name;
-	}
-
-	public void setNume(String nume) {
-		this.name = nume;
 	}
 	
 	public String getCircuit() {
@@ -67,6 +61,14 @@ public class Sensor {
 		this.name = name;
 	}
 
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public int getState() {
 		return state;
 	}
@@ -83,12 +85,12 @@ public class Sensor {
 		this.timestamp = timestamp;
 	}
 
-	public String getLoaction() {
-		return loaction;
+	public String getLocation() {
+		return location;
 	}
 
-	public void setLoaction(String loaction) {
-		this.loaction = loaction;
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	public Device getDevice() {
@@ -98,4 +100,11 @@ public class Sensor {
 	public void setDevice(Device device) {
 		this.device = device;
 	}
+
+	@Override
+	public String toString() {
+		return "Sensor [id=" + id + ", name=" + name + ", type=" + type + ", state=" + state + ", timestamp="
+				+ timestamp + ", location=" + location + "]";
+	}
+	
 }

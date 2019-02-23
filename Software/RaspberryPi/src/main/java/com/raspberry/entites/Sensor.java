@@ -8,6 +8,8 @@ public class Sensor {
 
 	protected String name;
 
+	protected String type;
+	
 	protected int state;
 
 	protected Date timestamp;
@@ -38,6 +40,14 @@ public class Sensor {
 
 	public void setState(int state) {
 		this.state = state;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public Date getTimestamp() {

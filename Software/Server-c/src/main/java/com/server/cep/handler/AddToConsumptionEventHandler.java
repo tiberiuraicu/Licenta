@@ -8,47 +8,45 @@ import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.EPStatement;
-import com.server.cep.subscriber.AdaugaLaCosnumSubscriber;
+import com.server.cep.subscriber.AddToConsumptionSubscriber;
 import com.server.entites.Consumer;
 
 @Component
 @Scope(value = "singleton")
-public class AdaugaLaConsumEventHandler implements InitializingBean {
+public class AddToConsumptionEventHandler implements InitializingBean {
 
 	private EPServiceProvider epService;
-	private EPStatement luminaMiscareStatement;
-
+	private EPStatement addToConsumptionStatement;
 
 	@Autowired
-	private AdaugaLaCosnumSubscriber adaugaLaCosnumSubscriber;
+	private AddToConsumptionSubscriber addToConsumptionSubscriber;
 
 	public void initService() {
-
+		
 		Configuration config = new Configuration();
+		
 		config.addEventTypeAutoName("com.server.entites");
+		
 		epService = EPServiceProviderManager.getDefaultProvider(config);
-		createPrizaNefolositaCheckExpression();
+		
+		createAddToConsumptionCheckExpression();
 	}
 
-	private void createPrizaNefolositaCheckExpression() {
-
-		luminaMiscareStatement = epService.getEPAdministrator().createEPL(adaugaLaCosnumSubscriber.getStatement());
-		luminaMiscareStatement.setSubscriber(adaugaLaCosnumSubscriber);
+	private void createAddToConsumptionCheckExpression() {
 		
+		addToConsumptionStatement = epService.getEPAdministrator().createEPL(addToConsumptionSubscriber.getStatement());
 		
+		addToConsumptionStatement.setSubscriber(addToConsumptionSubscriber);
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-
+		
 		initService();
 	}
 
-	public void handle(Consumer consumator) {
-
-		epService.getEPRuntime().sendEvent(consumator);
+	public void handle(Consumer consumer) {
 		
-
+		epService.getEPRuntime().sendEvent(consumer);
 	}
-
 }

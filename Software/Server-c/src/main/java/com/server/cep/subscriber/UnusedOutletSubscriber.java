@@ -7,7 +7,7 @@ import com.server.entites.Outlet;
 
 
 @Component
-public class PrizaNefolositaSubscriber {
+public class UnusedOutletSubscriber {
 
 	public String getStatement() {
 		 String crtiticalEventExpression =" select avg(outlet.powerConsumed) as p, avg(outlet.state) as o from Outlet.win:time_batch(1 sec) as outlet having"

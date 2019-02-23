@@ -7,9 +7,11 @@ import java.util.Vector;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.server.database.repositories.AlimentatorRepository;
-import com.server.database.repositories.ConsumatorRepository;
+import com.server.database.repositories.PowerSourceRepository;
+import com.server.database.repositories.SensorRepository;
+import com.server.database.repositories.ConsumerRepository;
 import com.server.entites.PowerSource;
+import com.server.entites.Sensor;
 import com.server.entites.Circuit;
 import com.server.entites.Consumer;
 import com.server.entites.Switch;
@@ -19,9 +21,11 @@ import com.server.entites.Outlet;
 public class FnctiiAjutor {
 
 	@Autowired
-	AlimentatorRepository alimentatorRepository;
+	PowerSourceRepository alimentatorRepository;
 	@Autowired
-	ConsumatorRepository consumatorRepository;
+	ConsumerRepository consumatorRepository;
+	@Autowired
+	SensorRepository sensorRepository;
 
 	public Circuit getCircuit() {
 		return null;
@@ -36,30 +40,43 @@ public class FnctiiAjutor {
 		Consumer unu = new Outlet();
 		unu.setPowerConsumed(0.2);
 		unu.setState(1);
-		unu.setName("outletOne");
+		unu.setName("outlet1");
 		Consumer doi = new Outlet();
 		doi.setPowerConsumed(52.6);
 		doi.setState(1);
-		doi.setName("outletTwo");
+		doi.setName("outlet2");
 		Consumer trei = new Outlet();
 		trei.setPowerConsumed(58.6);
 		trei.setState(1);
-		trei.setName("p3");
+		trei.setName("outlet3");
 
-		Consumer patru = new Switch();
+		Consumer patru = new Outlet();
 		patru.setPowerConsumed(0.2);
 		patru.setState(1);
-		patru.setName("i1");
+		patru.setName("outlet4");
+
 		Consumer cinci = new Switch();
 		cinci.setPowerConsumed(55.6);
 		cinci.setState(1);
-		cinci.setName("i2");
+		cinci.setName("switch1");
+		cinci.setLocation("bathroom");
 		
 		Consumer sase = new Switch();
 		sase.setPowerConsumed(58.6);
 		sase.setState(1);
-		sase.setName("i3");
-		
+		sase.setName("switch2");
+		sase.setLocation("lobby");
+
+		Sensor sensor1 = new Sensor();
+		sensor1.setName("sensor1");
+		sensor1.setLocation("lobby");
+
+		Sensor sensor2 = new Sensor();
+		sensor2.setName("sensor2");
+		sensor2.setLocation("bathroom");
+
+		sensorRepository.save(sensor1);
+		sensorRepository.save(sensor2);
 
 		consumatori1.add(unu);
 		consumatori1.add(doi);
@@ -83,34 +100,33 @@ public class FnctiiAjutor {
 		c3.setConsumers(consumatori3);
 		c3.setPowerSource(alimentator);
 		c3.setPowerConsumed(calculateCircuitPowerConsumption(c3));
-		
+
 		sase.setCircuit(c3);
 		cinci.setCircuit(c3);
 		patru.setCircuit(c2);
 		trei.setCircuit(c2);
 		doi.setCircuit(c1);
 		unu.setCircuit(c1);
-		
 
 		c1.setPowerSource(alimentator);
 		c2.setPowerSource(alimentator);
 		c3.setPowerSource(alimentator);
-		
+
 		circuite.add(c1);
 		circuite.add(c2);
 		circuite.add(c3);
 
-		
 		alimentator.setCircuits(circuite);
 
 		return alimentator;
 
 	}
+
 	public Double calculateCircuitPowerConsumption(Circuit circuit) {
 		Double putereConsumata = 0.0;
-		List<Consumer> consumatori=circuit.getConsumers();
-		for(Consumer consumator :consumatori)
-			putereConsumata+=consumator.getPowerConsumed();
+		List<Consumer> consumatori = circuit.getConsumers();
+		for (Consumer consumator : consumatori)
+			putereConsumata += consumator.getPowerConsumed();
 		return putereConsumata;
 	}
 
@@ -121,7 +137,7 @@ public class FnctiiAjutor {
 		double putereGenerata = panouSolar.getPutereGenerata();
 		// calculeaza noua putere consumata de circuitele alimentate la panou
 		double putereConsumata = calculeazaPutereConsumata(panouSolar.getCircuits());
-System.out.println("putere consumata"+putereConsumata);
+
 		if (putereGenerata > putereConsumata) {
 			// informeaza frontend ca a fost marat consumul
 		} else if (putereGenerata < putereConsumata) {
@@ -182,8 +198,8 @@ System.out.println("putere consumata"+putereConsumata);
 //			 
 //			 }
 	}
-	
-   //de modificat
+
+	// de modificat
 	public List<List<Circuit>> getAllSubsets(List<Circuit> input) {
 		int allMasks = 1 << input.size();
 		List<List<Circuit>> output = new ArrayList<List<Circuit>>();

@@ -1,22 +1,34 @@
 package com.server.receiver;
 
-
 import org.apache.log4j.Logger;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.server.cep.handler.AdaugaLaConsumEventHandler;
+import com.server.cep.handler.AddToConsumptionEventHandler;
+import com.server.cep.handler.LightAndMovementEventHandler;
+import com.server.database.repositories.ConsumerRepository;
+import com.server.database.repositories.SensorRepository;
 import com.server.entites.Consumer;
 import com.server.entites.Outlet;
+import com.server.entites.Sensor;
 import com.server.entites.Switch;
 
 @Component
 public class Receiver {
 
 	@Autowired
-	private AdaugaLaConsumEventHandler adaugaLaConsumEventHandler;
+	private AddToConsumptionEventHandler addToConsumptionEventHandler;
 
+	@Autowired
+	private LightAndMovementEventHandler lightAndMovementEventHandler;
+	
+	@Autowired
+    private SensorRepository sensorRepository;
+	
+	@Autowired
+	ConsumerRepository consumerRepository;
+	
 	ObjectMapper mapper = new ObjectMapper();
 
 	final static Logger logger = Logger.getLogger(Receiver.class);
@@ -31,20 +43,52 @@ public class Receiver {
 
 				Consumer outlet = mapper.readValue(consumerMessage, Outlet.class);
 
-				adaugaLaConsumEventHandler.handle(outlet);
+				addToConsumptionEventHandler.handle(outlet);
 
 			}
 			if (consumerMessage.contains("switch")) {
 
-				Consumer switcher = mapper.readValue(consumerMessage, Switch.class);
+				Consumer switcherForConsumptionAdding = mapper.readValue(consumerMessage, Switch.class);
 
-				adaugaLaConsumEventHandler.handle(switcher);
+				
+				
+				Switch switcherForLightOpenTesting=(Switch) consumerRepository.getConsumerByName(switcherForConsumptionAdding.getName());
+
+				
+				
+				switcherForConsumptionAdding.setLocation(switcherForLightOpenTesting.getLocation());
+				
+				addToConsumptionEventHandler.handle(switcherForConsumptionAdding);
 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return "Consumer message received.";
+	}
+
+	@RabbitListener(queues = "Sensor")
+	public String sensorDataReceiver(byte[] body) throws Exception {
+		try {
+
+			String sensorMessage = new String(body, "UTF-8");
+
+			if (sensorMessage.contains("movement")) {
+				
+				Sensor sensor = mapper.readValue(sensorMessage, Sensor.class);
+				
+				Sensor sensorFromDB= sensorRepository.getSensorByName(sensor.getName());
+			
+				sensor.setLocation(sensorFromDB.getLocation());
+				
+				lightAndMovementEventHandler.handle(sensor);
+				
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "Sensor message received.";
 	}
 
 }

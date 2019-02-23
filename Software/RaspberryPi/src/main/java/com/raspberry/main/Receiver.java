@@ -26,7 +26,7 @@ public class Receiver {
 			String outletData = new String(body, "UTF-8");
 
 			// processes and sends data to server
-			dataInfoSender.sendData(outletData);
+			dataInfoSender.sendConsumerData(outletData);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -42,7 +42,7 @@ public class Receiver {
 			String switchData = new String(body, "UTF-8");
 
 			// processes and sends data to server
-			dataInfoSender.sendData(switchData);
+			dataInfoSender.sendConsumerData(switchData);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -50,16 +50,16 @@ public class Receiver {
 		return "Switch message has been received.";
 	}
 
-	// de implementat
+	
 	//listening for sensor data
 	@RabbitListener(queues = "queue_sensor")
 	public String sensorDataReceiver(byte[] body) throws Exception {
 		try {
 			// change byte -> String
-			String switchData = new String(body, "UTF-8");
+			String sensorData = new String(body, "UTF-8");
 
 			// processes and sends data to server
-			dataInfoSender.sendData(switchData);
+			dataInfoSender.sendSensorData(sensorData);
 
 		} catch (Exception e) {
 			e.printStackTrace();

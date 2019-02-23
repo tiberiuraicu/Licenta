@@ -1,7 +1,6 @@
 package com.server.entites;
 
 import java.util.Date;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Consumer {
@@ -23,6 +21,8 @@ public class Consumer {
 	protected Integer deviceId;
 
 	protected double powerConsumed;
+	
+	protected String location;
 
 	protected Date timestamp;
 
@@ -75,6 +75,14 @@ public class Consumer {
 
 	public void setPowerConsumed(double powerConsumed) {
 		this.powerConsumed = powerConsumed;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	public Date getTimestamp() {

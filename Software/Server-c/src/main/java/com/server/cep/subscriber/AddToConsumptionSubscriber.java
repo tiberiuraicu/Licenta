@@ -7,7 +7,7 @@ import com.server.entites.Consumer;
 
 
 @Component
-public class AdaugaLaCosnumSubscriber {
+public class AddToConsumptionSubscriber {
 FnctiiAjutor fnctiiAjutor= new FnctiiAjutor();
 
 public String getStatement() {
@@ -36,6 +36,7 @@ return crtiticalEventExpression;
 	 */
 	public void update(Map<String, Consumer> eventMap) {
 		System.out.println(eventMap.toString());
+		//System.out.println("-----------------------------------");
 	
 //	
 //		Consumator a = eventMap.get("a");

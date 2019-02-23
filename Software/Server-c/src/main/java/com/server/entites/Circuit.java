@@ -36,9 +36,6 @@ public class Circuit {
 
 	public Circuit() {
 		super();
-		this.consumers = consumers;
-		this.powerConsumed = powerConsumed;
-		this.powerSource = powerSource;
 	}
 
 	public Integer getId() {

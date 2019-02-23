@@ -11,6 +11,8 @@ public class Consumer {
 	protected double powerConsumed;
 
 	protected Date timestamp;
+	
+	protected String location;
 
 	protected int state;// aprins/inchis
 
@@ -55,6 +57,14 @@ public class Consumer {
 
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	public int getState() {

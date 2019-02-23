@@ -4,23 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import com.server.cep.processing.FnctiiAjutor;
-import com.server.database.repositories.AlimentatorRepository;
-import com.server.database.repositories.ConsumatorRepository;
-import com.server.database.repositories.DispozitivRepository;
-import com.server.database.repositories.NotificareRepository;
-import com.server.database.repositories.UserRepository;
-
+import com.server.database.repositories.PowerSourceRepository;
 
 @SpringBootApplication
-
+@EnableScheduling
+@EnableJpaRepositories
 public class ServerApplication implements CommandLineRunner {
 
 	
 	@Autowired
-	private AlimentatorRepository alimentatorRepository;
+	private PowerSourceRepository alimentatorRepository;
 	
+	@Autowired
+	private FnctiiAjutor fnctiiAjutor;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ServerApplication.class, args);
@@ -29,8 +28,6 @@ public class ServerApplication implements CommandLineRunner {
 	@Override
 	public void run(String... strings) throws Exception {	
 	
-		
-		FnctiiAjutor fnctiiAjutor = new FnctiiAjutor();
 		alimentatorRepository.save(fnctiiAjutor.getAlimentator());
 		
 	}

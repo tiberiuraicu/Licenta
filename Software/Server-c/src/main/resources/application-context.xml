@@ -9,11 +9,3 @@
 
 	<!-- Process Spring Annotations -->
 	<context:component-scan base-package="com.server"/>
-
-<bean id="eventGenerator"
-		class="com.server.cep.generator.LuminaMiscareEventGenerator" />
-        <bean id="eventGenerator1"
-		class="com.server.cep.generator.PrizaNefolositaEventGenerator" />
-         <bean id="eventGenerator2"
-		class="com.server.cep.generator.AdaugaLaConsumEventGenerator" />
-</beans>

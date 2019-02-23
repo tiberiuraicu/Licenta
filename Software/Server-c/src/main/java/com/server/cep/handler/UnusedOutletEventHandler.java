@@ -2,40 +2,40 @@ package com.server.cep.handler;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.EPStatement;
-import com.server.cep.subscriber.PrizaNefolositaSubscriber;
-import com.server.entites.Outlet;
+import com.server.cep.subscriber.UnusedOutletSubscriber;
 
 @Component
 @Scope(value = "singleton")
-public class PrizaNefolositaEventHandler implements InitializingBean {
+public class UnusedOutletEventHandler implements InitializingBean {
 
 	private EPServiceProvider epService;
-	private EPStatement luminaMiscareStatement;
-
+	private EPStatement unusedOutletStatement;
 
 	@Autowired
-
-	private PrizaNefolositaSubscriber prizaNefolositaSubscriber;
+	private UnusedOutletSubscriber unusedOutletSubscriber;
 
 	public void initService() {
 
 		Configuration config = new Configuration();
+		
 		config.addEventTypeAutoName("com.server.entites");
+		
 		epService = EPServiceProviderManager.getDefaultProvider(config);
-		createPrizaNefolositaCheckExpression();
+		
+		createUnusedOutletCheckExpression();
 	}
 
-	private void createPrizaNefolositaCheckExpression() {
+	private void createUnusedOutletCheckExpression() {
 
-		luminaMiscareStatement = epService.getEPAdministrator().createEPL(prizaNefolositaSubscriber.getStatement());
-		luminaMiscareStatement.setSubscriber(prizaNefolositaSubscriber);
+		unusedOutletStatement = epService.getEPAdministrator().createEPL(unusedOutletSubscriber.getStatement());
+		
+		unusedOutletStatement.setSubscriber(unusedOutletSubscriber);
 	}
 
 	@Override
@@ -44,11 +44,5 @@ public class PrizaNefolositaEventHandler implements InitializingBean {
 		initService();
 	}
 
-	public void handle(Outlet prizaEvent) {
-
-		// LOG.debug(m.toString());
-		epService.getEPRuntime().sendEvent(prizaEvent);
-
-	}
-
+	
 }
