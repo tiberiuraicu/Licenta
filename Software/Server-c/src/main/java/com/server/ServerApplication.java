@@ -6,7 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import com.server.cep.processing.FnctiiAjutor;
+import com.server.cep.processing.FunctiiAjutor;
 import com.server.database.repositories.PowerSourceRepository;
 
 @SpringBootApplication
@@ -19,7 +19,7 @@ public class ServerApplication implements CommandLineRunner {
 	private PowerSourceRepository alimentatorRepository;
 	
 	@Autowired
-	private FnctiiAjutor fnctiiAjutor;
+	private FunctiiAjutor fnctiiAjutor;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ServerApplication.class, args);

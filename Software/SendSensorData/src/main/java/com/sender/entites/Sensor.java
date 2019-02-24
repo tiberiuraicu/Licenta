@@ -11,6 +11,8 @@ public class Sensor {
 	protected String type;
 
 	protected int state;
+	
+	protected int triggered;
 
 	protected Date timestamp;
 
@@ -40,6 +42,14 @@ public class Sensor {
 
 	public void setState(int state) {
 		this.state = state;
+	}
+
+	public int getTriggered() {
+		return triggered;
+	}
+
+	public void setTriggered(int triggered) {
+		this.triggered = triggered;
 	}
 
 	public String getType() {

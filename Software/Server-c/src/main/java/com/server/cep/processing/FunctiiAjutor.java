@@ -18,7 +18,7 @@ import com.server.entites.Switch;
 import com.server.entites.SolarPanel;
 import com.server.entites.Outlet;
 
-public class FnctiiAjutor {
+public class FunctiiAjutor {
 
 	@Autowired
 	PowerSourceRepository alimentatorRepository;

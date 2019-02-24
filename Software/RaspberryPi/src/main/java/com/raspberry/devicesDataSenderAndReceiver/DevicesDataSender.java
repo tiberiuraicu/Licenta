@@ -1,4 +1,4 @@
-package com.raspberry.main;
+package com.raspberry.devicesDataSenderAndReceiver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.raspberry.constants.Constants;
@@ -9,13 +9,15 @@ import java.io.IOException;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public class DataInfoSender {
+@Component
+public class DevicesDataSender {
 
 	@Autowired
 	RabbitTemplate template;
 	@Autowired
-	DirectExchange senderExchange;
+	DirectExchange serverExchange;
 
 	// JSON to POJO and POJO to JSON
 	ObjectMapper mapper = new ObjectMapper();
@@ -29,7 +31,7 @@ public class DataInfoSender {
 		String consumerAsJSON = mapper.writeValueAsString(consumer);
 
 		//send the JSON to server
-		String callBackMessage = (String) this.template.convertSendAndReceive(senderExchange.getName(),
+		String callBackMessage = (String) this.template.convertSendAndReceive(serverExchange.getName(),
 				Constants.CONSUMER_KEY, consumerAsJSON.toString().getBytes());
 
 		System.out.println(callBackMessage + "de la server");
@@ -43,7 +45,7 @@ public class DataInfoSender {
 		String sensorAsJSON = mapper.writeValueAsString(sensor);
 
 		//send the JSON to server
-		String callBackMessage = (String) this.template.convertSendAndReceive(senderExchange.getName(),
+		String callBackMessage = (String) this.template.convertSendAndReceive(serverExchange.getName(),
 				Constants.SENSOR_KEY, sensorAsJSON.toString().getBytes());
 
 		System.out.println(callBackMessage + "de la server");

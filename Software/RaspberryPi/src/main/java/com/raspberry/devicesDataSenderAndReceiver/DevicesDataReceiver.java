@@ -1,4 +1,4 @@
-package com.raspberry.main;
+package com.raspberry.devicesDataSenderAndReceiver;
 
 import org.apache.log4j.Logger;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -7,16 +7,16 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
-public class Receiver {
+public class DevicesDataReceiver {
 
 	@Autowired
-	DataInfoSender dataInfoSender;
+	DevicesDataSender dataInfoSender;
 
 	// for string -> object
 	ObjectMapper mapper = new ObjectMapper();
 
 	// logging
-	final static Logger logger = Logger.getLogger(Receiver.class);
+	final static Logger logger = Logger.getLogger(DevicesDataReceiver.class);
 
 	//listening for the outlet data
 	@RabbitListener(queues = "queue_outlet")

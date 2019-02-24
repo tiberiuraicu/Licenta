@@ -1,6 +1,4 @@
-package com.server.receiver;
-
-
+package com.server.devicesDataConfiguration;
 
 import org.apache.log4j.Logger;
 import org.springframework.amqp.core.Binding;
@@ -15,14 +13,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-
-import com.server.cep.processing.FnctiiAjutor;
+import com.server.cep.processing.FunctiiAjutor;
+import com.server.devicesDataReceiver.Receiver;
+import com.server.devicesInstructionsSender.InstructionsSender;
 
 
 @Configuration
 @ComponentScan(basePackages="com.server")
 @PropertySource("classpath:config.properties")
-public class ReceiverConfiguration {
+public class RabbitMQConfiguration {
 	@Value("${factory.host}")
 	String host;
 	@Value("${rabbit.username}")
@@ -40,7 +39,7 @@ public class ReceiverConfiguration {
 	@Value("${sensor.key}")
 	String sensorKey;
 
-	final static Logger logger = Logger.getLogger(ReceiverConfiguration.class);
+	final static Logger logger = Logger.getLogger(RabbitMQConfiguration.class);
 
 		@Bean
 		public CachingConnectionFactory connectionFactory() {
@@ -71,12 +70,10 @@ public class ReceiverConfiguration {
 			return new Queue(queueSensor);
 		}
 
-		
 		@Bean
 		public DirectExchange exchange() {
 			return new DirectExchange(exchange);
 		}
-
 	
 		@Bean
 		public Binding bindingConsumator(DirectExchange exchange, Queue queueConsumer) {
@@ -93,9 +90,12 @@ public class ReceiverConfiguration {
 			return new Receiver();
 		}
 		@Bean
-		public FnctiiAjutor fnctiiAjutor() {
-			return new FnctiiAjutor();
+		public FunctiiAjutor fnctiiAjutor() {
+			return new FunctiiAjutor();
 		}
-		
+		@Bean
+		public InstructionsSender instructionsSender() {
+			return new InstructionsSender();
+		}
 		
 }

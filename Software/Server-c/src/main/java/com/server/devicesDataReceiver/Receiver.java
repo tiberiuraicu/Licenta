@@ -1,4 +1,4 @@
-package com.server.receiver;
+package com.server.devicesDataReceiver;
 
 import org.apache.log4j.Logger;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -49,12 +49,8 @@ public class Receiver {
 			if (consumerMessage.contains("switch")) {
 
 				Consumer switcherForConsumptionAdding = mapper.readValue(consumerMessage, Switch.class);
-
-				
 				
 				Switch switcherForLightOpenTesting=(Switch) consumerRepository.getConsumerByName(switcherForConsumptionAdding.getName());
-
-				
 				
 				switcherForConsumptionAdding.setLocation(switcherForLightOpenTesting.getLocation());
 				

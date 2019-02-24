@@ -1,40 +1,65 @@
 package com.sender.constants;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
+import java.io.FileInputStream;
+import java.util.Properties;
 
-@PropertySource("config.properties")
 public class Constants {
-	
-	//path to CSV which contains sensors and consumers data
-	@Value("${SENSOR_DATA_CSV}")
-	public static String SENSOR_DATA_CSV="SensorData.csv";
-	
-	//the exchange for sending info to raspberry
-	@Value("${EXCHANGE_NAME}")
-	public static String EXCHANGE_NAME="colector_exchange";
-	
-	//exchange type
-	@Value("${EXCHANGE_TYPE}")
-	public static String EXCHANGE_TYPE="direct";
-	
-	//exchange host
-	@Value("${HOST}")
-	public static String HOST="localhost";
-	
-	//rabbitmq broker credentials
-	@Value("${RABBITMQ_USERNAME}")
-	public static String RABBITMQ_USERNAME="test";
-	@Value("${RABBITMQ_PASSWORD}")
-	public static String RABBITMQ_PASSWORD="test";
-	@Value("${RABBITMQ_PORT}")
-	public static int RABBITMQ_PORT=5672;
-	
-	//the keys with which the data from sensors is encrypted
-	@Value("${OUTLET_KEY}")
-	public static String OUTLET_KEY="outlet_key";
-	@Value("${SWITCH_KEY}")
-	public static String SWITCH_KEY="switch_key";
-	@Value("${SENSOR_KEY}")
-	public static String SENSOR_KEY="sensor_key";
+	static final Properties prop = new Properties();
+
+	// path to CSV which contains sensors and consumers data
+	public static String SENSOR_DATA_CSV;
+
+	// the exchange for sending and receiving info to/from raspberry
+	public static String EXCHANGE_NAME;
+
+	// exchange type
+	public static String EXCHANGE_TYPE;
+
+	// exchange host
+	public static String HOST;
+
+	// rabbitmq broker credentials
+	public static String RABBITMQ_USERNAME;
+	public static String RABBITMQ_PASSWORD;
+	public static int RABBITMQ_PORT;
+
+	// the keys with which the data from sensors is encrypted
+	public static String OUTLET_KEY;
+	public static String SWITCH_KEY;
+	public static String SENSOR_KEY;
+
+	// the key with which the instrunctions are encrypted
+	public static String INSTRUCTION_KEY;
+
+	// Queue through which we receive the instrunctions from raspberry
+	public static String QUEUE_INSTRUCTION;
+
+	static {
+		try {
+			prop.load(new FileInputStream("config.config"));
+
+			SENSOR_DATA_CSV = prop.getProperty("SENSOR_DATA_CSV");
+
+			EXCHANGE_NAME = prop.getProperty("EXCHANGE_NAME");
+
+			EXCHANGE_TYPE = prop.getProperty("EXCHANGE_TYPE");
+
+			HOST = prop.getProperty("HOST");
+
+			RABBITMQ_USERNAME = prop.getProperty("RABBITMQ_USERNAME");
+			RABBITMQ_PASSWORD = prop.getProperty("RABBITMQ_PASSWORD");
+			RABBITMQ_PORT = Integer.parseInt(prop.getProperty("RABBITMQ_PORT"));
+
+			OUTLET_KEY = prop.getProperty("OUTLET_KEY");
+			SWITCH_KEY = prop.getProperty("SWITCH_KEY");
+			SENSOR_KEY = prop.getProperty("SENSOR_KEY");
+
+			INSTRUCTION_KEY = prop.getProperty("INSTRUCTION_KEY");
+
+			QUEUE_INSTRUCTION = prop.getProperty("QUEUE_INSTRUCTION");
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+	}
 }

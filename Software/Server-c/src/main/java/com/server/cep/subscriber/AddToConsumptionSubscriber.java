@@ -2,13 +2,13 @@ package com.server.cep.subscriber;
 
 import java.util.Map;
 import org.springframework.stereotype.Component;
-import com.server.cep.processing.FnctiiAjutor;
+import com.server.cep.processing.FunctiiAjutor;
 import com.server.entites.Consumer;
 
 
 @Component
 public class AddToConsumptionSubscriber {
-FnctiiAjutor fnctiiAjutor= new FnctiiAjutor();
+FunctiiAjutor fnctiiAjutor= new FunctiiAjutor();
 
 public String getStatement() {
 

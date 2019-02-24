@@ -10,7 +10,7 @@ public class LightAndMovementSubscriber {
 		 String crtiticalEventExpression =" select avg(movement.state) "
 		 		+ "from Sensor(name='sensor1').win:time_batch(10 sec) as movement, "
 		 		+ "Switch(name='switch1').win:time_batch(10 sec) as switcher having"
-		 		+ " avg(movement.state)=1 and avg(switcher.powerConsumed)>0 ";
+		 		+ " avg(movement.state)=1 and avg(movement.triggered)=1 and avg(switcher.powerConsumed)>0 ";
 		 		
 	        return crtiticalEventExpression;
 	}

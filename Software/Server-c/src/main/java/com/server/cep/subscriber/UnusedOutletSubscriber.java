@@ -1,27 +1,40 @@
 package com.server.cep.subscriber;
 
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.server.entites.Outlet;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.server.devicesInstructionsSender.InstructionsSender;
+import com.server.entites.Instruction;
 
 
 @Component
 public class UnusedOutletSubscriber {
 
-	public String getStatement() {
-		 String crtiticalEventExpression =" select avg(outlet.powerConsumed) as p, avg(outlet.state) as o from Outlet.win:time_batch(1 sec) as outlet having"
-		 		+ " avg(outlet.powerConsumed)<0.44 and avg(outlet.state)=1";
-		
-	        return crtiticalEventExpression;
-	}
-	 /**
-     * Listener method called when Esper has detected a pattern match.
-     */
-    public void update(Map<String, Outlet> eventMap) {
+	@Autowired
+	InstructionsSender instructionsSender;
 
-    	System.out.println("priza nefolosita");
-    
-    }
+	public String getStatement() {
+		String crtiticalEventExpression = " select outlet.name "
+				+ "from Outlet.win:time_batch(1 sec) as outlet having"
+				+ " avg(outlet.powerConsumed)<0.44 and avg(outlet.state)=1";
+
+		return crtiticalEventExpression;
+	}
+
+	/**
+	 * Listener method called when Esper has detected a pattern match.
+	 * 
+	 * @throws JsonProcessingException
+	 */
+	public void update(Map<String, String> eventMap) throws JsonProcessingException {
+
+		String  outletName=(String)eventMap.get("outlet.name");
+		Instruction instruction = new Instruction();
+		instruction.setDeviceName(outletName);
+		instruction.setOnOffValue("0");
+
+		instructionsSender.instructionSender(instruction);
+	}
 
 }
