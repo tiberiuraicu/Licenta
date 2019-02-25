@@ -33,10 +33,10 @@ public class HelperFunctions {
 		List<Consumer> consumersForCircuit = circuit.getConsumers();
 		try {
 			consumersForCircuit.remove(consumer);
-		}catch(Exception e) {
+		} catch (Exception e) {
 			System.out.println("exceptie-----------------------");
 		}
-		
+
 		consumersForCircuit.add(consumer);
 
 		circuit.setConsumers(consumersForCircuit);
@@ -65,8 +65,8 @@ public class HelperFunctions {
 		List<Circuit> circuitsForPowerSource = powerSource.getCircuits();
 		try {
 			circuitsForPowerSource.remove(circuit);
-		}catch(Exception e) {
-			
+		} catch (Exception e) {
+
 		}
 		circuitsForPowerSource.add(circuit);
 
@@ -77,12 +77,13 @@ public class HelperFunctions {
 	}
 
 	public void setNewSetOfCircuitsToPowerSource(PowerSource powerSource, List<Circuit> circuits) {
-
+		PowerSource normalPowerSource = powerSourceRepository.getPowerSourceById(2);
 		for (Circuit circuit : powerSource.getCircuits()) {
-
-			circuit.setPowerSource(powerSourceRepository.getPowerSourceById(2));
-
+			
+			circuit.setPowerSource(normalPowerSource);
+			normalPowerSource = makeCircuitAndPowerSourceConnection(circuit, normalPowerSource);
 		}
+		powerSourceRepository.save(normalPowerSource);
 		for (Circuit circuit : circuits) {
 
 			powerSource = makeCircuitAndPowerSourceConnection(circuit, powerSource);

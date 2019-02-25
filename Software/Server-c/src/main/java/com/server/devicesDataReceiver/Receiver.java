@@ -44,6 +44,10 @@ public class Receiver {
 			if (consumerMessage.contains("outlet")) {
 
 				Consumer outlet = mapper.readValue(consumerMessage, Outlet.class);
+				
+				List<Consumer> outletFromDB =  consumerRepository
+						.getConsumerByName(outlet.getName());
+				outlet.setCircuit(outletFromDB.get(outletFromDB.size()-1).getCircuit());
 				//consumerRepository.save(outlet);
 				addToConsumptionEventHandler.handle(outlet);
 
@@ -52,18 +56,19 @@ public class Receiver {
 
 				Consumer switcherForConsumptionAdding = mapper.readValue(consumerMessage, Switch.class);
 
-//				List<Consumer> switcherForLightOpenTesting =  consumerRepository
-//						.getConsumerByName(switcherForConsumptionAdding.getName());
-//
-//				switcherForConsumptionAdding.setLocation(switcherForLightOpenTesting.get(switcherForLightOpenTesting.size()-1).getLocation());
+				List<Consumer> switcherForLightOpenTesting =  consumerRepository
+						.getConsumerByName(switcherForConsumptionAdding.getName());
+
 				
+				switcherForConsumptionAdding.setLocation(switcherForLightOpenTesting.get(switcherForLightOpenTesting.size()-1).getLocation());
+				switcherForConsumptionAdding.setCircuit(switcherForLightOpenTesting.get(switcherForLightOpenTesting.size()-1).getCircuit());
 				//TODO change this
-				Consumer switcher = consumerRepository.getConsumerByName(switcherForConsumptionAdding.getName());
-				switcherForConsumptionAdding.setLocation(switcher.getLocation());
+//				Consumer switcher = consumerRepository.getConsumerByName(switcherForConsumptionAdding.getName());
+//				switcherForConsumptionAdding.setLocation(switcher.getLocation());
 						
-				//consumerRepository.save(switcherForConsumptionAdding);
-				
-				addToConsumptionEventHandler.handle(switcherForConsumptionAdding);
+				consumerRepository.save(switcherForConsumptionAdding);
+//				
+				//addToConsumptionEventHandler.handle(switcherForConsumptionAdding);
 
 			}
 		} catch (Exception e) {
@@ -82,15 +87,17 @@ public class Receiver {
 
 				Sensor sensor = mapper.readValue(sensorMessage, Sensor.class);
 
-//				List<Sensor> sensorFromDB = sensorRepository.getSensorByName(sensor.getName());
-//
-//				sensor.setLocation(sensorFromDB.get(sensorFromDB.size()-1).getLocation());
+				List<Sensor> sensorFromDB = sensorRepository.getSensorByName(sensor.getName());
+
+				sensor.setLocation(sensorFromDB.get(sensorFromDB.size()-1).getLocation());
+				sensor.setCircuit(sensorFromDB.get(sensorFromDB.size()-1).getCircuit());
 				//TODO change this
-				Sensor sensorFromDB = sensorRepository.getSensorByName(sensor.getName());
-				sensor.setLocation(sensorFromDB.getLocation());
+//				Sensor sensorFromDB = sensorRepository.getSensorByName(sensor.getName());
+//				sensor.setLocation(sensorFromDB.getLocation());
 				//sensorRepository.save(sensor);
 				
 				lightAndMovementEventHandler.handle(sensor);
+
 			}
 
 		} catch (Exception e) {

@@ -1,5 +1,6 @@
 package com.server.cep.subscriber;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,23 +38,18 @@ public class AddToConsumptionSubscriber {
 	 * Listener method called when Esper has detected a pattern match.
 	 */
 	public void update(Map<String, Consumer> eventMap) {
-
 		Consumer consumerWithSpikedPowerConsumption = eventMap.get("consumerWithSpikedPowerConsumption");
-
-		Consumer consumerFromDB = consumerRepository.getConsumerByName(consumerWithSpikedPowerConsumption.getName());
-
-		consumerFromDB.setPowerConsumed(consumerWithSpikedPowerConsumption.getPowerConsumed());
+		List<Consumer> consumerListFromDB =  consumerRepository
+				.getConsumerByName(consumerWithSpikedPowerConsumption.getName());
+		Consumer consumerFromDB = consumerListFromDB.get(consumerListFromDB.size()-1);
 
 		Circuit circuitFromDB = consumerFromDB.getCircuit();
-
-		helperFunctions.makeConsumerAndCircuitConnection(consumerFromDB, circuitFromDB);
 
 		PowerSource powerSource = circuitFromDB.getPowerSource();
 		
 		if (powerSource.getType().equals("solarPanel")) {
-		helperFunctions.makeCircuitAndPowerSourceConnection(circuitFromDB, powerSource);
-		
-			functiiAjutor.verificareMarireConsum(powerSource);
+			
+		functiiAjutor.verificareMarireConsum(powerSource);
 
 		}
 		else if (powerSource.getType().equals("normalPowerSource")) {

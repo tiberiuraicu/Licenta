@@ -11,7 +11,7 @@ import com.server.entites.Sensor;
 
 public interface SensorRepository extends JpaRepository<Sensor, Integer> {
 
-//	List<Sensor> getSensorByName(String name);
-	Sensor getSensorByName(String name);
+List<Sensor> getSensorByName(String name);
+	//Sensor getSensorByName(String name);
 
 }
