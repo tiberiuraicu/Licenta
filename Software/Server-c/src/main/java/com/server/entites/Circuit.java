@@ -18,6 +18,7 @@ import org.hibernate.annotations.FetchMode;
 public class Circuit {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Integer id;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,mappedBy="circuit")

@@ -12,6 +12,6 @@ public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
 	List<Consumer> getConsumerByName(String name);
 	//Consumer getConsumerByName(String name);
-
+   Consumer findTopByNameOrderByIdDesc(String name);
 
 }

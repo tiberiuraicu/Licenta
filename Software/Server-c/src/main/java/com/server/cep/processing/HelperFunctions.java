@@ -77,17 +77,21 @@ public class HelperFunctions {
 	}
 
 	public void setNewSetOfCircuitsToPowerSource(PowerSource powerSource, List<Circuit> circuits) {
+		
 		PowerSource normalPowerSource = powerSourceRepository.getPowerSourceById(2);
+		
 		for (Circuit circuit : powerSource.getCircuits()) {
 			
 			circuit.setPowerSource(normalPowerSource);
+			
 			normalPowerSource = makeCircuitAndPowerSourceConnection(circuit, normalPowerSource);
 		}
+		
 		powerSourceRepository.save(normalPowerSource);
+		
 		for (Circuit circuit : circuits) {
 
 			powerSource = makeCircuitAndPowerSourceConnection(circuit, powerSource);
-
 		}
 
 		powerSourceRepository.save(powerSource);

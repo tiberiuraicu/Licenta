@@ -33,7 +33,7 @@ public class Sensor {
 	
 	protected Double powerConsumed;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JoinColumn(name = "circuit_id")
 	protected Circuit circuit;
 	

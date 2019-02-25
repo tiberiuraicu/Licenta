@@ -37,13 +37,10 @@ public class FunctiiAjutor {
 	public PowerSource getAlimentator() {
 		
 		PowerSource powerSource = new SolarPanel();
-		powerSource.setGeneratedPower(80.5);
+		powerSource.setGeneratedPower(120.5);
 		Circuit c1 = new Circuit();
-		c1.setId(1);
 		Circuit c2 = new Circuit();
-		c2.setId(2);
 		Circuit c3 = new Circuit();
-		c3.setId(3);
 
 		Consumer unu = new Outlet();
 		unu.setPowerConsumed(0.2);
@@ -143,9 +140,12 @@ public class FunctiiAjutor {
 		// lista cu combinatii de circuite si puterile consumate de fiecare combinatie
 		HashMap<List<Circuit>, Double> puteriConsumate = new HashMap<List<Circuit>, Double>();
 
-		// fiecare combinatie posibila de circuite
+//		// fiecare combinatie posibila de circuite
 		List<List<Circuit>> diferiteCombinatiiDeCircuite = getAllSubsets(powerSource.getCircuits());
-
+		// fiecare combinatie posibila de circuite
+	
+				//List<List<Circuit>> diferiteCombinatiiDeCircuite = getAllSubsets(circuitReporitory.findAll());
+				
 		// calculeaza puterea consumata pentru toate combinatiile de circuite
 		for (List<Circuit> listaCuCircuite : diferiteCombinatiiDeCircuite) {
 			Double putereConsumata = 0.0;

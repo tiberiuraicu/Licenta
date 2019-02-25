@@ -11,6 +11,7 @@ import com.server.cep.handler.AddToConsumptionEventHandler;
 import com.server.cep.handler.LightAndMovementEventHandler;
 import com.server.database.repositories.ConsumerRepository;
 import com.server.database.repositories.SensorRepository;
+import com.server.entites.Circuit;
 import com.server.entites.Consumer;
 import com.server.entites.Outlet;
 import com.server.entites.Sensor;
@@ -44,31 +45,25 @@ public class Receiver {
 			if (consumerMessage.contains("outlet")) {
 
 				Consumer outlet = mapper.readValue(consumerMessage, Outlet.class);
+
+				outlet.setCircuit(consumerRepository.findTopByNameOrderByIdDesc(outlet.getName()).getCircuit());
 				
-				List<Consumer> outletFromDB =  consumerRepository
-						.getConsumerByName(outlet.getName());
-				outlet.setCircuit(outletFromDB.get(outletFromDB.size()-1).getCircuit());
-				//consumerRepository.save(outlet);
+			    consumerRepository.save(outlet);
+			    
 				addToConsumptionEventHandler.handle(outlet);
 
 			}
 			if (consumerMessage.contains("switch")) {
 
 				Consumer switcherForConsumptionAdding = mapper.readValue(consumerMessage, Switch.class);
-
-				List<Consumer> switcherForLightOpenTesting =  consumerRepository
-						.getConsumerByName(switcherForConsumptionAdding.getName());
-
+			
+				switcherForConsumptionAdding.setLocation(consumerRepository.findTopByNameOrderByIdDesc(switcherForConsumptionAdding.getName()).getLocation());
 				
-				switcherForConsumptionAdding.setLocation(switcherForLightOpenTesting.get(switcherForLightOpenTesting.size()-1).getLocation());
-				switcherForConsumptionAdding.setCircuit(switcherForLightOpenTesting.get(switcherForLightOpenTesting.size()-1).getCircuit());
-				//TODO change this
-//				Consumer switcher = consumerRepository.getConsumerByName(switcherForConsumptionAdding.getName());
-//				switcherForConsumptionAdding.setLocation(switcher.getLocation());
-						
+				switcherForConsumptionAdding.setCircuit(consumerRepository.findTopByNameOrderByIdDesc(switcherForConsumptionAdding.getName()).getCircuit());
+
 				consumerRepository.save(switcherForConsumptionAdding);
-//				
-				//addToConsumptionEventHandler.handle(switcherForConsumptionAdding);
+
+				addToConsumptionEventHandler.handle(switcherForConsumptionAdding);
 
 			}
 		} catch (Exception e) {
@@ -87,15 +82,12 @@ public class Receiver {
 
 				Sensor sensor = mapper.readValue(sensorMessage, Sensor.class);
 
-				List<Sensor> sensorFromDB = sensorRepository.getSensorByName(sensor.getName());
-
-				sensor.setLocation(sensorFromDB.get(sensorFromDB.size()-1).getLocation());
-				sensor.setCircuit(sensorFromDB.get(sensorFromDB.size()-1).getCircuit());
-				//TODO change this
-//				Sensor sensorFromDB = sensorRepository.getSensorByName(sensor.getName());
-//				sensor.setLocation(sensorFromDB.getLocation());
-				//sensorRepository.save(sensor);
+				sensor.setLocation(sensorRepository.findTopByNameOrderByIdDesc(sensor.getName()).getLocation());
 				
+				sensor.setCircuit(sensorRepository.findTopByNameOrderByIdDesc(sensor.getName()).getCircuit());
+				
+				sensorRepository.save(sensor);
+
 				lightAndMovementEventHandler.handle(sensor);
 
 			}

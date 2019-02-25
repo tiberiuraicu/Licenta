@@ -28,7 +28,7 @@ public class Consumer {
 
 	protected int state;// aprins/inchis
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JoinColumn(name = "circuit_id")
 	protected Circuit circuit;
 	
@@ -116,4 +116,11 @@ public class Consumer {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	@Override
+	public String toString() {
+		return "Consumer [id=" + id + ", type=" + type + ", deviceId=" + deviceId + ", powerConsumed=" + powerConsumed
+				+ ", location=" + location + ", timestamp=" + timestamp + ", state=" + state + ", name=" + name + "]";
+	}
+	
 }
