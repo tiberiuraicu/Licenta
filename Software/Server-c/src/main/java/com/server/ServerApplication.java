@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import com.server.cep.processing.FunctiiAjutor;
 import com.server.database.repositories.PowerSourceRepository;
+import com.server.entites.NormalPowerSource;
 
 @SpringBootApplication
 @EnableScheduling
@@ -16,7 +17,7 @@ public class ServerApplication implements CommandLineRunner {
 
 	
 	@Autowired
-	private PowerSourceRepository alimentatorRepository;
+	private PowerSourceRepository powerSourceRepository;
 	
 	@Autowired
 	private FunctiiAjutor fnctiiAjutor;
@@ -27,8 +28,9 @@ public class ServerApplication implements CommandLineRunner {
 	
 	@Override
 	public void run(String... strings) throws Exception {	
-	
-		alimentatorRepository.save(fnctiiAjutor.getAlimentator());
+		NormalPowerSource normalPowerSource=new NormalPowerSource();
+		powerSourceRepository.save(normalPowerSource);
+		powerSourceRepository.save(fnctiiAjutor.getAlimentator());
 		
 	}
 }

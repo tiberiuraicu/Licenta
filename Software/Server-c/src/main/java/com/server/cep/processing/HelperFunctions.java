@@ -2,9 +2,15 @@ package com.server.cep.processing;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.server.database.repositories.CircuitRepository;
+import com.server.database.repositories.PowerSourceRepository;
 import com.server.entites.Circuit;
 import com.server.entites.Consumer;
 import com.server.entites.Device;
+import com.server.entites.NormalPowerSource;
 import com.server.entites.Notification;
 import com.server.entites.PowerSource;
 import com.server.entites.Role;
@@ -12,14 +18,25 @@ import com.server.entites.Sensor;
 import com.server.entites.User;
 
 //TODO metoda de verificare (daca apare de mai multe ori) dupa id
+@Component
 public class HelperFunctions {
+
+	@Autowired
+	CircuitRepository circuitRepository;
+	@Autowired
+	PowerSourceRepository powerSourceRepository;
 
 	public Circuit makeConsumerAndCircuitConnection(Consumer consumer, Circuit circuit) {
 
 		consumer.setCircuit(circuit);
 
 		List<Consumer> consumersForCircuit = circuit.getConsumers();
-
+		try {
+			consumersForCircuit.remove(consumer);
+		}catch(Exception e) {
+			System.out.println("exceptie-----------------------");
+		}
+		
 		consumersForCircuit.add(consumer);
 
 		circuit.setConsumers(consumersForCircuit);
@@ -46,13 +63,33 @@ public class HelperFunctions {
 		circuit.setPowerSource(powerSource);
 
 		List<Circuit> circuitsForPowerSource = powerSource.getCircuits();
-System.out.println(circuitsForPowerSource);
+		try {
+			circuitsForPowerSource.remove(circuit);
+		}catch(Exception e) {
+			
+		}
 		circuitsForPowerSource.add(circuit);
 
 		powerSource.setCircuits(circuitsForPowerSource);
 
 		return powerSource;
 
+	}
+
+	public void setNewSetOfCircuitsToPowerSource(PowerSource powerSource, List<Circuit> circuits) {
+
+		for (Circuit circuit : powerSource.getCircuits()) {
+
+			circuit.setPowerSource(powerSourceRepository.getPowerSourceById(2));
+
+		}
+		for (Circuit circuit : circuits) {
+
+			powerSource = makeCircuitAndPowerSourceConnection(circuit, powerSource);
+
+		}
+
+		powerSourceRepository.save(powerSource);
 	}
 
 	public Circuit makeSensorAndCircuitConnection(Sensor sensor, Circuit circuit) {
@@ -93,27 +130,27 @@ System.out.println(circuitsForPowerSource);
 	}
 
 	public Circuit calculateAndSetCircuitPowerConsumed(Circuit circuit) {
-		
+
 		Double cumulatedPowerConsumed = 0.0;
-		
-		for (Sensor sensor : circuit.getSensors()) 
+
+		for (Sensor sensor : circuit.getSensors())
 			cumulatedPowerConsumed += sensor.getPowerConsumed();
-		
-		for (Consumer consumer : circuit.getConsumers()) 
-			cumulatedPowerConsumed += consumer.getPowerConsumed();	
-		
+
+		for (Consumer consumer : circuit.getConsumers())
+			cumulatedPowerConsumed += consumer.getPowerConsumed();
+
 		circuit.setPowerConsumed(cumulatedPowerConsumed);
-		
+
 		return circuit;
 	}
-	
-    public Double calculatePowerSourceCircuitsPowerConsumed(PowerSource powerSource) {
-		
+
+	public Double calculatePowerSourceCircuitsPowerConsumed(PowerSource powerSource) {
+
 		Double cumulatedPowerConsumed = 0.0;
-		
-		for (Circuit circuit : powerSource.getCircuits()) 
-			cumulatedPowerConsumed += circuit.getPowerConsumed();		
-		
+
+		for (Circuit circuit : powerSource.getCircuits())
+			cumulatedPowerConsumed += circuit.getPowerConsumed();
+
 		return cumulatedPowerConsumed;
 	}
 

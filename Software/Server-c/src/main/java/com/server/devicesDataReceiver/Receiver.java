@@ -58,7 +58,6 @@ public class Receiver {
 //				switcherForConsumptionAdding.setLocation(switcherForLightOpenTesting.get(switcherForLightOpenTesting.size()-1).getLocation());
 				
 				//TODO change this
-				System.out.println(switcherForConsumptionAdding.getName());
 				Consumer switcher = consumerRepository.getConsumerByName(switcherForConsumptionAdding.getName());
 				switcherForConsumptionAdding.setLocation(switcher.getLocation());
 						

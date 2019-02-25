@@ -17,9 +17,13 @@ import org.hibernate.annotations.FetchMode;
 public class PowerSource {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Integer id;
 	
+	@Override
+	public String toString() {
+		return "PowerSource [id=" + id + ", generatedPower=" + generatedPower + ", type=" + type + "]";
+	}
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,mappedBy="powerSource")
 	@Fetch(value = FetchMode.SUBSELECT)
 	protected List<Circuit> circuits= new Vector<Circuit>();
@@ -44,14 +48,6 @@ public class PowerSource {
 
 	public void setCircuits(List<Circuit> circuits) {
 		this.circuits = circuits;
-	}
-
-	public Double getPutereGenerata() {
-		return generatedPower;
-	}
-
-	public void setPutereGenerata(Double putereGenerata) {
-		this.generatedPower = putereGenerata;
 	}
 
 	public Double getGeneratedPower() {

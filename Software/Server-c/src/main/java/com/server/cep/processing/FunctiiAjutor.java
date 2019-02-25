@@ -3,45 +3,47 @@ package com.server.cep.processing;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Vector;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.stereotype.Component;
 import com.server.database.repositories.PowerSourceRepository;
 import com.server.database.repositories.SensorRepository;
+import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
 import com.server.entites.PowerSource;
 import com.server.entites.Sensor;
 import com.server.entites.Circuit;
 import com.server.entites.Consumer;
-import com.server.entites.Device;
+import com.server.entites.NormalPowerSource;
 import com.server.entites.Switch;
 import com.server.entites.SolarPanel;
 import com.server.entites.Outlet;
 
+@Component
 public class FunctiiAjutor {
 
 	@Autowired
-	PowerSourceRepository alimentatorRepository;
+	PowerSourceRepository powerSourceRepository;
 	@Autowired
-	ConsumerRepository consumatorRepository;
+	ConsumerRepository consumerRepository;
 	@Autowired
 	SensorRepository sensorRepository;
+	@Autowired
+	CircuitRepository circuitReporitory;
+	@Autowired
+	HelperFunctions helperFunctions;
 
-	HelperFunctions helperFunctions = new HelperFunctions();
 
-	public Circuit getCircuit() {
-		return null;
-	}
 
 	public PowerSource getAlimentator() {
-		PowerSource alimentator = new SolarPanel();
-		alimentator.setPutereGenerata(200.5);
-		Circuit c1 = new Circuit();
-		Circuit c2 = new Circuit();
-		Circuit c3 = new Circuit();
 		
-
+		PowerSource powerSource = new SolarPanel();
+		powerSource.setGeneratedPower(80.5);
+		Circuit c1 = new Circuit();
+		c1.setId(1);
+		Circuit c2 = new Circuit();
+		c2.setId(2);
+		Circuit c3 = new Circuit();
+		c3.setId(3);
 
 		Consumer unu = new Outlet();
 		unu.setPowerConsumed(0.2);
@@ -81,36 +83,23 @@ public class FunctiiAjutor {
 		sensor2.setName("sensor2");
 		sensor2.setLocation("bathroom");
 
-
-		c1=helperFunctions.makeSensorAndCircuitConnection(sensor1, c1);
-		System.out.println("---------------------------");
-		c1=helperFunctions.makeSensorAndCircuitConnection(sensor2, c1);
-		System.out.println("---------------------------");
-		c2=helperFunctions.makeConsumerAndCircuitConnection(unu, c2);
-		System.out.println("---------------------------");
-		c2=helperFunctions.makeConsumerAndCircuitConnection(doi, c2);
-		System.out.println("---------------------------");
-		c3=helperFunctions.makeConsumerAndCircuitConnection(trei, c3);
-		System.out.println("---------------------------");
-		c3=helperFunctions.makeConsumerAndCircuitConnection(patru, c3);
-		System.out.println("---------------------------");
-		c1=helperFunctions.makeConsumerAndCircuitConnection(cinci, c1);
-		System.out.println("---------------------------");
-		c2=helperFunctions.makeConsumerAndCircuitConnection(sase, c2);
+		c1 = helperFunctions.makeSensorAndCircuitConnection(sensor1, c1);
+		c1 = helperFunctions.makeSensorAndCircuitConnection(sensor2, c1);
+		c2 = helperFunctions.makeConsumerAndCircuitConnection(unu, c2);
+		c2 = helperFunctions.makeConsumerAndCircuitConnection(doi, c2);
+		c3 = helperFunctions.makeConsumerAndCircuitConnection(trei, c3);
+		c3 = helperFunctions.makeConsumerAndCircuitConnection(patru, c3);
+		c1 = helperFunctions.makeConsumerAndCircuitConnection(cinci, c1);
+		c2 = helperFunctions.makeConsumerAndCircuitConnection(sase, c2);
 		c1.setPowerConsumed(calculateCircuitPowerConsumption(c1));
 		c2.setPowerConsumed(calculateCircuitPowerConsumption(c2));
 		c3.setPowerConsumed(calculateCircuitPowerConsumption(c3));
 
+		powerSource = helperFunctions.makeCircuitAndPowerSourceConnection(c1, powerSource);
+		powerSource = helperFunctions.makeCircuitAndPowerSourceConnection(c2, powerSource);
+		powerSource = helperFunctions.makeCircuitAndPowerSourceConnection(c3, powerSource);
 
-		System.out.println("---------------------------");
-		alimentator=helperFunctions.makeCircuitAndPowerSourceConnection(c1, alimentator);
-		System.out.println("---------------------------");
-		alimentator=helperFunctions.makeCircuitAndPowerSourceConnection(c2, alimentator);
-		System.out.println("---------------------------");
-		alimentator=helperFunctions.makeCircuitAndPowerSourceConnection(c3, alimentator);
-		System.out.println("---------------------------");
-
-		return alimentator;
+		return powerSource;
 
 	}
 
@@ -124,19 +113,20 @@ public class FunctiiAjutor {
 
 	// verifica daca puterea generata de panou solar este <=> decat noua putere
 	// consumata de circuite
-	public void verificareMarireConsum(SolarPanel panouSolar) {
+	public void verificareMarireConsum(PowerSource powerSource) {
 		// preia puterea generata de panou
-		double putereGenerata = panouSolar.getPutereGenerata();
+		double putereGenerata = powerSource.getGeneratedPower();
 		// calculeaza noua putere consumata de circuitele alimentate la panou
-		double putereConsumata = calculeazaPutereConsumata(panouSolar.getCircuits());
+		double putereConsumata = calculeazaPutereConsumata(powerSource.getCircuits());
 
 		if (putereGenerata > putereConsumata) {
-			// informeaza frontend ca a fost marat consumul
+
+			// TODO informeaza frontend ca a fost marat consumul
 		} else if (putereGenerata < putereConsumata) {
 			// rearanjeaza circuitele in cel mai bun mod posibil
 			// astfel incat puterea consumata de circuitele conectate
 			// la panou sa fie mai mica decat puterea generata
-			rearanjareCircuite(panouSolar);
+			rearanjareCircuite(powerSource);
 
 		}
 	}
@@ -149,12 +139,12 @@ public class FunctiiAjutor {
 		return putereConsumata;
 	}
 
-	public void rearanjareCircuite(SolarPanel panouSolar) {
+	public void rearanjareCircuite(PowerSource powerSource) {
 		// lista cu combinatii de circuite si puterile consumate de fiecare combinatie
 		HashMap<List<Circuit>, Double> puteriConsumate = new HashMap<List<Circuit>, Double>();
 
 		// fiecare combinatie posibila de circuite
-		List<List<Circuit>> diferiteCombinatiiDeCircuite = getAllSubsets(panouSolar.getCircuits());
+		List<List<Circuit>> diferiteCombinatiiDeCircuite = getAllSubsets(powerSource.getCircuits());
 
 		// calculeaza puterea consumata pentru toate combinatiile de circuite
 		for (List<Circuit> listaCuCircuite : diferiteCombinatiiDeCircuite) {
@@ -170,25 +160,19 @@ public class FunctiiAjutor {
 		List<Circuit> nearest = null;
 		for (List<Circuit> key : puteriConsumate.keySet()) {
 
-			Double temp = panouSolar.getPutereGenerata() - puteriConsumate.get(key);
+			Double temp = powerSource.getGeneratedPower() - puteriConsumate.get(key);
 
 			if (temp > 0) {
 
 				if (temp < min) {
 					min = temp;
 					nearest = key;
+				
 				}
 			}
 		}
-		System.out.println(nearest);
-		panouSolar.setCircuits(nearest);
-		// save in database panou
-//		 alimentatorRepository.save(panouSolar);
-//		 for (Alimentator book :  alimentatorRepository.findAll()) {
-//			System.out.println(book.toString());
-//			
-//			 
-//			 }
+		
+		helperFunctions.setNewSetOfCircuitsToPowerSource(powerSource, nearest);
 	}
 
 	// de modificat

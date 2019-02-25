@@ -14,6 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import com.server.cep.processing.FunctiiAjutor;
+import com.server.cep.processing.HelperFunctions;
 import com.server.devicesDataReceiver.Receiver;
 import com.server.devicesInstructionsSender.InstructionsSender;
 
@@ -96,6 +97,10 @@ public class RabbitMQConfiguration {
 		@Bean
 		public InstructionsSender instructionsSender() {
 			return new InstructionsSender();
+		}
+		@Bean
+		public HelperFunctions helperFunctions() {
+			return new HelperFunctions();
 		}
 		
 }
