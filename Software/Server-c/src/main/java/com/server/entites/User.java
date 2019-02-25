@@ -26,7 +26,6 @@ public class User {
 	@JoinColumn(name = "role_id")
 	private Role role;
 
-	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER )
 	@JoinColumn(name = "device_id")
 	private List<Device> devices = new Vector<Device>();
@@ -52,8 +51,7 @@ public class User {
 		super();
 		this.role = role;
 		this.firstName = firstName;
-		this.devices=devices;
-		
+		this.devices=devices;	
 	}
 
 	public Integer getId() {
@@ -64,7 +62,6 @@ public class User {
 		this.id = id;
 	}
 
-	
 	public String getEmail() {
 		return email;
 	}

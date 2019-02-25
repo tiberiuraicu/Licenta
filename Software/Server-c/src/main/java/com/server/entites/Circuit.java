@@ -1,5 +1,6 @@
 package com.server.entites;
 
+import java.util.List;
 import java.util.Vector;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -34,6 +35,10 @@ public class Circuit {
 	@JoinColumn(name = "powerSource_id")
 	private PowerSource powerSource;
 
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="circuit")
+	@Fetch(value = FetchMode.SUBSELECT)
+	private List<Sensor> sensors = new Vector<Sensor>();
+	
 	public Circuit() {
 		super();
 	}
@@ -53,8 +58,6 @@ public class Circuit {
 	public void setConsumers(java.util.List<Consumer> consumers) {
 		this.consumers = consumers;
 	}
-
-	
 
 	public double getPowerConsumed() {
 		return powerConsumed;
@@ -78,6 +81,20 @@ public class Circuit {
 
 	public void setPowerSource(PowerSource powerSource) {
 		this.powerSource = powerSource;
+	}
+
+	public List<Sensor> getSensors() {
+		return sensors;
+	}
+
+	public void setSensors(List<Sensor> sensors) {
+		this.sensors = sensors;
+	}
+
+	@Override
+	public String toString() {
+		return "Circuit [id=" + id + ", consumers=" + consumers + ", powerConsumed=" + powerConsumed + ", device="
+				+ device + ", sensors=" + sensors + "]";
 	}
 	
 

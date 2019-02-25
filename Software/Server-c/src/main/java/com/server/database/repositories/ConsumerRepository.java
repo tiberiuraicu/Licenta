@@ -1,5 +1,7 @@
 package com.server.database.repositories;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.server.entites.Consumer;
 
@@ -8,6 +10,7 @@ import com.server.entites.Consumer;
 
 public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
+	//List<Consumer> getConsumerByName(String name);
 	Consumer getConsumerByName(String name);
 
 

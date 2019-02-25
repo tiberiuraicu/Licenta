@@ -7,7 +7,8 @@ public class SolarPanel extends PowerSource {
 
 	public SolarPanel() {
 		super();
-
+		setType("solarPanel");
 	}
+	
 
 }

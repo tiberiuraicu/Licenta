@@ -1,5 +1,7 @@
 package com.server.devicesDataReceiver;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +24,13 @@ public class Receiver {
 
 	@Autowired
 	private LightAndMovementEventHandler lightAndMovementEventHandler;
-	
+
 	@Autowired
-    private SensorRepository sensorRepository;
-	
+	private SensorRepository sensorRepository;
+
 	@Autowired
 	ConsumerRepository consumerRepository;
-	
+
 	ObjectMapper mapper = new ObjectMapper();
 
 	final static Logger logger = Logger.getLogger(Receiver.class);
@@ -42,17 +44,25 @@ public class Receiver {
 			if (consumerMessage.contains("outlet")) {
 
 				Consumer outlet = mapper.readValue(consumerMessage, Outlet.class);
-
+				//consumerRepository.save(outlet);
 				addToConsumptionEventHandler.handle(outlet);
 
 			}
 			if (consumerMessage.contains("switch")) {
 
 				Consumer switcherForConsumptionAdding = mapper.readValue(consumerMessage, Switch.class);
+
+//				List<Consumer> switcherForLightOpenTesting =  consumerRepository
+//						.getConsumerByName(switcherForConsumptionAdding.getName());
+//
+//				switcherForConsumptionAdding.setLocation(switcherForLightOpenTesting.get(switcherForLightOpenTesting.size()-1).getLocation());
 				
-				Switch switcherForLightOpenTesting=(Switch) consumerRepository.getConsumerByName(switcherForConsumptionAdding.getName());
-				
-				switcherForConsumptionAdding.setLocation(switcherForLightOpenTesting.getLocation());
+				//TODO change this
+				System.out.println(switcherForConsumptionAdding.getName());
+				Consumer switcher = consumerRepository.getConsumerByName(switcherForConsumptionAdding.getName());
+				switcherForConsumptionAdding.setLocation(switcher.getLocation());
+						
+				//consumerRepository.save(switcherForConsumptionAdding);
 				
 				addToConsumptionEventHandler.handle(switcherForConsumptionAdding);
 
@@ -70,15 +80,18 @@ public class Receiver {
 			String sensorMessage = new String(body, "UTF-8");
 
 			if (sensorMessage.contains("movement")) {
-				
+
 				Sensor sensor = mapper.readValue(sensorMessage, Sensor.class);
-				
-				Sensor sensorFromDB= sensorRepository.getSensorByName(sensor.getName());
-			
+
+//				List<Sensor> sensorFromDB = sensorRepository.getSensorByName(sensor.getName());
+//
+//				sensor.setLocation(sensorFromDB.get(sensorFromDB.size()-1).getLocation());
+				//TODO change this
+				Sensor sensorFromDB = sensorRepository.getSensorByName(sensor.getName());
 				sensor.setLocation(sensorFromDB.getLocation());
+				//sensorRepository.save(sensor);
 				
 				lightAndMovementEventHandler.handle(sensor);
-				
 			}
 
 		} catch (Exception e) {

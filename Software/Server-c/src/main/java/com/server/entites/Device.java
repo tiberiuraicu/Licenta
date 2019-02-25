@@ -37,10 +37,6 @@ public class Device {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="device")
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Circuit> circuits = new Vector<Circuit>();
-	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="device")
-	@Fetch(value = FetchMode.SUBSELECT)
-	private List<Sensor> sensors = new Vector<Sensor>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="device")
 	@Fetch(value = FetchMode.SUBSELECT)
@@ -107,14 +103,6 @@ public class Device {
 
 	public void setCircuits(List<Circuit> circuits) {
 		this.circuits = circuits;
-	}
-
-	public List<Sensor> getSensors() {
-		return sensors;
-	}
-
-	public void setSensors(List<Sensor> sensors) {
-		this.sensors = sensors;
 	}
 
 	public List<Notification> getNotifications() {

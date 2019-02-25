@@ -3,45 +3,33 @@ package com.server.cep.subscriber;
 import java.util.Map;
 import org.springframework.stereotype.Component;
 import com.server.cep.processing.FunctiiAjutor;
+import com.server.cep.processing.HelperFunctions;
 import com.server.entites.Consumer;
-
 
 @Component
 public class AddToConsumptionSubscriber {
-FunctiiAjutor fnctiiAjutor= new FunctiiAjutor();
+	FunctiiAjutor fnctiiAjutor = new FunctiiAjutor();
+	HelperFunctions helperFunctions = new HelperFunctions();
 
-public String getStatement() {
+	public String getStatement() {
 
-// Example using 'Match Recognise' syntax.
-//String crtiticalEventExpression = "select * from Consumator "
-//        + "match_recognize ( "
-//        + "       measures A as consumator1, B as consumator2 "
-//        + "       pattern (A B) " 
-//        + "       define "
-//        + "               A as A.putereConsumata >= " + 0.0 + ", "
-//        + "               B as (A.putereConsumata < B.putereConsumata) "
-//        + ")";
-//
-//return crtiticalEventExpression;
-//}
-	
-//Example using 'Match Recognise' syntax.
-String crtiticalEventExpression = "select * from pattern [ every a=Consumer()-> b=Consumer(name=a.name,powerConsumed>a.powerConsumed)   ]";
+		String crtiticalEventExpression = "select firstConsumer from pattern [ every firstConsumer=Consumer()-> secondConsumer=Consumer(name=firstConsumer.name,powerConsumed>firstConsumer.powerConsumed)]";
 
-return crtiticalEventExpression;
-}
+		return crtiticalEventExpression;
+	}
 
 	/**
 	 * Listener method called when Esper has detected a pattern match.
 	 */
 	public void update(Map<String, Consumer> eventMap) {
 		System.out.println(eventMap.toString());
-		//System.out.println("-----------------------------------");
-	
-//	
-//		Consumator a = eventMap.get("a");
-//        System.out.println(a.getPutereConsumata()+"--------------------------------------------------"+a.getNume());
-//
+
+		Consumer a = eventMap.get("firstConsumer");
+		
+		System.out.println(a.getPowerConsumed() + "--------------------------------------------------" + a.getName());
+
+		
+		
 //		Consumator con=consumatorRepository.findByNume(a.getNume());
 //	
 //		
@@ -59,7 +47,6 @@ return crtiticalEventExpression;
 //		
 //			fnctiiAjutor.verificareMarireConsum((PanouSolar)alimentator);
 //		}
-		
 
 	}
 

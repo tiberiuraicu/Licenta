@@ -14,6 +14,7 @@ import com.server.entites.PowerSource;
 import com.server.entites.Sensor;
 import com.server.entites.Circuit;
 import com.server.entites.Consumer;
+import com.server.entites.Device;
 import com.server.entites.Switch;
 import com.server.entites.SolarPanel;
 import com.server.entites.Outlet;
@@ -27,15 +28,20 @@ public class FunctiiAjutor {
 	@Autowired
 	SensorRepository sensorRepository;
 
+	HelperFunctions helperFunctions = new HelperFunctions();
+
 	public Circuit getCircuit() {
 		return null;
 	}
 
 	public PowerSource getAlimentator() {
-		java.util.List<Consumer> consumatori1 = new Vector<Consumer>();
-		java.util.List<Consumer> consumatori2 = new Vector<Consumer>();
-		java.util.List<Consumer> consumatori3 = new Vector<Consumer>();
-		List<Circuit> circuite = new Vector<Circuit>();
+		PowerSource alimentator = new SolarPanel();
+		alimentator.setPutereGenerata(200.5);
+		Circuit c1 = new Circuit();
+		Circuit c2 = new Circuit();
+		Circuit c3 = new Circuit();
+		
+
 
 		Consumer unu = new Outlet();
 		unu.setPowerConsumed(0.2);
@@ -60,7 +66,7 @@ public class FunctiiAjutor {
 		cinci.setState(1);
 		cinci.setName("switch1");
 		cinci.setLocation("bathroom");
-		
+
 		Consumer sase = new Switch();
 		sase.setPowerConsumed(58.6);
 		sase.setState(1);
@@ -75,48 +81,34 @@ public class FunctiiAjutor {
 		sensor2.setName("sensor2");
 		sensor2.setLocation("bathroom");
 
-		sensorRepository.save(sensor1);
-		sensorRepository.save(sensor2);
 
-		consumatori1.add(unu);
-		consumatori1.add(doi);
-		consumatori2.add(trei);
-
-		consumatori2.add(patru);
-		consumatori3.add(cinci);
-		consumatori3.add(sase);
-
-		PowerSource alimentator = new SolarPanel();
-		alimentator.setPutereGenerata(200.5);
-		Circuit c1 = new Circuit();
-		c1.setConsumers(consumatori1);
-		c1.setPowerSource(alimentator);
+		c1=helperFunctions.makeSensorAndCircuitConnection(sensor1, c1);
+		System.out.println("---------------------------");
+		c1=helperFunctions.makeSensorAndCircuitConnection(sensor2, c1);
+		System.out.println("---------------------------");
+		c2=helperFunctions.makeConsumerAndCircuitConnection(unu, c2);
+		System.out.println("---------------------------");
+		c2=helperFunctions.makeConsumerAndCircuitConnection(doi, c2);
+		System.out.println("---------------------------");
+		c3=helperFunctions.makeConsumerAndCircuitConnection(trei, c3);
+		System.out.println("---------------------------");
+		c3=helperFunctions.makeConsumerAndCircuitConnection(patru, c3);
+		System.out.println("---------------------------");
+		c1=helperFunctions.makeConsumerAndCircuitConnection(cinci, c1);
+		System.out.println("---------------------------");
+		c2=helperFunctions.makeConsumerAndCircuitConnection(sase, c2);
 		c1.setPowerConsumed(calculateCircuitPowerConsumption(c1));
-		Circuit c2 = new Circuit();
-		c2.setConsumers(consumatori2);
-		c2.setPowerSource(alimentator);
 		c2.setPowerConsumed(calculateCircuitPowerConsumption(c2));
-		Circuit c3 = new Circuit();
-		c3.setConsumers(consumatori3);
-		c3.setPowerSource(alimentator);
 		c3.setPowerConsumed(calculateCircuitPowerConsumption(c3));
 
-		sase.setCircuit(c3);
-		cinci.setCircuit(c3);
-		patru.setCircuit(c2);
-		trei.setCircuit(c2);
-		doi.setCircuit(c1);
-		unu.setCircuit(c1);
 
-		c1.setPowerSource(alimentator);
-		c2.setPowerSource(alimentator);
-		c3.setPowerSource(alimentator);
-
-		circuite.add(c1);
-		circuite.add(c2);
-		circuite.add(c3);
-
-		alimentator.setCircuits(circuite);
+		System.out.println("---------------------------");
+		alimentator=helperFunctions.makeCircuitAndPowerSourceConnection(c1, alimentator);
+		System.out.println("---------------------------");
+		alimentator=helperFunctions.makeCircuitAndPowerSourceConnection(c2, alimentator);
+		System.out.println("---------------------------");
+		alimentator=helperFunctions.makeCircuitAndPowerSourceConnection(c3, alimentator);
+		System.out.println("---------------------------");
 
 		return alimentator;
 

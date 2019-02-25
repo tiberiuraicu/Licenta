@@ -15,6 +15,8 @@ public class Sensor {
 	protected int triggered;
 
 	protected Date timestamp;
+	
+	protected Double powerConsumed;
 
 	protected String location;
 	
@@ -68,6 +70,14 @@ public class Sensor {
 		this.timestamp = timestamp;
 	}
 
+	public Double getPowerConsumed() {
+		return powerConsumed;
+	}
+
+	public void setPowerConsumed(Double powerConsumed) {
+		this.powerConsumed = powerConsumed;
+	}
+
 	public String getLocation() {
 		return location;
 	}
@@ -75,7 +85,4 @@ public class Sensor {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-
-	
-
 }

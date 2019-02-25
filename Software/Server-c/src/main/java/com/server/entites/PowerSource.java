@@ -1,6 +1,8 @@
 package com.server.entites;
 
 import java.util.List;
+import java.util.Vector;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,10 +22,12 @@ public class PowerSource {
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,mappedBy="powerSource")
 	@Fetch(value = FetchMode.SUBSELECT)
-	protected List<Circuit> circuits;
+	protected List<Circuit> circuits= new Vector<Circuit>();
 	
 	protected Double generatedPower;
 
+	protected String type;
+	
 	public PowerSource() {}
 
 	public Integer getId() {
@@ -50,6 +54,20 @@ public class PowerSource {
 		this.generatedPower = putereGenerata;
 	}
 
-	
+	public Double getGeneratedPower() {
+		return generatedPower;
+	}
+
+	public void setGeneratedPower(Double generatedPower) {
+		this.generatedPower = generatedPower;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 
 }
