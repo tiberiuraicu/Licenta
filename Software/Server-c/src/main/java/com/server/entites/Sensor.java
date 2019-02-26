@@ -109,6 +109,13 @@ public class Sensor {
 
 	public void setCircuit(Circuit circuit) {
 		this.circuit = circuit;
+	}
+
+	@Override
+	public String toString() {
+		return "Sensor [id=" + id + ", name=" + name + ", type=" + type + ", state=" + state + ", triggered="
+				+ triggered + ", timestamp=" + timestamp + ", location=" + location + ", powerConsumed=" + powerConsumed
+				+ "]";
 	}	
 	
 }

@@ -24,8 +24,7 @@ public class PowerSource {
 		return "PowerSource [id=" + id + ", generatedPower=" + generatedPower + ", type=" + type + "]";
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,mappedBy="powerSource")
-	@Fetch(value = FetchMode.SUBSELECT)
+	@OneToMany(cascade =CascadeType.ALL , fetch = FetchType.EAGER, mappedBy="powerSource")
 	protected List<Circuit> circuits= new Vector<Circuit>();
 	
 	protected Double generatedPower;

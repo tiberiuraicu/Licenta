@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.server.database.repositories.CircuitRepository;
+import com.server.database.repositories.ConsumerRepository;
 import com.server.database.repositories.PowerSourceRepository;
+import com.server.database.repositories.SensorRepository;
 import com.server.entites.Circuit;
 import com.server.entites.Consumer;
 import com.server.entites.Device;
@@ -25,19 +27,37 @@ public class HelperFunctions {
 	CircuitRepository circuitRepository;
 	@Autowired
 	PowerSourceRepository powerSourceRepository;
+	@Autowired
+	SensorRepository sensorRepository;
+	@Autowired
+	ConsumerRepository consumerRepository;
 
 	public Circuit makeConsumerAndCircuitConnection(Consumer consumer, Circuit circuit) {
 
 		consumer.setCircuit(circuit);
 
 		List<Consumer> consumersForCircuit = circuit.getConsumers();
-		try {
-			consumersForCircuit.remove(consumer);
-		} catch (Exception e) {
-			System.out.println("exceptie-----------------------");
-		}
+		Consumer consumerFromCircuit = null;
+		int consumerPosition = 0;
 
-		consumersForCircuit.add(consumer);
+		for (int i = 0; i < consumersForCircuit.size(); i++) {
+			if (consumersForCircuit.get(i).getName().equals(consumer.getName())) {
+
+				consumerFromCircuit = consumersForCircuit.get(i);
+				consumerPosition = i;
+				break;
+
+			}
+		}
+		if (consumerFromCircuit != null) {
+			consumerFromCircuit.setCircuit(null);
+
+			consumerRepository.save(consumerFromCircuit);
+			consumersForCircuit.set(consumerPosition, consumer);
+		} else {
+
+			consumersForCircuit.add(consumer);
+		}
 
 		circuit.setConsumers(consumersForCircuit);
 
@@ -63,11 +83,15 @@ public class HelperFunctions {
 		circuit.setPowerSource(powerSource);
 
 		List<Circuit> circuitsForPowerSource = powerSource.getCircuits();
-		try {
-			circuitsForPowerSource.remove(circuit);
-		} catch (Exception e) {
-
-		}
+		
+//		System.out.println(circuitsForPowerSource.toString());
+//		System.out.println("______________________________");
+//		for (int i = 0; i < circuitsForPowerSource.size(); i++)
+//			if (circuitsForPowerSource.get(i).getId().equals(circuit.getId())) {
+//				circuitsForPowerSource.get(i).setPowerSource(powerSourceRepository.getPowerSourceById(2));
+//				circuitRepository.save(circuitsForPowerSource.get(i));
+//				circuitsForPowerSource.set(i, circuit);
+//			}
 		circuitsForPowerSource.add(circuit);
 
 		powerSource.setCircuits(circuitsForPowerSource);
@@ -77,35 +101,54 @@ public class HelperFunctions {
 	}
 
 	public void setNewSetOfCircuitsToPowerSource(PowerSource powerSource, List<Circuit> circuits) {
-		
+
 		PowerSource normalPowerSource = powerSourceRepository.getPowerSourceById(2);
-		
-		for (Circuit circuit : powerSource.getCircuits()) {
-			
+
+		for (Circuit circuit :circuitRepository.findAll()) {
+
 			circuit.setPowerSource(normalPowerSource);
-			
+
 			normalPowerSource = makeCircuitAndPowerSourceConnection(circuit, normalPowerSource);
 		}
-		
+
 		powerSourceRepository.save(normalPowerSource);
-		
+		PowerSource solarPowerSource = powerSourceRepository.getPowerSourceById(1);
 		for (Circuit circuit : circuits) {
 
 			powerSource = makeCircuitAndPowerSourceConnection(circuit, powerSource);
 		}
-
-		powerSourceRepository.save(powerSource);
+System.out.println(solarPowerSource.getCircuits().toString());
+		powerSourceRepository.save(solarPowerSource);
 	}
 
 	public Circuit makeSensorAndCircuitConnection(Sensor sensor, Circuit circuit) {
 
 		sensor.setCircuit(circuit);
 
-		List<Sensor> senosrsForCircuit = circuit.getSensors();
+		List<Sensor> sensorsForCircuit = circuit.getSensors();
 
-		senosrsForCircuit.add(sensor);
+		Sensor sensorFromCircuit = null;
+		int sensorPosition = 0;
 
-		circuit.setSensors(senosrsForCircuit);
+		for (int i = 0; i < sensorsForCircuit.size(); i++) {
+			if (sensorsForCircuit.get(i).getName().equals(sensor.getName())) {
+
+				sensorFromCircuit = sensorsForCircuit.get(i);
+				sensorPosition = i;
+				break;
+
+			}
+		}
+		if (sensorFromCircuit != null) {
+			sensorFromCircuit.setCircuit(null);
+
+			sensorRepository.save(sensorFromCircuit);
+			sensorsForCircuit.set(sensorPosition, sensor);
+		} else {
+
+			sensorsForCircuit.add(sensor);
+		}
+		circuit.setSensors(sensorsForCircuit);
 
 		return circuit;
 	}

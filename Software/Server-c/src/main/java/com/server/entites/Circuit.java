@@ -93,8 +93,7 @@ public class Circuit {
 
 	@Override
 	public String toString() {
-		return "Circuit [id=" + id + ", consumers=" + consumers + ", powerConsumed=" + powerConsumed + ", device="
-				+ device + ", sensors=" + sensors + "]";
+		return "Circuit [  powerConsumed=" + powerConsumed  + "]";
 	}
 	
 

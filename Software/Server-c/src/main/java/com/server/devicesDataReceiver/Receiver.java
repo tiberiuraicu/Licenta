@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.cep.handler.AddToConsumptionEventHandler;
 import com.server.cep.handler.LightAndMovementEventHandler;
+import com.server.cep.processing.HelperFunctions;
+import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
 import com.server.database.repositories.SensorRepository;
 import com.server.entites.Circuit;
@@ -31,6 +33,12 @@ public class Receiver {
 
 	@Autowired
 	ConsumerRepository consumerRepository;
+	
+	@Autowired
+	CircuitRepository circuitRepository;
+	
+	@Autowired
+	HelperFunctions helperFunctions;
 
 	ObjectMapper mapper = new ObjectMapper();
 
@@ -45,25 +53,26 @@ public class Receiver {
 			if (consumerMessage.contains("outlet")) {
 
 				Consumer outlet = mapper.readValue(consumerMessage, Outlet.class);
-
-				outlet.setCircuit(consumerRepository.findTopByNameOrderByIdDesc(outlet.getName()).getCircuit());
+				outlet.setLocation(consumerRepository.findTopByNameOrderByIdDesc(outlet.getName()).getLocation());
 				
-			    consumerRepository.save(outlet);
-			    
+				Circuit circuit=helperFunctions.makeConsumerAndCircuitConnection(outlet, consumerRepository.findTopByNameOrderByIdDesc(outlet.getName()).getCircuit());
+				circuit = helperFunctions.calculateAndSetCircuitPowerConsumed(circuit);
+				circuitRepository.save(circuit);
+				
 				addToConsumptionEventHandler.handle(outlet);
 
 			}
 			if (consumerMessage.contains("switch")) {
 
-				Consumer switcherForConsumptionAdding = mapper.readValue(consumerMessage, Switch.class);
+				Consumer switcher = mapper.readValue(consumerMessage, Switch.class);
 			
-				switcherForConsumptionAdding.setLocation(consumerRepository.findTopByNameOrderByIdDesc(switcherForConsumptionAdding.getName()).getLocation());
+				switcher.setLocation(consumerRepository.findTopByNameOrderByIdDesc(switcher.getName()).getLocation());
 				
-				switcherForConsumptionAdding.setCircuit(consumerRepository.findTopByNameOrderByIdDesc(switcherForConsumptionAdding.getName()).getCircuit());
+				Circuit circuit=helperFunctions.makeConsumerAndCircuitConnection(switcher, consumerRepository.findTopByNameOrderByIdDesc(switcher.getName()).getCircuit());
+				circuit = helperFunctions.calculateAndSetCircuitPowerConsumed(circuit);
+				circuitRepository.save(circuit);
 
-				consumerRepository.save(switcherForConsumptionAdding);
-
-				addToConsumptionEventHandler.handle(switcherForConsumptionAdding);
+				addToConsumptionEventHandler.handle(switcher);
 
 			}
 		} catch (Exception e) {
@@ -84,9 +93,12 @@ public class Receiver {
 
 				sensor.setLocation(sensorRepository.findTopByNameOrderByIdDesc(sensor.getName()).getLocation());
 				
-				sensor.setCircuit(sensorRepository.findTopByNameOrderByIdDesc(sensor.getName()).getCircuit());
+				sensor.setPowerConsumed(sensorRepository.findTopByNameOrderByIdDesc(sensor.getName()).getPowerConsumed());
 				
-				sensorRepository.save(sensor);
+				Circuit circuit=helperFunctions.makeSensorAndCircuitConnection(sensor, sensorRepository.findTopByNameOrderByIdDesc(sensor.getName()).getCircuit());
+				circuit = helperFunctions.calculateAndSetCircuitPowerConsumed(circuit);
+				circuitRepository.save(circuit);
+		
 
 				lightAndMovementEventHandler.handle(sensor);
 

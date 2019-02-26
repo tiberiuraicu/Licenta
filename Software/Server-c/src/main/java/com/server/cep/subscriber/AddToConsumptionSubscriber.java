@@ -38,23 +38,21 @@ public class AddToConsumptionSubscriber {
 	 * Listener method called when Esper has detected a pattern match.
 	 */
 	public void update(Map<String, Consumer> eventMap) {
+		System.out.println("subscriber");
 		Consumer consumerWithSpikedPowerConsumption = eventMap.get("consumerWithSpikedPowerConsumption");
-		List<Consumer> consumerListFromDB =  consumerRepository
-				.getConsumerByName(consumerWithSpikedPowerConsumption.getName());
-		Consumer consumerFromDB = consumerListFromDB.get(consumerListFromDB.size()-1);
+		
+		Consumer consumerFromDB = consumerRepository.findTopByNameOrderByIdDesc(consumerWithSpikedPowerConsumption.getName());
 
 		Circuit circuitFromDB = consumerFromDB.getCircuit();
 
 		PowerSource powerSource = circuitFromDB.getPowerSource();
 		
-		if (powerSource.getType().equals("solarPanel")) {
+
 			
 		functiiAjutor.verificareMarireConsum(powerSource);
 
-		}
-		else if (powerSource.getType().equals("normalPowerSource")) {
-			circuitReporitory.save(circuitFromDB);
-		}
+		
+		
 
 	}
 

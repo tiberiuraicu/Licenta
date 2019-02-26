@@ -32,6 +32,7 @@ public class ServerApplication implements CommandLineRunner {
 		powerSourceRepository.save(normalPowerSource);
 		powerSourceRepository.save(fnctiiAjutor.getAlimentator());
 		
+		
 	}
 }
 
