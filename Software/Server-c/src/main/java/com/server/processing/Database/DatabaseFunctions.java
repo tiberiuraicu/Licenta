@@ -16,7 +16,6 @@ import com.server.entites.Role;
 import com.server.entites.Sensor;
 import com.server.entites.User;
 
-
 @Component
 public class DatabaseFunctions {
 
@@ -29,35 +28,48 @@ public class DatabaseFunctions {
 	@Autowired
 	ConsumerRepository consumerRepository;
 
-	//make the connection between Consumer and a Circuit
+	// make the connection between Consumer and a Circuit or,
+	// if it already exists in circuit update its dates
 	public Circuit makeConsumerAndCircuitConnection(Consumer consumer, Circuit circuit) {
 
-		//sets the circuit for the specific Consumer
+		// sets the circuit for the specific Consumer
 		consumer.setCircuit(circuit);
 
+		// gets all consumers for the circuit
 		List<Consumer> consumersForCircuit = circuit.getConsumers();
-		Consumer consumerFromCircuit = null;
-		int consumerPosition = 0;
 
+		Consumer consumerToBeReplaced = null;
+
+		int consumerToBeReplacedPosition = 0;
+
+		// iterate trough all consumers from circuit
 		for (int i = 0; i < consumersForCircuit.size(); i++) {
+			// and if one is found with the same name
 			if (consumersForCircuit.get(i).getName().equals(consumer.getName())) {
-
-				consumerFromCircuit = consumersForCircuit.get(i);
-				consumerPosition = i;
+               //store it in an intermediate variabile
+				consumerToBeReplaced = consumersForCircuit.get(i);
+				 //and store its position in an intermediate variabile
+				consumerToBeReplacedPosition = i;
 				break;
-
 			}
-		}
-		if (consumerFromCircuit != null) {
-			consumerFromCircuit.setCircuit(null);
-
-			consumerRepository.save(consumerFromCircuit);
-			consumersForCircuit.set(consumerPosition, consumer);
-		} else {
-			consumer.getName();
+		}	
+		
+		if (consumerToBeReplaced != null) {
+			//remove the link with the Circuit
+			consumerToBeReplaced.setCircuit(null);
+			//save in database 
+			consumerRepository.save(consumerToBeReplaced);
+			//replace the old consumer with the new one
+			consumersForCircuit.set(consumerToBeReplacedPosition, consumer);
+		} 
+		
+		//if the consumer doesn't exists 
+		else {
+            //add the consumer to array
 			consumersForCircuit.add(consumer);
 		}
-
+		
+		//seteaza lista actualizata de consumatori pentru circuit
 		circuit.setConsumers(consumersForCircuit);
 
 		return circuit;
@@ -80,9 +92,9 @@ public class DatabaseFunctions {
 	public PowerSource makeCircuitAndPowerSourceConnection(Circuit circuit, PowerSource powerSource) {
 
 		circuit.setPowerSource(powerSource);
-		
+
 		circuitRepository.save(circuit);
-		
+
 		List<Circuit> circuitsForPowerSource = powerSource.getCircuits();
 
 		circuitsForPowerSource.add(circuit);
@@ -107,14 +119,14 @@ public class DatabaseFunctions {
 		powerSourceRepository.save(normalPowerSource);
 
 		PowerSource solarPowerSource = powerSourceRepository.getPowerSourceById(1);
-		
+
 		for (Circuit circuit : circuits) {
 
 			solarPowerSource = makeCircuitAndPowerSourceConnection(circuit, solarPowerSource);
 		}
-	
+
 		powerSourceRepository.save(solarPowerSource);
-		
+
 	}
 
 	public Circuit makeSensorAndCircuitConnection(Sensor sensor, Circuit circuit) {
