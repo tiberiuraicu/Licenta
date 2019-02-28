@@ -13,7 +13,7 @@ import com.server.entites.NormalPowerSource;
 @SpringBootApplication
 @EnableScheduling
 @EnableJpaRepositories
-public class ServerApplication implements CommandLineRunner {
+public class DummyApplication implements CommandLineRunner {
 
 	
 	@Autowired
@@ -23,16 +23,14 @@ public class ServerApplication implements CommandLineRunner {
 	private FunctiiAjutor fnctiiAjutor;
 	
 	public static void main(String[] args) {
-		SpringApplication.run(ServerApplication.class, args);
+		SpringApplication.run(DummyApplication.class, args);
 	}
 	
 	@Override
 	public void run(String... strings) throws Exception {	
-//		NormalPowerSource normalPowerSource=new NormalPowerSource();
-//		powerSourceRepository.save(normalPowerSource);
-//		powerSourceRepository.save(fnctiiAjutor.getAlimentator());
-//		
-		
+		NormalPowerSource normalPowerSource=new NormalPowerSource();
+		powerSourceRepository.save(normalPowerSource);
+		powerSourceRepository.save(fnctiiAjutor.getAlimentator());
 	}
 }
 

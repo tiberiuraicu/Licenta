@@ -19,7 +19,7 @@ public class PowerSource {
 		return "PowerSource [id=" + id + ", generatedPower=" + generatedPower + ", type=" + type + "]";
 	}
 
-	@OneToMany(cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.REMOVE} , fetch = FetchType.EAGER, mappedBy="powerSource")
+	@OneToMany(cascade = {CascadeType.MERGE,CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.REMOVE} , fetch = FetchType.EAGER, mappedBy="powerSource")
 	protected List<Circuit> circuits= new Vector<Circuit>();
 	
 	protected Double generatedPower;

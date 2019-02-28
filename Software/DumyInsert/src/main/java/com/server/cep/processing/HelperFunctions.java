@@ -82,7 +82,7 @@ public class HelperFunctions {
 
 		circuit.setPowerSource(powerSource);
 		
-		circuitRepository.save(circuit);
+		//circuitRepository.save(circuit);
 		
 		List<Circuit> circuitsForPowerSource = powerSource.getCircuits();
 
