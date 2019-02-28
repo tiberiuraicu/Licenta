@@ -1,8 +1,6 @@
 package com.server.cep.subscriber;
 
-import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.server.cep.processing.FunctiiAjutor;
@@ -36,9 +34,10 @@ public class AddToConsumptionSubscriber {
 
 	/**
 	 * Listener method called when Esper has detected a pattern match.
+	 * @throws InterruptedException 
 	 */
-	public void update(Map<String, Consumer> eventMap) {
-		System.out.println("subscriber");
+	public void update(Map<String, Consumer> eventMap) throws InterruptedException {
+		
 		Consumer consumerWithSpikedPowerConsumption = eventMap.get("consumerWithSpikedPowerConsumption");
 		
 		Consumer consumerFromDB = consumerRepository.findTopByNameOrderByIdDesc(consumerWithSpikedPowerConsumption.getName());

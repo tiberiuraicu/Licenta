@@ -2,16 +2,11 @@ package com.server.entites;
 
 import java.util.List;
 import java.util.Vector;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 @Entity
 public class PowerSource {
@@ -24,7 +19,7 @@ public class PowerSource {
 		return "PowerSource [id=" + id + ", generatedPower=" + generatedPower + ", type=" + type + "]";
 	}
 
-	@OneToMany(cascade =CascadeType.ALL , fetch = FetchType.EAGER, mappedBy="powerSource")
+	@OneToMany(cascade = {CascadeType.MERGE,CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.REMOVE} , fetch = FetchType.EAGER, mappedBy="powerSource")
 	protected List<Circuit> circuits= new Vector<Circuit>();
 	
 	protected Double generatedPower;

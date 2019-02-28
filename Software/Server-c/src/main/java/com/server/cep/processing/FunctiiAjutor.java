@@ -2,11 +2,18 @@ package com.server.cep.processing;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.Vector;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.server.database.repositories.PowerSourceRepository;
 import com.server.database.repositories.SensorRepository;
+import com.google.common.collect.Sets;
 import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
 import com.server.entites.PowerSource;
@@ -31,6 +38,8 @@ public class FunctiiAjutor {
 	CircuitRepository circuitReporitory;
 	@Autowired
 	HelperFunctions helperFunctions;
+
+	private BlockingQueue<Set<Set<Circuit>>> blockQue = new ArrayBlockingQueue<Set<Set<Circuit>>>(1024);
 
 	public PowerSource getAlimentator() {
 
@@ -81,7 +90,7 @@ public class FunctiiAjutor {
 		sensor2.setName("sensor2");
 		sensor2.setLocation("bathroom");
 		sensor2.setPowerConsumed(2.0);
-		
+
 		Circuit c4 = new Circuit();
 		Circuit c5 = new Circuit();
 		Circuit c6 = new Circuit();
@@ -128,7 +137,6 @@ public class FunctiiAjutor {
 		sensor4.setLocation("bathroom");
 		sensor4.setPowerConsumed(2.0);
 
-
 		c1 = helperFunctions.makeSensorAndCircuitConnection(sensor1, c1);
 		c1 = helperFunctions.makeSensorAndCircuitConnection(sensor2, c1);
 		c2 = helperFunctions.makeConsumerAndCircuitConnection(unu, c2);
@@ -137,7 +145,7 @@ public class FunctiiAjutor {
 		c3 = helperFunctions.makeConsumerAndCircuitConnection(patru, c3);
 		c1 = helperFunctions.makeConsumerAndCircuitConnection(cinci, c1);
 		c2 = helperFunctions.makeConsumerAndCircuitConnection(sase, c2);
-		
+
 		c4 = helperFunctions.makeSensorAndCircuitConnection(sensor3, c4);
 		c4 = helperFunctions.makeSensorAndCircuitConnection(sensor4, c4);
 		c5 = helperFunctions.makeConsumerAndCircuitConnection(sapte, c5);
@@ -146,7 +154,7 @@ public class FunctiiAjutor {
 		c6 = helperFunctions.makeConsumerAndCircuitConnection(zece, c6);
 		c4 = helperFunctions.makeConsumerAndCircuitConnection(unsprezece, c4);
 		c5 = helperFunctions.makeConsumerAndCircuitConnection(doisprezece, c5);
-		
+
 		c1.setPowerConsumed(calculateCircuitPowerConsumption(c1));
 		c2.setPowerConsumed(calculateCircuitPowerConsumption(c2));
 		c3.setPowerConsumed(calculateCircuitPowerConsumption(c3));
@@ -161,7 +169,6 @@ public class FunctiiAjutor {
 		powerSource = helperFunctions.makeCircuitAndPowerSourceConnection(c5, powerSource);
 		powerSource = helperFunctions.makeCircuitAndPowerSourceConnection(c6, powerSource);
 
-		
 		return powerSource;
 
 	}
@@ -176,22 +183,44 @@ public class FunctiiAjutor {
 
 	// verifica daca puterea generata de panou solar este <=> decat noua putere
 	// consumata de circuite
-	public void verificareMarireConsum(PowerSource powerSource) {
+	public void verificareMarireConsum(PowerSource powerSource) throws InterruptedException {
 		// preia puterea generata de panou
-		double putereGenerata = powerSource.getGeneratedPower();
+		double putereGenerata = powerSourceRepository.getPowerSourceById(1).getGeneratedPower();
 		// calculeaza noua putere consumata de circuitele alimentate la panou
-		double putereConsumata = calculeazaPutereConsumata(powerSource.getCircuits());
+		double putereConsumata = calculeazaPutereConsumata(powerSourceRepository.getPowerSourceById(1).getCircuits());
 
 		if (putereGenerata > putereConsumata) {
 
+			verificaDacaSeMaiPoateAdaugaConsumatorLaPanou();
 			// TODO informeaza frontend ca a fost marat consumul
-		} else  if (putereGenerata < putereConsumata){
+		} else if (putereGenerata < putereConsumata) {
+//			System.out.println("subscriber");
 			// rearanjeaza circuitele in cel mai bun mod posibil
 			// astfel incat puterea consumata de circuitele conectate
 			// la panou sa fie mai mica decat puterea generata
 			rearanjareCircuite(powerSource);
 
 		}
+	}
+
+	public void verificaDacaSeMaiPoateAdaugaConsumatorLaPanou() throws InterruptedException {
+		PowerSource powerSource = powerSourceRepository.getPowerSourceById(1);
+		List<Circuit> circuitsForPowerSource = powerSource.getCircuits();
+		double putereConsumata = calculeazaPutereConsumata(circuitsForPowerSource);
+		List<Circuit> allCircuitsFormHome = circuitReporitory.findAll();
+
+		Double powerAvailable = powerSource.getGeneratedPower() - putereConsumata;
+		if (powerAvailable > 0) {
+
+			for (Circuit circuit : allCircuitsFormHome) {
+				if (circuit.getPowerConsumed() < powerAvailable) {
+//				   System.out.println("subscriber");
+					rearanjareCircuite(powerSource);
+					break;
+				}
+			}
+		}
+
 	}
 
 	public double calculeazaPutereConsumata(List<Circuit> circuite) {
@@ -202,29 +231,30 @@ public class FunctiiAjutor {
 		return putereConsumata;
 	}
 
-	public void rearanjareCircuite(PowerSource powerSource) {
+	public void rearanjareCircuite(PowerSource powerSource) throws InterruptedException {
 		// lista cu combinatii de circuite si puterile consumate de fiecare combinatie
 		HashMap<List<Circuit>, Double> puteriConsumate = new HashMap<List<Circuit>, Double>();
 
-//		// fiecare combinatie posibila de circuite
-		//List<List<Circuit>> diferiteCombinatiiDeCircuite = getAllSubsets(powerSource.getCircuits());
-		// fiecare combinatie posibila de circuite
-List<Circuit> c=circuitReporitory.findAll();
-		 List<List<Circuit>> diferiteCombinatiiDeCircuite =
-		 getAllSubsets(c);
-	
-		 System.out.println(diferiteCombinatiiDeCircuite);
+		Set<Circuit> set = new HashSet<Circuit>(circuitReporitory.findAll());
+
+		Set<Set<Circuit>> result = Sets.powerSet(Sets.newHashSet(set));
 
 		// calculeaza puterea consumata pentru toate combinatiile de circuite
-		for (List<Circuit> listaCuCircuite : diferiteCombinatiiDeCircuite) {
+		for (Set<Circuit> setCuCircuite : result) {
+
+			List<Circuit> listaCuCircuite = new Vector<Circuit>();
+			listaCuCircuite.addAll(setCuCircuite);
 			Double putereConsumata = 0.0;
 			for (Circuit circuit : listaCuCircuite) {
 				putereConsumata += circuit.getPowerConsumed();
 			}
+			
 			puteriConsumate.put(listaCuCircuite, putereConsumata);
 		}
-		// calculeaza cea mai apropiata valoare a puterii consumate
+		
+//		// calculeaza cea mai apropiata valoare a puterii consumate
 		// a diferitelor combinatii fata de puterea generata de panou solar
+
 		Double min = 10000.0;
 		List<Circuit> nearest = null;
 		for (List<Circuit> key : puteriConsumate.keySet()) {
@@ -241,23 +271,7 @@ List<Circuit> c=circuitReporitory.findAll();
 			}
 		}
 
-		helperFunctions.setNewSetOfCircuitsToPowerSource(powerSource, nearest);
-	}
-
-	// de modificat
-	public List<List<Circuit>> getAllSubsets(List<Circuit> input) {
-		int allMasks = 1 << input.size();
-		List<List<Circuit>> output = new ArrayList<List<Circuit>>();
-		for (int i = 0; i < allMasks; i++) {
-			List<Circuit> sub = new ArrayList<Circuit>();
-			for (int j = 0; j < input.size(); j++) {
-				if ((i & (1 << j)) > 0) {
-					sub.add(input.get(j));
-				}
-			}
-			output.add(sub);
-		}
-		return output;
+		helperFunctions.setNewSetOfCircuitsToPowerSource(powerSourceRepository.getPowerSourceById(1), nearest);
 	}
 
 }

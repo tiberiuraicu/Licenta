@@ -55,7 +55,7 @@ public class HelperFunctions {
 			consumerRepository.save(consumerFromCircuit);
 			consumersForCircuit.set(consumerPosition, consumer);
 		} else {
-
+			consumer.getName();
 			consumersForCircuit.add(consumer);
 		}
 
@@ -81,17 +81,11 @@ public class HelperFunctions {
 	public PowerSource makeCircuitAndPowerSourceConnection(Circuit circuit, PowerSource powerSource) {
 
 		circuit.setPowerSource(powerSource);
-
-		List<Circuit> circuitsForPowerSource = powerSource.getCircuits();
 		
-//		System.out.println(circuitsForPowerSource.toString());
-//		System.out.println("______________________________");
-//		for (int i = 0; i < circuitsForPowerSource.size(); i++)
-//			if (circuitsForPowerSource.get(i).getId().equals(circuit.getId())) {
-//				circuitsForPowerSource.get(i).setPowerSource(powerSourceRepository.getPowerSourceById(2));
-//				circuitRepository.save(circuitsForPowerSource.get(i));
-//				circuitsForPowerSource.set(i, circuit);
-//			}
+		//circuitRepository.save(circuit);
+		
+		List<Circuit> circuitsForPowerSource = powerSource.getCircuits();
+
 		circuitsForPowerSource.add(circuit);
 
 		powerSource.setCircuits(circuitsForPowerSource);
@@ -104,7 +98,7 @@ public class HelperFunctions {
 
 		PowerSource normalPowerSource = powerSourceRepository.getPowerSourceById(2);
 
-		for (Circuit circuit :circuitRepository.findAll()) {
+		for (Circuit circuit : circuitRepository.findAll()) {
 
 			circuit.setPowerSource(normalPowerSource);
 
@@ -112,13 +106,16 @@ public class HelperFunctions {
 		}
 
 		powerSourceRepository.save(normalPowerSource);
+
 		PowerSource solarPowerSource = powerSourceRepository.getPowerSourceById(1);
+		
 		for (Circuit circuit : circuits) {
 
-			powerSource = makeCircuitAndPowerSourceConnection(circuit, powerSource);
+			solarPowerSource = makeCircuitAndPowerSourceConnection(circuit, solarPowerSource);
 		}
-System.out.println(solarPowerSource.getCircuits().toString());
+	
 		powerSourceRepository.save(solarPowerSource);
+		
 	}
 
 	public Circuit makeSensorAndCircuitConnection(Sensor sensor, Circuit circuit) {

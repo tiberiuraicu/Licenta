@@ -51,7 +51,7 @@ public class DataInfoSenderToRaspberry {
 				if (lineValues[0].equals("values"))
 					sendOneLine(lineValues);
 				// send every 1s
-				Thread.sleep(1000);
+				Thread.sleep(5000);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
