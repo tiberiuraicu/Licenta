@@ -13,10 +13,13 @@ import com.server.cep.subscriber.UnusedOutletSubscriber;
 @Component
 @Scope(value = "singleton")
 public class UnusedOutletEventHandler implements InitializingBean {
-
+	
+	// CEP service
 	private EPServiceProvider epService;
+	// CEP query for detecting a increase in power consumed
 	private EPStatement unusedOutletStatement;
-
+	
+	// Auto initialized (by Spring) -> the class who contains the statement
 	@Autowired
 	private UnusedOutletSubscriber unusedOutletSubscriber;
 
@@ -24,8 +27,10 @@ public class UnusedOutletEventHandler implements InitializingBean {
 
 		Configuration config = new Configuration();
 		
+		// Specifying from which package to get the necessary objects for Query
 		config.addEventTypeAutoName("com.server.entites");
 		
+		// Specifying which configuration to follow
 		epService = EPServiceProviderManager.getDefaultProvider(config);
 		
 		createUnusedOutletCheckExpression();
@@ -33,8 +38,10 @@ public class UnusedOutletEventHandler implements InitializingBean {
 
 	private void createUnusedOutletCheckExpression() {
 
+		// create the the actual statement
 		unusedOutletStatement = epService.getEPAdministrator().createEPL(unusedOutletSubscriber.getStatement());
 		
+		// adding a method to get the result in case the query gives one
 		unusedOutletStatement.setSubscriber(unusedOutletSubscriber);
 	}
 
@@ -43,6 +50,4 @@ public class UnusedOutletEventHandler implements InitializingBean {
 
 		initService();
 	}
-
-	
 }

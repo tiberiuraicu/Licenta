@@ -13,10 +13,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import com.server.cep.processing.FunctiiAjutor;
-import com.server.cep.processing.HelperFunctions;
+
 import com.server.devicesDataReceiver.Receiver;
 import com.server.devicesInstructionsSender.InstructionsSender;
+import com.server.processing.CEP.CEPFunctions;
+import com.server.processing.Database.DatabaseFunctions;
 
 
 @Configuration
@@ -91,16 +92,16 @@ public class RabbitMQConfiguration {
 			return new Receiver();
 		}
 		@Bean
-		public FunctiiAjutor fnctiiAjutor() {
-			return new FunctiiAjutor();
+		public CEPFunctions CEPFunctions() {
+			return new CEPFunctions();
 		}
 		@Bean
 		public InstructionsSender instructionsSender() {
 			return new InstructionsSender();
 		}
 		@Bean
-		public HelperFunctions helperFunctions() {
-			return new HelperFunctions();
+		public DatabaseFunctions databaseFunctions() {
+			return new DatabaseFunctions();
 		}
 		
 }

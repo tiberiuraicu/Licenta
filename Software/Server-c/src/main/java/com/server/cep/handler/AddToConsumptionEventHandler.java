@@ -15,38 +15,46 @@ import com.server.entites.Consumer;
 @Scope(value = "singleton")
 public class AddToConsumptionEventHandler implements InitializingBean {
 
+	// CEP service
 	private EPServiceProvider epService;
+
+	// CEP query for detecting a increase in power consumed
 	private EPStatement addToConsumptionStatement;
 
+	// Auto initialized (by Spring) -> the class who contains the statement
 	@Autowired
 	private AddToConsumptionSubscriber addToConsumptionSubscriber;
 
 	public void initService() {
-		
+
 		Configuration config = new Configuration();
-		
+
+		// Specifying from which package to get the necessary objects for Query
 		config.addEventTypeAutoName("com.server.entites");
-		
+
+		// Specifying which configuration to follow
 		epService = EPServiceProviderManager.getDefaultProvider(config);
-		
+
 		createAddToConsumptionCheckExpression();
 	}
 
 	private void createAddToConsumptionCheckExpression() {
-		
+		// create the the actual statement
 		addToConsumptionStatement = epService.getEPAdministrator().createEPL(addToConsumptionSubscriber.getStatement());
-		
+
+		// adding a method to get the result in case the query gives one
 		addToConsumptionStatement.setSubscriber(addToConsumptionSubscriber);
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		
+
 		initService();
 	}
 
+	//Send the event to query
 	public void handle(Consumer consumer) {
-		
+
 		epService.getEPRuntime().sendEvent(consumer);
 	}
 }

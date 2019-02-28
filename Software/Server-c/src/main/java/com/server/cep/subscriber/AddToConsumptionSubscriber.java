@@ -3,13 +3,15 @@ package com.server.cep.subscriber;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.server.cep.processing.FunctiiAjutor;
-import com.server.cep.processing.HelperFunctions;
+
 import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
+import com.server.database.repositories.PowerSourceRepository;
 import com.server.entites.Circuit;
 import com.server.entites.Consumer;
 import com.server.entites.PowerSource;
+import com.server.processing.CEP.CEPFunctions;
+import com.server.processing.Database.DatabaseFunctions;
 
 @Component
 public class AddToConsumptionSubscriber {
@@ -17,11 +19,13 @@ public class AddToConsumptionSubscriber {
 	@Autowired
 	ConsumerRepository consumerRepository;
 	@Autowired
+	PowerSourceRepository powerSourceRepository;
+	@Autowired
 	CircuitRepository circuitReporitory;
 	@Autowired
-	FunctiiAjutor functiiAjutor;
+	CEPFunctions CEPFunctions;
 	@Autowired
-	HelperFunctions helperFunctions;
+	DatabaseFunctions helperFunctions;
 
 	public String getStatement() {
 
@@ -46,9 +50,9 @@ public class AddToConsumptionSubscriber {
 
 		PowerSource powerSource = circuitFromDB.getPowerSource();
 		
-
+		PowerSource solarPowerSource = powerSourceRepository.getPowerSourceById(1);
 			
-		functiiAjutor.verificareMarireConsum(powerSource);
+		CEPFunctions.energyStatusCheckForSolarPanel(solarPowerSource);
 
 		
 		

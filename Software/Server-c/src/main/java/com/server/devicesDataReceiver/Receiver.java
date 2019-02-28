@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.cep.handler.AddToConsumptionEventHandler;
 import com.server.cep.handler.LightAndMovementEventHandler;
-import com.server.cep.processing.HelperFunctions;
 import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
 import com.server.database.repositories.SensorRepository;
@@ -18,6 +17,7 @@ import com.server.entites.Consumer;
 import com.server.entites.Outlet;
 import com.server.entites.Sensor;
 import com.server.entites.Switch;
+import com.server.processing.Database.DatabaseFunctions;
 
 @Component
 public class Receiver {
@@ -38,7 +38,7 @@ public class Receiver {
 	CircuitRepository circuitRepository;
 	
 	@Autowired
-	HelperFunctions helperFunctions;
+	DatabaseFunctions helperFunctions;
 
 	ObjectMapper mapper = new ObjectMapper();
 

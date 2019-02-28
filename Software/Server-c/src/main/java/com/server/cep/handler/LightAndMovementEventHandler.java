@@ -15,21 +15,24 @@ import com.server.entites.Sensor;
 @Scope(value = "singleton")
 public class LightAndMovementEventHandler implements InitializingBean {
 
-
+	// CEP service
 	private EPServiceProvider epService;
+	
+	// CEP query for detecting a increase in power consumed
 	private EPStatement lightAndMovementStatement;
 
-
+	// Auto initialized (by Spring) -> the class who contains the statement
 	@Autowired
-
 	private LightAndMovementSubscriber lightAndMovementSubscriber;
 
 	public void initService() {
 		
 		Configuration config = new Configuration();
 		
+		// Specifying from which package to get the necessary objects for Query
 		config.addEventTypeAutoName("com.server.entites");
 		
+		// Specifying which configuration to follow
 		epService = EPServiceProviderManager.getDefaultProvider(config);
 		
 		createLightAndMovementCheckExpression();
@@ -37,10 +40,10 @@ public class LightAndMovementEventHandler implements InitializingBean {
 
 	private void createLightAndMovementCheckExpression() {
 
-        
-		
+		// create the the actual statement
 		lightAndMovementStatement = epService.getEPAdministrator().createEPL(lightAndMovementSubscriber.getStatement());
-		
+
+		// adding a method to get the result in case the query gives one
 		lightAndMovementStatement.setSubscriber(lightAndMovementSubscriber);
 	}
 
@@ -49,14 +52,10 @@ public class LightAndMovementEventHandler implements InitializingBean {
 
 		initService();
 	}
-
+	
+	//Send the event to query
 	public void handle(Sensor movementSensor) {
-
-		// LOG.debug(m.toString());
 		
 		epService.getEPRuntime().sendEvent(movementSensor);
-		
 	}
-
-
 }

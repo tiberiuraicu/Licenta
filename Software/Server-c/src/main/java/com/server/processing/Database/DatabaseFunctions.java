@@ -1,10 +1,8 @@
-package com.server.cep.processing;
+package com.server.processing.Database;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
 import com.server.database.repositories.PowerSourceRepository;
@@ -12,16 +10,15 @@ import com.server.database.repositories.SensorRepository;
 import com.server.entites.Circuit;
 import com.server.entites.Consumer;
 import com.server.entites.Device;
-import com.server.entites.NormalPowerSource;
 import com.server.entites.Notification;
 import com.server.entites.PowerSource;
 import com.server.entites.Role;
 import com.server.entites.Sensor;
 import com.server.entites.User;
 
-//TODO metoda de verificare (daca apare de mai multe ori) dupa id
+
 @Component
-public class HelperFunctions {
+public class DatabaseFunctions {
 
 	@Autowired
 	CircuitRepository circuitRepository;
@@ -32,8 +29,10 @@ public class HelperFunctions {
 	@Autowired
 	ConsumerRepository consumerRepository;
 
+	//make the connection between Consumer and a Circuit
 	public Circuit makeConsumerAndCircuitConnection(Consumer consumer, Circuit circuit) {
 
+		//sets the circuit for the specific Consumer
 		consumer.setCircuit(circuit);
 
 		List<Consumer> consumersForCircuit = circuit.getConsumers();

@@ -14,14 +14,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
-import com.server.cep.processing.FunctiiAjutor;
 import com.server.database.repositories.CircuitRepository;
 import com.server.entites.Circuit;
+import com.server.processing.CEP.CEPFunctions;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ServerApplicationTests {
-FunctiiAjutor functiiAjutor = new FunctiiAjutor();
+CEPFunctions functiiAjutor = new CEPFunctions();
 @Autowired
 CircuitRepository circuitRepository;
 	@Test
