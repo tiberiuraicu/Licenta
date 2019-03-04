@@ -116,7 +116,7 @@ public class DatabaseFunctions {
 
 	// used for changing the powerd circuits from the power source
 	// *mostly used for setting the best configuration after calculating it
-	public void setNewSetOfCircuitsToPowerSource(PowerSource powerSource, List<Circuit> circuits) {
+	public PowerSource setNewSetOfCircuitsToPowerSource(PowerSource powerSource, List<Circuit> circuits) {
 
 		// TODO -> make this more optimized
 		// first : get the normal power source entity form the database
@@ -144,7 +144,8 @@ public class DatabaseFunctions {
 
 		// save in database the new configuration of circuits for solar power source
 		powerSourceRepository.save(solarPowerSource);
-
+		
+		return solarPowerSource;
 	}
 
 	// make the connection between Sensor and a Circuit or,
@@ -170,7 +171,6 @@ public class DatabaseFunctions {
 				sensorPosition = i;
 				// break out of the loop
 				break;
-
 			}
 		}
 		if (sensorFromCircuit != null) {
@@ -232,8 +232,8 @@ public class DatabaseFunctions {
 		for (Consumer consumer : circuit.getConsumers())
 			// add its power consumed to the cumulated power
 			cumulatedPowerConsumed += consumer.getPowerConsumed();
-		
-		//set the circuit its new consumed power
+
+		// set the circuit its new consumed power
 		circuit.setPowerConsumed(cumulatedPowerConsumed);
 
 		return circuit;

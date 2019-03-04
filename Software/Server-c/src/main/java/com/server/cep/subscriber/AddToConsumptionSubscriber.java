@@ -3,11 +3,9 @@ package com.server.cep.subscriber;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
 import com.server.database.repositories.PowerSourceRepository;
-import com.server.entites.Circuit;
 import com.server.entites.Consumer;
 import com.server.entites.PowerSource;
 import com.server.processing.CEP.CEPFunctions;
@@ -42,6 +40,7 @@ public class AddToConsumptionSubscriber {
 	 */
 	public void update(Map<String, Consumer> eventMap) throws InterruptedException {
 		
+		@SuppressWarnings("unused")
 		Consumer consumerWithSpikedPowerConsumption = eventMap.get("consumerWithSpikedPowerConsumption");
 
 		PowerSource solarPowerSource = powerSourceRepository.getPowerSourceById(1);
