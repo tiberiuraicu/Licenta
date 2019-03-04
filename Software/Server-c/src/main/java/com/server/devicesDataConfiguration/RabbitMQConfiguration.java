@@ -18,6 +18,7 @@ import com.server.devicesDataReceiver.Receiver;
 import com.server.devicesInstructionsSender.InstructionsSender;
 import com.server.processing.CEP.CEPFunctions;
 import com.server.processing.Database.DatabaseFunctions;
+import com.server.processing.receiver.ReceiverFunctions;
 
 
 @Configuration
@@ -66,6 +67,7 @@ public class RabbitMQConfiguration {
 		public Queue queueConsumer() {
 			return new Queue(queueConsumer);
 		}
+		
 		@Bean
 		@Qualifier("queueSensor")
 		public Queue queueSensor() {
@@ -91,17 +93,26 @@ public class RabbitMQConfiguration {
 		public Receiver receiver() {
 			return new Receiver();
 		}
+		
 		@Bean
 		public CEPFunctions CEPFunctions() {
 			return new CEPFunctions();
 		}
+		
 		@Bean
 		public InstructionsSender instructionsSender() {
 			return new InstructionsSender();
 		}
+		
 		@Bean
 		public DatabaseFunctions databaseFunctions() {
 			return new DatabaseFunctions();
+		}
+		
+		@Bean
+		public ReceiverFunctions receiverFunctions() {
+			return new ReceiverFunctions();
+			
 		}
 		
 }

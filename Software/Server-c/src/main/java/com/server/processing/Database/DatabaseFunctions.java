@@ -46,35 +46,37 @@ public class DatabaseFunctions {
 		for (int i = 0; i < consumersForCircuit.size(); i++) {
 			// and if one is found with the same name
 			if (consumersForCircuit.get(i).getName().equals(consumer.getName())) {
-               //store it in an intermediate variabile
+				// store it in an intermediate variabile
 				consumerToBeReplaced = consumersForCircuit.get(i);
-				 //and store its position in an intermediate variabile
+				// and store its position in an intermediate variabile
 				consumerToBeReplacedPosition = i;
+				// break out of the loop
 				break;
 			}
-		}	
-		
+		}
+
 		if (consumerToBeReplaced != null) {
-			//remove the link with the Circuit
+			// remove the link with the Circuit
 			consumerToBeReplaced.setCircuit(null);
-			//save in database 
+			// save in database
 			consumerRepository.save(consumerToBeReplaced);
-			//replace the old consumer with the new one
+			// replace the old consumer with the new one
 			consumersForCircuit.set(consumerToBeReplacedPosition, consumer);
-		} 
-		
-		//if the consumer doesn't exists 
+		}
+
+		// if the consumer doesn't exists
 		else {
-            //add the consumer to array
+			// add the consumer to array
 			consumersForCircuit.add(consumer);
 		}
-		
-		//seteaza lista actualizata de consumatori pentru circuit
+
+		// set the new list of consumers for circuit
 		circuit.setConsumers(consumersForCircuit);
 
 		return circuit;
 	}
 
+	// TODO *test
 	public Device makeCircuitAndDeviceConnection(Circuit circuit, Device device) {
 
 		circuit.setDevice(device);
@@ -89,26 +91,38 @@ public class DatabaseFunctions {
 
 	}
 
+	// add the circuit to the power source array (power it by solar panel)
+	// set the power source of the circuit to the given power source
 	public PowerSource makeCircuitAndPowerSourceConnection(Circuit circuit, PowerSource powerSource) {
 
+		// set the circuit new power source
 		circuit.setPowerSource(powerSource);
 
+		// save the new circuit configuration to the database
 		circuitRepository.save(circuit);
 
+		// get the power source powerd circuits
 		List<Circuit> circuitsForPowerSource = powerSource.getCircuits();
 
+		// add the given circuit
 		circuitsForPowerSource.add(circuit);
 
+		// and set the new set of circuits to be powerd by the power source
 		powerSource.setCircuits(circuitsForPowerSource);
 
 		return powerSource;
 
 	}
 
+	// used for changing the powerd circuits from the power source
+	// *mostly used for setting the best configuration after calculating it
 	public void setNewSetOfCircuitsToPowerSource(PowerSource powerSource, List<Circuit> circuits) {
 
+		// TODO -> make this more optimized
+		// first : get the normal power source entity form the database
 		PowerSource normalPowerSource = powerSourceRepository.getPowerSourceById(2);
 
+		// then set all circuits from home to this power source
 		for (Circuit circuit : circuitRepository.findAll()) {
 
 			circuit.setPowerSource(normalPowerSource);
@@ -116,51 +130,69 @@ public class DatabaseFunctions {
 			normalPowerSource = makeCircuitAndPowerSourceConnection(circuit, normalPowerSource);
 		}
 
+		// save in database the new configuration
 		powerSourceRepository.save(normalPowerSource);
 
+		// second : get the solar power source entity form the database
 		PowerSource solarPowerSource = powerSourceRepository.getPowerSourceById(1);
 
+		// set the given array of circuits to this power source
 		for (Circuit circuit : circuits) {
 
 			solarPowerSource = makeCircuitAndPowerSourceConnection(circuit, solarPowerSource);
 		}
 
+		// save in database the new configuration of circuits for solar power source
 		powerSourceRepository.save(solarPowerSource);
 
 	}
 
+	// make the connection between Sensor and a Circuit or,
+	// if it already exists in circuit update its dates
 	public Circuit makeSensorAndCircuitConnection(Sensor sensor, Circuit circuit) {
 
+		// sets the circuit for the specific Sensor
 		sensor.setCircuit(circuit);
 
+		// gets all sensors for the circuit
 		List<Sensor> sensorsForCircuit = circuit.getSensors();
 
 		Sensor sensorFromCircuit = null;
 		int sensorPosition = 0;
 
+		// iterate trough all sensors from circuit
 		for (int i = 0; i < sensorsForCircuit.size(); i++) {
+			// and if one is found with the same name
 			if (sensorsForCircuit.get(i).getName().equals(sensor.getName())) {
-
+				// store it in an intermediate variabile
 				sensorFromCircuit = sensorsForCircuit.get(i);
+				// and store its position in an intermediate variabile
 				sensorPosition = i;
+				// break out of the loop
 				break;
 
 			}
 		}
 		if (sensorFromCircuit != null) {
+			// remove the link with the Circuit
 			sensorFromCircuit.setCircuit(null);
-
+			// save in database
 			sensorRepository.save(sensorFromCircuit);
+			// replace the old sensor with the new one
 			sensorsForCircuit.set(sensorPosition, sensor);
-		} else {
 
+			// if the consumer doesn't exists
+		} else {
+			// add the consumer to array
 			sensorsForCircuit.add(sensor);
 		}
+		// set the new list of sensors for circuit
 		circuit.setSensors(sensorsForCircuit);
 
 		return circuit;
 	}
 
+	// TODO *test
 	public Device makeNotificationAndDeviceConnection(Notification notification, Device device) {
 
 		notification.setDevice(device);
@@ -175,6 +207,7 @@ public class DatabaseFunctions {
 
 	}
 
+	// TODO *test
 	public User makeNotificationAndDeviceConnection(User user, Role role) {
 
 		role.setUser(user);
@@ -187,27 +220,23 @@ public class DatabaseFunctions {
 
 	public Circuit calculateAndSetCircuitPowerConsumed(Circuit circuit) {
 
+		// initialize the total power with zero
 		Double cumulatedPowerConsumed = 0.0;
 
+		// iterate trough every sensor
 		for (Sensor sensor : circuit.getSensors())
+			// add its power consumed to the cumulated power
 			cumulatedPowerConsumed += sensor.getPowerConsumed();
 
+		// iterate trough every consumer
 		for (Consumer consumer : circuit.getConsumers())
+			// add its power consumed to the cumulated power
 			cumulatedPowerConsumed += consumer.getPowerConsumed();
-
+		
+		//set the circuit its new consumed power
 		circuit.setPowerConsumed(cumulatedPowerConsumed);
 
 		return circuit;
-	}
-
-	public Double calculatePowerSourceCircuitsPowerConsumed(PowerSource powerSource) {
-
-		Double cumulatedPowerConsumed = 0.0;
-
-		for (Circuit circuit : powerSource.getCircuits())
-			cumulatedPowerConsumed += circuit.getPowerConsumed();
-
-		return cumulatedPowerConsumed;
 	}
 
 }

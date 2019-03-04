@@ -43,13 +43,7 @@ public class AddToConsumptionSubscriber {
 	public void update(Map<String, Consumer> eventMap) throws InterruptedException {
 		
 		Consumer consumerWithSpikedPowerConsumption = eventMap.get("consumerWithSpikedPowerConsumption");
-		
-		Consumer consumerFromDB = consumerRepository.findTopByNameOrderByIdDesc(consumerWithSpikedPowerConsumption.getName());
 
-		Circuit circuitFromDB = consumerFromDB.getCircuit();
-
-		PowerSource powerSource = circuitFromDB.getPowerSource();
-		
 		PowerSource solarPowerSource = powerSourceRepository.getPowerSourceById(1);
 			
 		CEPFunctions.energyStatusCheckForSolarPanel(solarPowerSource);

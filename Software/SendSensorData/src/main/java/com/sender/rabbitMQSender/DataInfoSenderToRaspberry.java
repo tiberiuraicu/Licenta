@@ -76,6 +76,7 @@ public class DataInfoSenderToRaspberry {
 		
 		prop.load(new FileInputStream("devicesState.config"));
 		
+		
 		Consumer outlet = new Outlet();
 		outlet.setName(outletName);
 		outlet.setPowerConsumed(powerConsumed);
