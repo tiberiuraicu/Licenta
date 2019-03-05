@@ -1,5 +1,7 @@
 package com.server.cep.handler;
 
+import java.util.List;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -9,6 +11,8 @@ import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.EPStatement;
 import com.server.cep.subscriber.LightAndMovementSubscriber;
+import com.server.database.repositories.ScenarioRepository;
+import com.server.entites.Scenario;
 import com.server.entites.Sensor;
 
 @Component
@@ -17,7 +21,7 @@ public class LightAndMovementEventHandler implements InitializingBean {
 
 	// CEP service
 	private EPServiceProvider epService;
-	
+
 	// CEP query for detecting a increase in power consumed
 	private EPStatement lightAndMovementStatement;
 
@@ -25,23 +29,35 @@ public class LightAndMovementEventHandler implements InitializingBean {
 	@Autowired
 	private LightAndMovementSubscriber lightAndMovementSubscriber;
 
+	@Autowired
+	private ScenarioRepository scenarioRepository;
+
 	public void initService() {
-		
+
 		Configuration config = new Configuration();
-		
+
 		// Specifying from which package to get the necessary objects for Query
 		config.addEventTypeAutoName("com.server.entites");
-		
+
 		// Specifying which configuration to follow
 		epService = EPServiceProviderManager.getDefaultProvider(config);
-		
-		createLightAndMovementCheckExpression();
+
+		List<Scenario> scenarios = scenarioRepository.findAll();
+
+		for (Scenario scenario : scenarios) {
+			createLightAndMovementCheckExpression(scenario.getSensorName(), scenario.getSwitchName(),
+					scenario.getSensorRegisterTime(), scenario.getSwitchRegisterTime());
+		}
+
 	}
 
-	private void createLightAndMovementCheckExpression() {
+	private void createLightAndMovementCheckExpression(String sensorName, String switchName, double sensorRegisterTime,
+			double switchRegisterTime) {
 
 		// create the the actual statement
-		lightAndMovementStatement = epService.getEPAdministrator().createEPL(lightAndMovementSubscriber.getStatement());
+		lightAndMovementStatement = epService.getEPAdministrator().createEPL(lightAndMovementSubscriber
+				.getStatement(sensorName, switchName, sensorRegisterTime, switchRegisterTime));
+	
 
 		// adding a method to get the result in case the query gives one
 		lightAndMovementStatement.setSubscriber(lightAndMovementSubscriber);
@@ -52,10 +68,10 @@ public class LightAndMovementEventHandler implements InitializingBean {
 
 		initService();
 	}
-	
-	//Send the event to query
+
+	// Send the event to query
 	public void handle(Sensor movementSensor) {
-		
+
 		epService.getEPRuntime().sendEvent(movementSensor);
 	}
 }

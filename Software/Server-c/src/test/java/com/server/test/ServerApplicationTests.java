@@ -1,10 +1,6 @@
 package com.server.test;
 
 import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-import java.util.Vector;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +111,7 @@ public class ServerApplicationTests {
 	public void testMakeConsumerAndCircuitConnectionFunction() {
 
 		Consumer consumer = new Consumer();
-		consumer.setName("sensor1");
+		consumer.setName("consumer1");
 
 		Circuit circuit = new Circuit();
 
@@ -123,7 +119,7 @@ public class ServerApplicationTests {
 		assertEquals(consumer, circuit.getConsumers().get(0));
 
 		Consumer consumerNew = new Consumer();
-		consumer.setName("sensor1");
+		consumer.setName("consumer1");
 		consumer.setPowerConsumed(50.0);
 		circuit = databaseFunctions.makeConsumerAndCircuitConnection(consumerNew, circuit);
 		assertEquals(50.0, circuit.getConsumers().get(0).getPowerConsumed(), 0);
@@ -133,7 +129,7 @@ public class ServerApplicationTests {
 	public void testMakeCircuitAndPowerSourceConnectionFunction() {
 
 		PowerSource powerSource = new PowerSource();
-        powerSource.setId(5);
+        powerSource.setId((int) Math.random());
 		Circuit circuit = new Circuit();
 		circuit.setPowerConsumed(50.0);;
 
@@ -173,6 +169,23 @@ public class ServerApplicationTests {
 //
 //	}
 	
+	@Test
+	public void testMakeSensorAndCircuitConnectionFunction() {
+
+		Sensor sensor = new Sensor();
+		sensor.setName("sensor1");
+
+		Circuit circuit = new Circuit();
+
+		circuit = databaseFunctions.makeSensorAndCircuitConnection(sensor, circuit);
+		assertEquals(sensor, circuit.getSensors().get(0));
+
+		Sensor sensorNew = new Sensor();
+		sensor.setName("sensor1");
+		sensor.setPowerConsumed(50.0);
+		circuit = databaseFunctions.makeSensorAndCircuitConnection(sensorNew, circuit);
+		assertEquals(50.0, circuit.getSensors().get(0).getPowerConsumed(), 0);
+	}
 	
 
 }

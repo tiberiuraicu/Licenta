@@ -12,11 +12,13 @@ import java.util.concurrent.BlockingQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.server.database.repositories.PowerSourceRepository;
+import com.server.database.repositories.ScenarioRepository;
 import com.server.database.repositories.SensorRepository;
 import com.google.common.collect.Sets;
 import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
 import com.server.entites.PowerSource;
+import com.server.entites.Scenario;
 import com.server.entites.Sensor;
 import com.server.entites.Circuit;
 import com.server.entites.Consumer;
@@ -37,11 +39,14 @@ public class FunctiiAjutor {
 	@Autowired
 	CircuitRepository circuitReporitory;
 	@Autowired
+	ScenarioRepository scenarioRepository;
+	@Autowired
 	HelperFunctions helperFunctions;
-
 
 	public PowerSource getAlimentator() {
 
+		registerScenarioToDatabase();
+		
 		PowerSource powerSource = new SolarPanel();
 		powerSource.setGeneratedPower(300.5);
 		Circuit c1 = new Circuit();
@@ -180,8 +185,6 @@ public class FunctiiAjutor {
 		return putereConsumata;
 	}
 
-	
-
 	public double calculeazaPutereConsumata(List<Circuit> circuite) {
 		double putereConsumata = 0;
 		for (Circuit circuit : circuite) {
@@ -190,5 +193,31 @@ public class FunctiiAjutor {
 		return putereConsumata;
 	}
 
+	public void registerScenarioToDatabase() {
+		
+		Scenario scenarioOne =returnScenario("sensor1", "switch1", 10, 10);
+		Scenario scenarioTwo =returnScenario("sensor2", "switch2", 10, 10);
+		Scenario scenarioThree =returnScenario("sensor3", "switch3", 10, 10);
+		Scenario scenarioFour =returnScenario("sensor4", "switch4", 10, 10);
+		
+		scenarioRepository.save(scenarioOne);
+		scenarioRepository.save(scenarioTwo);
+		scenarioRepository.save(scenarioThree);
+		scenarioRepository.save(scenarioFour);
+		
+	}
+	public Scenario returnScenario(String sensorName,
+							   String switchName, 
+							   double sensorRegisterTime,
+							   double switchRegisterTime)
+	{
+		Scenario scenario= new Scenario();
+		scenario.setSensorName(sensorName);
+		scenario.setSwitchName(switchName);
+		scenario.setSensorRegisterTime(sensorRegisterTime);
+		scenario.setSwitchRegisterTime(switchRegisterTime);
+		return scenario;
+		
+	}
 
 }

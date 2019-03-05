@@ -27,7 +27,8 @@ public class AddToConsumptionSubscriber {
 
 	public String getStatement() {
 
-		String crtiticalEventExpression = "select consumerWithSpikedPowerConsumption from pattern [ every consumerWithNormalPowerConsumption = Consumer() -> "
+		String crtiticalEventExpression = "select consumerWithSpikedPowerConsumption from pattern "
+				+ "[ every consumerWithNormalPowerConsumption = Consumer() -> "
 				+ "consumerWithSpikedPowerConsumption = Consumer(name = consumerWithNormalPowerConsumption.name,"
 				+ "powerConsumed > consumerWithNormalPowerConsumption.powerConsumed)]";
 
