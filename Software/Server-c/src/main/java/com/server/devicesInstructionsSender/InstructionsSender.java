@@ -27,6 +27,6 @@ public class InstructionsSender {
 		String callBackMessage = (String) this.template.convertSendAndReceive(exchange.getName(),
 				"instruction_key", instructionAsJSON.getBytes());
 
-		System.out.println(callBackMessage);
+		//System.out.println(callBackMessage);
 	}
 }

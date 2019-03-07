@@ -41,9 +41,7 @@ public class AddToConsumptionSubscriber {
 	 */
 	public void update(Map<String, Consumer> eventMap) throws InterruptedException {
 		
-		@SuppressWarnings("unused")
-		Consumer consumerWithSpikedPowerConsumption = eventMap.get("consumerWithSpikedPowerConsumption");
-
+		
 		PowerSource solarPowerSource = powerSourceRepository.getPowerSourceById(1);
 			
 		CEPFunctions.energyStatusCheckForSolarPanel(solarPowerSource);
