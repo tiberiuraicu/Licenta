@@ -18,7 +18,6 @@ import com.server.entites.Notification;
 import com.server.entites.PowerSource;
 import com.server.entites.Role;
 import com.server.entites.Sensor;
-import com.server.entites.SolarPanel;
 import com.server.entites.User;
 
 @Component
