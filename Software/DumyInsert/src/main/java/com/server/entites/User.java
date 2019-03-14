@@ -43,6 +43,8 @@ public class User {
 	private String street;
 
 	private String email;
+	
+	private  String password;
 
 	public User() {
 	}
@@ -133,4 +135,13 @@ public class User {
 	public void setStreet(String street) {
 		this.street = street;
 	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
 }

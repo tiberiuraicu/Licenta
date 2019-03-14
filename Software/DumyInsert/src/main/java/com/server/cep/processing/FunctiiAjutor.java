@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.server.database.repositories.PowerSourceRepository;
 import com.server.database.repositories.ScenarioRepository;
 import com.server.database.repositories.SensorRepository;
+import com.server.database.repositories.UserRepository;
 import com.google.common.collect.Sets;
 import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
@@ -24,6 +25,7 @@ import com.server.entites.Circuit;
 import com.server.entites.Consumer;
 import com.server.entites.NormalPowerSource;
 import com.server.entites.Switch;
+import com.server.entites.User;
 import com.server.entites.SolarPanel;
 import com.server.entites.Outlet;
 
@@ -41,6 +43,9 @@ public class FunctiiAjutor {
 	@Autowired
 	ScenarioRepository scenarioRepository;
 	@Autowired
+	UserRepository userRepository;
+	
+	@Autowired
 	HelperFunctions helperFunctions;
 
 	public PowerSource getAlimentator() {
@@ -49,6 +54,12 @@ public class FunctiiAjutor {
 		
 		PowerSource powerSource = new SolarPanel();
 		powerSource.setGeneratedPower(300.5);
+		
+		User u = new User();
+		u.setEmail("t");
+		u.setPassword("t");
+		userRepository.save(u);
+		
 		Circuit c1 = new Circuit();
 		Circuit c2 = new Circuit();
 		Circuit c3 = new Circuit();
