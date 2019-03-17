@@ -16,14 +16,14 @@ import com.server.entites.PowerSource;
 import com.server.entites.Sensor;
 import com.server.entites.Switch;
 import com.server.processing.Database.DatabaseFunctions;
-import com.server.processing.receiver.ReceiverFunctions;
+import com.server.processing.MqReceiver.MqReceiverFunctions;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ServerApplicationTests {
 
 	@Autowired
-	ReceiverFunctions receiverFunctions;
+	MqReceiverFunctions receiverFunctions;
 
 	@Autowired
 	CircuitRepository circuitRepository;

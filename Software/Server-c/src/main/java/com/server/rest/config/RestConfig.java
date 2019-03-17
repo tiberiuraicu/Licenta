@@ -1,4 +1,4 @@
-package com.server.controllers;
+package com.server.rest.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -23,23 +23,23 @@ public class InstructionsReceiverFromRaspberry {
 		Instruction instruction = mapper.readValue(instructionMessage, Instruction.class);
 		
 		// if instructruction type is for turning on and off rewrite devicesState file.
-		if (instruction.getType().equals("OnOff")) {
-		
-			prop.load(new FileInputStream("devicesState.config"));
-			prop.setProperty(instruction.getDeviceName(), instruction.getOnOffValue());
-			prop.store(new FileWriter("devicesState.config"), null);
-			
-		}
+//		if (instruction.getType().equals("OnOff")) {
+//		
+//			prop.load(new FileInputStream("devicesState.config"));
+//			prop.setProperty(instruction.getDeviceName(), instruction.getOnOffValue());
+//			prop.store(new FileWriter("devicesState.config"), null);
+//			
+//		}
 		
 		// if instructruction type is for changing the circuit power source rewrite
 		// circuitState file.
-		if (instruction.getType().equals("PowerSourceChange")) {
-			
-			prop.load(new FileInputStream("circuitState.config"));
-			prop.setProperty(instruction.getDeviceName(), instruction.getPowerSource());
-			prop.store(new FileWriter("circuitState.config"), null);
-			
-		}
+//		if (instruction.getType().equals("PowerSourceChange")) {
+//			
+//			prop.load(new FileInputStream("circuitState.config"));
+//			prop.setProperty(instruction.getDeviceName(), instruction.getPowerSource());
+//			prop.store(new FileWriter("circuitState.config"), null);
+//			
+//		}
 
 		return "Instruction message received.";
 	}

@@ -1,0 +1,31 @@
+<form (ngSubmit) ="register()" class="form-signin custom-style" >
+  <input  
+    type="text" 
+    class="form-control custom-input" 
+    [(ngModel)]="model.email"
+    ngControl="email"
+    name="email"
+    placeholder="Email address" 
+    required autofocus>
+    
+    <input  type="password"
+     id="inputPassword"
+     class="form-control custom-input"  
+     placeholder="Password"
+     [(ngModel)]="model.password" 
+     ngControl="password"
+     name="password"
+     required>
+
+     <input  type="deviceId"
+     id="deviceId"
+     class="form-control custom-input"  
+     placeholder="device Id"
+     [(ngModel)]="model.deviceId"
+     name="deviceId"
+     required>
+   
+   
+    <button class="btn btn-lg btn-primary custom-submit-button" 
+     type="submit">Register</button>
+  </form>

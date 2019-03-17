@@ -4,13 +4,14 @@ import org.apache.log4j.Logger;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.server.processing.receiver.ReceiverFunctions;
+
+import com.server.processing.MqReceiver.MqReceiverFunctions;
 
 @Component
 public class Receiver {
 
 	@Autowired
-	ReceiverFunctions receiverFunctions;
+	MqReceiverFunctions receiverFunctions;
 
 	final static Logger logger = Logger.getLogger(Receiver.class);
 

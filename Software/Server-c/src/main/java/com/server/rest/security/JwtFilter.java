@@ -1,19 +1,19 @@
-package com.server.controllers;
+package com.server.rest.security;
 
 import java.io.IOException;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.filter.GenericFilterBean;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureException;
+
 
 public class JwtFilter extends GenericFilterBean {
 	
@@ -49,4 +49,5 @@ public class JwtFilter extends GenericFilterBean {
         }
 
     }
+	
 }
