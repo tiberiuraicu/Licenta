@@ -1,22 +1,19 @@
 package com.server.socket;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
 import com.server.processing.REST.RestFunctions;
 
 @Component
 public class WebSocketController {
 	@Autowired
 	RestFunctions restFunctions;
-	
+
 	@Autowired
 	private SimpMessagingTemplate template;
 	
@@ -26,6 +23,6 @@ public class WebSocketController {
 	}
 	@Scheduled(fixedDelay = 1000)
 	public void sendOutletPower() throws MessagingException, ServletException, IOException {
-		this.template.convertAndSend("/outletPowerConsumed", restFunctions.getOutletPowerConsumed());
+		this.template.convertAndSend("/outletPowerConsumed",restFunctions.getLastRegistratedPowerConsumedForEveryOutlet());
 	}
 }

@@ -11,7 +11,7 @@ import { UserPageComponent } from './user-page/user-page.component';
 import { NavBarComponent } from './user-page/nav-bar/nav-bar.component';
 import { LeftSideMenuComponent } from './user-page/left-side-menu/left-side-menu.component';
 import { RightSidePanelComponent } from './user-page/right-side-panel/right-side-panel.component';
-
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -32,7 +32,7 @@ import { RightSidePanelComponent } from './user-page/right-side-panel/right-side
     AppRoutingModule,
     HttpModule,
     FormsModule,
-    
+    NgbModule,
     RouterModule.forRoot([
      
       { path: "login", component: LoginComponent },

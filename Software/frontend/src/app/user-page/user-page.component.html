@@ -5,14 +5,23 @@
 <div class="user-content">
   <app-right-side-panel></app-right-side-panel>
   <div class="text-dark bg-light basic-content">
-      <div class="line-chart-container" style=" float:left; height:30vh; width:28vw">
-          <canvas id="line-chart"></canvas>
-        </div>
-    <div class="pie-chart-container" style=" float:right; height:30vh; width:28vw">
-        <canvas id="doughnut-chart"></canvas>
-      </div>
-     
+    <div class="pie-chart-container">
+      <canvas id="doughnut-chart"></canvas>
+    </div>
 
-     
+    <div class="row" style="margin-left:1%; width:100%;">
+      <ul class="list-group outlet-list" style="margin-top:10%;">
+        <li *ngFor="let outlet of outlets" class="list-group-item" (click)="initializeLineChart(outlet)" >
+          {{ outlet }}
+        </li>
+      </ul>
+
+      <div
+        class="line-chart-container"
+        style="float:right; margin-bottom: 5%; margin-left:10%;"
+      >
+        <canvas id="line-chart"></canvas>
+      </div>
+    </div>
   </div>
 </div>

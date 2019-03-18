@@ -2,7 +2,10 @@ package com.server.processing.REST;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,8 +21,6 @@ import com.server.entites.Consumer;
 import com.server.entites.Device;
 import com.server.entites.User;
 import com.server.processing.Database.DatabaseFunctions;
-import com.server.socket.WebSocketController;
-
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -62,7 +63,6 @@ public class RestFunctions {
 	}
 
 	public String registerUser(Map<String, String> userForm) {
-		System.out.println(userForm.get("email").toString());
 
 		User user = new User();
 		user.setEmail(userForm.get("email"));
@@ -79,6 +79,9 @@ public class RestFunctions {
 
 	}
 
+	
+	
+	
 	public String getTotalPowerConsumed() throws ServletException, IOException {
 
 		Double powerConsumedFromSolarPanel = 0.0;
@@ -99,17 +102,55 @@ public class RestFunctions {
 		return powerConsumptionInfo.toString();
 	}
 
-	public String getOutletPowerConsumed() throws ServletException, IOException {
+	public String getLast60ConsumersPowerConsumed(Map<String, String> json) throws ServletException, IOException {
 
 		JsonObject outletPowerConsumptionInfo = new JsonObject();
+		System.out.println(json.get("name"));
+		for (Consumer consumer : consumerRepository.findTop60ByNameOrderByIdDesc(json.get("name"))) {
 
-		for (Consumer consumer : consumerRepository.getConsumerByName("outlet1")) {
-			System.out.println(consumer.getTimestamp());
-			System.out.println(consumer.getPowerConsumed());
 			outletPowerConsumptionInfo.addProperty(consumer.getTimestamp().toString(), consumer.getPowerConsumed());
 		}
-		
+
 		return outletPowerConsumptionInfo.toString();
 	}
 
+	public String getLastConsumersPowerConsumed(Map<String, String> json) throws ServletException, IOException {
+
+		JsonObject last60recordsOfPowerConsumptionforOutlet = new JsonObject();
+
+		for (Consumer consumer : consumerRepository.findTop60ByNameOrderByIdDesc(json.get("name"))) {
+
+			last60recordsOfPowerConsumptionforOutlet.addProperty(consumer.getTimestamp().toString(), consumer.getPowerConsumed());
+		}
+
+		return last60recordsOfPowerConsumptionforOutlet.toString();
+	}
+
+	public List<String> getAllOutlets() {
+		List<String> outlets = new Vector<String>();
+		for (Consumer consumer : consumerRepository.findAll()) {
+			if (consumer.getType().equals("outlet")) {
+				if(!outlets.contains(consumer.getName()))
+					outlets.add(consumer.getName());
+			}
+		}
+		return outlets;
+	}
+
+	public String getLastRegistratedPowerConsumedForEveryOutlet() {
+		JsonObject outletPowerConsumptionInfo = new JsonObject();
+		List<String> outletNames = getAllOutlets();
+		for(String outletName : outletNames ) {
+			JsonObject outletChartData= new JsonObject();
+			outletChartData.addProperty(
+					"powerConsumed",
+					consumerRepository.findTopByNameOrderByIdDesc(outletName).getPowerConsumed());
+			outletChartData.addProperty(
+					"timestamp",
+					consumerRepository.findTopByNameOrderByIdDesc(outletName).getTimestamp().toString());
+			outletPowerConsumptionInfo.add(outletName, outletChartData);
+		}
+		return outletPowerConsumptionInfo.toString();
+		
+	}
 }
