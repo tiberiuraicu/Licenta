@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class Device {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
 	private boolean sendNotifications;

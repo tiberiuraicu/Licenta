@@ -1,4 +1,4 @@
-package com.server.processing.receiver;
+package com.server.processing.MqReceiver;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import com.server.entites.Switch;
 import com.server.processing.Database.DatabaseFunctions;
 
 @Component
-public class ReceiverFunctions {
+public class MqReceiverFunctions {
 
 	@Autowired
 	private AddToConsumptionEventHandler addToConsumptionEventHandler;

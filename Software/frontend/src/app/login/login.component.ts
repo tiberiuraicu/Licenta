@@ -1,0 +1,36 @@
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { LoginService } from './service/login.service';
+
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
+  animations: [
+
+  ]
+})
+export class LoginComponent {
+  private info;
+  private model = { 'email': '', 'password': '' }
+  private currentEmail;
+
+  constructor(private loginService: LoginService, private router : Router) {
+    this.currentEmail = localStorage.getItem("currentEmail");
+
+  }
+
+  onSubmit() {
+    this.loginService.sendCredential(this.model).subscribe(
+      data => {
+        localStorage.setItem("token", JSON.parse(JSON.stringify(data))._body)
+        localStorage.setItem("currentEmail", this.model.email);
+         this.router.navigate(['/user'])
+         location.reload();
+      },
+      error => console.log(error)
+    );
+  }
+
+
+}

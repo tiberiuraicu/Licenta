@@ -18,7 +18,9 @@ import com.server.devicesDataReceiver.Receiver;
 import com.server.devicesInstructionsSender.InstructionsSender;
 import com.server.processing.CEP.CEPFunctions;
 import com.server.processing.Database.DatabaseFunctions;
-import com.server.processing.receiver.ReceiverFunctions;
+import com.server.processing.MqReceiver.MqReceiverFunctions;
+import com.server.processing.REST.RestFunctions;
+import com.server.socket.WebSocketController;
 
 
 @Configuration
@@ -110,9 +112,16 @@ public class RabbitMQConfiguration {
 		}
 		
 		@Bean
-		public ReceiverFunctions receiverFunctions() {
-			return new ReceiverFunctions();
+		public MqReceiverFunctions receiverFunctions() {
+			return new MqReceiverFunctions();
 			
 		}
-		
+		@Bean
+		public RestFunctions restFunctions() {
+			return new RestFunctions();
+		}
+		@Bean
+		public WebSocketController webSocketController() {
+			return new WebSocketController();
+		}
 }

@@ -10,6 +10,6 @@ import com.server.entites.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 	
-     User getUserByFirstName(String firstName);
+     User getUserByEmail(String email);
 
 }

@@ -217,7 +217,7 @@ public class DatabaseFunctions {
 	}
 
 	// TODO *test
-	public User makeNotificationAndDeviceConnection(User user, Role role) {
+	public User makeRoleAndUserConnection(User user, Role role) {
 
 		role.setUser(user);
 
@@ -225,6 +225,12 @@ public class DatabaseFunctions {
 
 		return user;
 
+	}
+	public User makeDeviceAndUserConnection(User user, Device device) {
+		device.getUsers().add(user);
+		user.getDevices().add(device);
+		return user;
+		
 	}
 
 	public Circuit calculateAndSetCircuitPowerConsumed(Circuit circuit) {

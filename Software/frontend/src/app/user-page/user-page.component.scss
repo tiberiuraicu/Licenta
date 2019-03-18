@@ -1,0 +1,28 @@
+.user-content {
+  float: right;
+  width: 90%;
+}
+@mixin sidePanelElementsShading {
+  -webkit-box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
+  box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
+}
+.pie-chart-container {
+ 
+  margin-top: 10%;
+  width: 18%;
+  height: 20%;
+  display: block;
+}
+.line-chart-container {
+ margin-left: 2%;
+  margin-top: 10%;
+  width: 18%;
+  height: 20%;
+  display: block;
+}
+.basic-content {
+  @include sidePanelElementsShading;
+  width: 68%;
+  height: 79vh;
+}
