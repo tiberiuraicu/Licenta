@@ -1,5 +1,6 @@
 package com.server.processing.Database;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,7 +37,10 @@ public class DatabaseFunctions {
 	InstructionsSender instructionsSender;
 	@Autowired
 	NotificationBroadcaster notificationBroadcaster;
-
+	
+	
+	DecimalFormat df = new DecimalFormat("####.##");
+	
 	// make the connection between Consumer and a Circuit or,
 	// if it already exists in circuit update its dates
 	public Circuit makeConsumerAndCircuitConnection(Consumer consumer, Circuit circuit) {
@@ -118,8 +122,7 @@ public class DatabaseFunctions {
 
 		// and set the new set of circuits to be powerd by the power source
 		powerSource.setCircuits(circuitsForPowerSource);
-		notificationBroadcaster.sendOutletPower(
-				"Circuit with id :" + circuit.getId() + " changed power source to : " + powerSource.getType());
+		
 		return powerSource;
 
 	}
@@ -170,7 +173,17 @@ public class DatabaseFunctions {
 		powerSourceRepository.save(solarPowerSource);
 
 		circuitPowerSourceChangedInstructionSender();
-
+		
+		notificationBroadcaster.sendOutletPower(
+				"New power consumption : Solar panel : "+df.format(calculateConsumedPowerForPowerSource(solarPowerSource.getCircuits()))+ " kW -> " + 
+		         calculatePercentage(calculateConsumedPowerForPowerSource(solarPowerSource.getCircuits()),
+		        		 calculateConsumedPowerForPowerSource(solarPowerSource.getCircuits())
+		        		 +calculateConsumedPowerForPowerSource(normalPowerSource.getCircuits()))+"%,"+
+		        " Normal power source : "+df.format(calculateConsumedPowerForPowerSource(normalPowerSource.getCircuits()))+" kW -> " +
+		        calculatePercentage(calculateConsumedPowerForPowerSource(normalPowerSource.getCircuits()),
+		        		 calculateConsumedPowerForPowerSource(solarPowerSource.getCircuits())+
+		        		 calculateConsumedPowerForPowerSource(normalPowerSource.getCircuits()))+"%,"
+				);
 		return solarPowerSource;
 	}
 
@@ -302,6 +315,24 @@ public class DatabaseFunctions {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public String calculatePercentage(double obtained, double total) {
+		
+        return df.format(obtained * 100 / total);
+    }
+	
+	public double calculateConsumedPowerForPowerSource(List<Circuit> circuits) {
+
+		// initially the consumed power is 0
+		double consumedPower = 0;
+
+		// iterate trough every circuit
+		for (Circuit circuit : circuits) {
+			// adds its consumed power to the total
+			consumedPower += circuit.getPowerConsumed();
+		}
+		return consumedPower;
 	}
 
 }

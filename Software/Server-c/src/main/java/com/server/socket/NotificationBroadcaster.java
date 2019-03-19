@@ -14,4 +14,5 @@ public class NotificationBroadcaster {
 		this.template.convertAndSend("/notification", notification);
 
 	}
+	
 }

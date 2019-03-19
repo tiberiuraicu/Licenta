@@ -72,6 +72,7 @@ export class UserService {
             ]
           },
           options: {
+            resize:true,
             animation: {
               duration: 10
             },

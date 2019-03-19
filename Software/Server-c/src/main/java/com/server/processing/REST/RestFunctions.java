@@ -1,6 +1,7 @@
 package com.server.processing.REST;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,8 @@ import com.server.entites.Consumer;
 import com.server.entites.Device;
 import com.server.entites.User;
 import com.server.processing.Database.DatabaseFunctions;
+import com.server.socket.NotificationBroadcaster;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -39,10 +42,10 @@ public class RestFunctions {
 	HttpServletRequest httpServletRequest;
 	@Autowired
 	HttpServletResponse httpServletResponse;
-
 	@Autowired
 	DatabaseFunctions databaseFunctions;
-
+	
+	 
 	public String login(Map<String, String> json) throws ServletException {
 		if (json.get("email") == null || json.get("password") == null) {
 			throw new ServletException("Please fill in username and password");
@@ -83,6 +86,7 @@ public class RestFunctions {
 	
 	
 	public String getTotalPowerConsumed() throws ServletException, IOException {
+	
 
 		Double powerConsumedFromSolarPanel = 0.0;
 		Double powerConsumedFromNormalPowerSource = 0.0;
@@ -98,7 +102,7 @@ public class RestFunctions {
 		}
 		powerConsumptionInfo.addProperty("powerConsumedFromSolarPanel", powerConsumedFromSolarPanel);
 		powerConsumptionInfo.addProperty("powerConsumedFromNormalPowerSource", powerConsumedFromNormalPowerSource);
-
+		
 		return powerConsumptionInfo.toString();
 	}
 
@@ -137,8 +141,10 @@ public class RestFunctions {
 					"timestamp",
 					consumerRepository.findTopByNameOrderByIdDesc(outletName).getTimestamp().toString());
 			outletPowerConsumptionInfo.add(outletName, outletChartData);
+			
 		}
 		return outletPowerConsumptionInfo.toString();
 		
 	}
+	 
 }

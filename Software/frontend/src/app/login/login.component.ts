@@ -23,7 +23,8 @@ export class LoginComponent {
   onSubmit() {
     this.loginService.sendCredential(this.model).subscribe(
       data => {
-        localStorage.setItem("token", JSON.parse(JSON.stringify(data))._body)
+       
+        localStorage.setItem("token", data._body)
         localStorage.setItem("currentEmail", this.model.email);
          this.router.navigate(['/user'])
          location.reload();

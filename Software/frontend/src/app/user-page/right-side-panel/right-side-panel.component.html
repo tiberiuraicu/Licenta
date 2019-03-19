@@ -36,8 +36,8 @@
 
   <div class="card text-white bg-dark recent-activity">
     <div class="card-header">Recent Activity</div>
-    <div class="card-body" style="overflow:scroll;">
-      <p *ngFor="let notification of notifications" class="card-text">
+    <div class="card-body notifications" >
+      <p *ngFor="let notification of notifications" class="card-text notification">
         {{ notification }}
       </p>
      
