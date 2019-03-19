@@ -50,7 +50,7 @@ export class UserService {
               {
                 label: ["Power Consumed","Timestamp"],
                 data: last60ResultsPowerConsumed,
-                backgroundColor: ["rgba(255, 99, 132, 0.2)"],
+                backgroundColor: ["rgba(255, 99, 132, 1)"],
                 borderColor: ["rgba(255, 99, 132, 1)"],
                 borderWidth: 1
               }
