@@ -2,38 +2,69 @@
   float: right;
   width: 90%;
 }
+
 @mixin sidePanelElementsShading {
   -webkit-box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
   box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
 }
+
 .pie-chart-container {
   margin-top: 2%;
-  margin-right: 18%;
+
   display: block;
-  float:right; 
-  height:30vh; 
-  width:30vw
+  float: right;
+  height: 30vh;
+  width: 30vw;
 }
-.line-chart-container {
- margin-left: 2%;
-  margin-top: 10%;
-  display: block;
-  float:left; 
-  height:40vh; 
-  width:38vw;
-}
+
 .basic-content {
   @include sidePanelElementsShading;
   width: 68%;
   height: 79vh;
 }
 
-.outlet-list{
-  overflow-y: scroll;
-  height: 25vh;
+.row {
+  margin-left: 8%;
+  width: 100%;
+
+  .outlet-list {
+    @keyframes example {
+      from {
+        background-color: rgba(81, 98, 148, 0.1);
+      }
+      to {
+        background-color: rgba(129, 143, 243, 0.5);
+        color: black;
+      }
+    }
+    li {
+      background-color: rgba(81, 98, 148, 0.1);
+      cursor: pointer;
+      &:hover {
+        animation-fill-mode: forwards;
+        animation-name: example;
+        animation-duration: 0.2s;
+      }
+    }
+    margin-top: 10%;
+    overflow-y: scroll;
+    height: 29.5vh;
+    width: 10vw;
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.2);
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .line-chart-container {
+    margin-top: 10%;
+    float: right;
+    margin-bottom: 5%;
+    margin-left: 10%;
+    height: 40vh;
+    width: 38vw;
+  }
 }
-
-
-
-

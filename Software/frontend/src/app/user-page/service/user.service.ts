@@ -4,7 +4,6 @@ import * as Stomp from "stompjs";
 import * as SockJS from "sockjs-client";
 import Chart from "chart.js";
 import Config from "../../config/config";
-import { httpFactory } from "@angular/http/src/http_module";
 
 @Injectable({
   providedIn: "root"
@@ -14,32 +13,48 @@ export class UserService {
   stompClient;
   pieChart: any;
   lineChart: any;
+
   constructor(private http: Http) {}
 
-  getHeaders = new Headers({
+  //the headers of the authentificated user (without this no resource can be obtained from server)
+  userAuthentificationHeader = new Headers({
     Authorization: "Bearer " + localStorage.getItem("token")
   });
 
+  //getting all existing outlets from server
   getAllOutlets() {
     return this.http.get("http://localhost:8080/user/resources/getOutlets", {
-      headers: this.getHeaders
+      headers: this.userAuthentificationHeader
     });
   }
 
+  //initialize the line chart with information fron server about the selected outlet
   initializeLineChart = name => {
+    //set the global selected outlet
     this.selectedOutlet = name;
-    let dataName = { name: name };
-    let last60RecordsTimestamp = [];
-    let last60ResultsPowerConsumed = [];
 
+    let last60RecordsTimestamp = [];
+    let last60RecordsPowerConsumed = [];
+
+    //get the last 60 records of outlet and initialize the line chart
+    //make the request to server
     this.http
-      .post("http://localhost:8080/user/resources/last60Consumers", dataName, {
-        headers: this.getHeaders
-      })
-      .subscribe(result => {
-        for (var i in result.json()) {
-          last60RecordsTimestamp.push(i.split(" ")[1]);
-          last60ResultsPowerConsumed.push(result.json()[i]);
+      .post(
+        "http://localhost:8080/user/resources/last60Consumers",
+        { outletName: name },
+        { headers: this.userAuthentificationHeader }
+      )
+      .subscribe(response => {
+        //iterate trough response (its form: {"timestamp":".......","powerConsumed": ".........."})
+        for (var outletData in response.json()) {
+          //get the timestamp
+          var thisOutletRecordTimestamp = outletData.split(" ")[1]; //just the hour
+          //add it to the list
+          last60RecordsTimestamp.push(thisOutletRecordTimestamp);
+          //get the power consumed
+          var thisOutletRecordPowerConsumed = response.json()[outletData];
+          //add it to the list 
+          last60RecordsPowerConsumed.push(thisOutletRecordPowerConsumed);
         }
 
         this.lineChart = new Chart(document.getElementById("line-chart"), {
@@ -48,8 +63,8 @@ export class UserService {
             labels: last60RecordsTimestamp,
             datasets: [
               {
-                label: ["Power Consumed","Timestamp"],
-                data: last60ResultsPowerConsumed,
+                label: "Outlet power consumed",
+                data: last60RecordsPowerConsumed,
                 backgroundColor: ["rgba(255, 99, 132, 0.2)"],
                 borderColor: ["rgba(255, 99, 132, 1)"],
                 borderWidth: 1
@@ -65,7 +80,7 @@ export class UserService {
                 {
                   scaleLabel: {
                     display: true,
-                    labelString: 'Power Consumed'
+                    labelString: "Power Consumed"
                   },
                   ticks: {
                     beginAtZero: true
@@ -76,7 +91,7 @@ export class UserService {
                 {
                   scaleLabel: {
                     display: true,
-                    labelString: 'TimeStamp'
+                    labelString: "TimeStamp"
                   },
                   ticks: {
                     beginAtZero: true
@@ -99,7 +114,7 @@ export class UserService {
           {
             label: "Consumption(kW)",
             backgroundColor: ["#3e95cd", "#F7464A"],
-            data: [5, 5]
+            data: [0, 0]
           }
         ]
       },
@@ -143,18 +158,18 @@ export class UserService {
   getOutletPowerConsumedForLineChart = () => {
     this.stompClient.subscribe("/outletPowerConsumed", response => {
       var responseAsJson = JSON.parse(response.body);
-    for(var outlet in responseAsJson){
-      if(outlet==this.selectedOutlet){
-        console.log(responseAsJson[outlet]);
-        console.log(responseAsJson[outlet[1]]);
-         this.addDataToLineChart(responseAsJson[outlet].powerConsumed,responseAsJson[outlet].timestamp.split(" ")[1]);
+      for (var outlet in responseAsJson) {
+        if (outlet == this.selectedOutlet) {
+          var lastPowerConsumedForOutlet = responseAsJson[outlet].powerConsumed;
+          var lastRecordedTimestampForOutlet = responseAsJson[
+            outlet
+          ].timestamp.split(" ")[1]; //just the hour
+          this.addDataToLineChart(
+            lastPowerConsumedForOutlet,
+            lastRecordedTimestampForOutlet
+          );
+        }
       }
-    }
-      // let data = [
-      //   powerConsumedFromSolarPanel,
-      //   powerConsumedFromNormalPowerSource
-      // ];
-      //this.addDataToLineChart(data);
     });
   };
 
@@ -163,7 +178,7 @@ export class UserService {
     this.pieChart.update();
   }
 
-  addDataToLineChart(data,label) {
+  addDataToLineChart(data, label) {
     this.removeData();
     this.lineChart.data.labels.push(label);
     this.lineChart.data.datasets.forEach(dataset => {
@@ -171,11 +186,11 @@ export class UserService {
     });
     this.lineChart.update();
   }
-   removeData() {
+  removeData() {
     this.lineChart.data.labels.shift();
-    this.lineChart.data.datasets.forEach((dataset) => {
-        dataset.data.shift();
+    this.lineChart.data.datasets.forEach(dataset => {
+      dataset.data.shift();
     });
     this.lineChart.update();
-}
+  }
 }

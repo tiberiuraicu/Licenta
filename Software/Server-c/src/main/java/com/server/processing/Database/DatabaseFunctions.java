@@ -19,6 +19,7 @@ import com.server.entites.PowerSource;
 import com.server.entites.Role;
 import com.server.entites.Sensor;
 import com.server.entites.User;
+import com.server.socket.NotificationBroadcaster;
 
 @Component
 public class DatabaseFunctions {
@@ -33,6 +34,8 @@ public class DatabaseFunctions {
 	ConsumerRepository consumerRepository;
 	@Autowired
 	InstructionsSender instructionsSender;
+	@Autowired
+	NotificationBroadcaster notificationBroadcaster;
 
 	// make the connection between Consumer and a Circuit or,
 	// if it already exists in circuit update its dates
@@ -115,7 +118,8 @@ public class DatabaseFunctions {
 
 		// and set the new set of circuits to be powerd by the power source
 		powerSource.setCircuits(circuitsForPowerSource);
-
+		notificationBroadcaster.sendOutletPower(
+				"Circuit with id :" + circuit.getId() + " changed power source to : " + powerSource.getType());
 		return powerSource;
 
 	}
@@ -129,11 +133,18 @@ public class DatabaseFunctions {
 		PowerSource normalPowerSource = powerSourceRepository.getPowerSourceById(2);
 
 		// then set all circuits from home to this power source
-		for (Circuit circuit : circuitRepository.findAll()) {
+		for (Circuit circuitFromDatabase : circuitRepository.findAll()) {
+			boolean exists = false;
+			for (Circuit circuitForSolarPanel : circuits) {
+				if (circuitFromDatabase.getId().equals(circuitForSolarPanel.getId())) {
+					exists = true;
+				}
+			}
+			if (exists==false) {
+				circuitFromDatabase.setPowerSource(normalPowerSource);
 
-			circuit.setPowerSource(normalPowerSource);
-
-			normalPowerSource = makeCircuitAndPowerSourceConnection(circuit, normalPowerSource);
+				normalPowerSource = makeCircuitAndPowerSourceConnection(circuitFromDatabase, normalPowerSource);
+			}
 		}
 
 		// save in database the new configuration
@@ -143,9 +154,15 @@ public class DatabaseFunctions {
 		PowerSource solarPowerSource = powerSourceRepository.getPowerSourceById(1);
 
 		// set the given array of circuits to this power source
-		for (Circuit circuit : circuits) {
-
-			solarPowerSource = makeCircuitAndPowerSourceConnection(circuit, solarPowerSource);
+		for (Circuit circuitForSolarPanel : circuits) {
+			boolean exists = false;
+			for (Circuit circuitInSolarPanel : solarPowerSource.getCircuits()) {
+				if (circuitInSolarPanel.getId().equals(circuitForSolarPanel.getId())) {
+					exists = true;
+				}
+			}
+			if(exists==false)
+				solarPowerSource = makeCircuitAndPowerSourceConnection(circuitForSolarPanel, solarPowerSource);
 
 		}
 
@@ -153,7 +170,7 @@ public class DatabaseFunctions {
 		powerSourceRepository.save(solarPowerSource);
 
 		circuitPowerSourceChangedInstructionSender();
-		
+
 		return solarPowerSource;
 	}
 
@@ -226,11 +243,12 @@ public class DatabaseFunctions {
 		return user;
 
 	}
+
 	public User makeDeviceAndUserConnection(User user, Device device) {
 		device.getUsers().add(user);
 		user.getDevices().add(device);
 		return user;
-		
+
 	}
 
 	public Circuit calculateAndSetCircuitPowerConsumed(Circuit circuit) {
@@ -253,33 +271,32 @@ public class DatabaseFunctions {
 
 		return circuit;
 	}
-	
-	
+
 	public void circuitPowerSourceChangedInstructionSender() {
-		
-		//for every circuit from home
+
+		// for every circuit from home
 		for (Circuit circuit : circuitRepository.findAll()) {
-			
-			//create a new instruction
+
+			// create a new instruction
 			Instruction instruction = new Instruction();
-			
-			//with the type PowerSourceChange
+
+			// with the type PowerSourceChange
 			instruction.setType("PowerSourceChange");
-			
-			//set the device name = the circuit ID
+
+			// set the device name = the circuit ID
 			instruction.setDeviceName(circuit.getId().toString());
-			
-			//if the circuit is powerd by solar panel
+
+			// if the circuit is powerd by solar panel
 			if (circuit.getPowerSource().getType().equals("solarPanel")) {
 				instruction.setPowerSource("solarPowerSource");
-				
-				//if the circuit is powerd by the normal power source
+
+				// if the circuit is powerd by the normal power source
 			} else if (circuit.getPowerSource().getType().equals("normalPowerSource")) {
 				instruction.setPowerSource("normalPowerSource");
 			}
-			
+
 			try {
-				//send the instruction to the electric panel
+				// send the instruction to the electric panel
 				instructionsSender.instructionSender(instruction);
 			} catch (JsonProcessingException e) {
 				e.printStackTrace();

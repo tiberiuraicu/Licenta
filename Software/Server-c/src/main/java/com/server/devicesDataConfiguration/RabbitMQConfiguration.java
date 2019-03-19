@@ -20,7 +20,8 @@ import com.server.processing.CEP.CEPFunctions;
 import com.server.processing.Database.DatabaseFunctions;
 import com.server.processing.MqReceiver.MqReceiverFunctions;
 import com.server.processing.REST.RestFunctions;
-import com.server.socket.WebSocketController;
+import com.server.socket.DataBroadcaster;
+import com.server.socket.NotificationBroadcaster;
 
 
 @Configuration
@@ -121,7 +122,11 @@ public class RabbitMQConfiguration {
 			return new RestFunctions();
 		}
 		@Bean
-		public WebSocketController webSocketController() {
-			return new WebSocketController();
+		public DataBroadcaster dataBroadcaster() {
+			return new DataBroadcaster();
+		}
+		@Bean
+		public NotificationBroadcaster notificationBroadcaster() {
+			return new NotificationBroadcaster();
 		}
 }

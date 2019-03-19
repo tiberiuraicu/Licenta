@@ -12,20 +12,17 @@ export class UserPageComponent implements OnInit {
   outlets = [];
   ngOnInit() {
     this.userService.getAllOutlets().subscribe(result => {
-
-      result._body = result._body.slice(1, -1);
-      result._body=result._body.split(' ').join('');
+      //got response as string
+      result._body = result._body.slice(1, -1); //eliminate the "[]" from string
+      result._body = result._body.split(" ").join(""); //eliminate the spaces from string
       this.outlets = result._body.split(",");
-
-      
     });
-    this.initializeLineChart(0)
+    this.initializeLineChart(0);
     this.userService.initializePieChart();
     this.userService.initializeWebSocketConnection();
-   
   }
 
-  initializeLineChart(name){
+  initializeLineChart(name) {
     this.userService.initializeLineChart(name);
   }
 }

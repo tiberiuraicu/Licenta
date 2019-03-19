@@ -105,8 +105,7 @@ public class RestFunctions {
 	public String getLast60ConsumersPowerConsumed(Map<String, String> json) throws ServletException, IOException {
 
 		JsonObject outletPowerConsumptionInfo = new JsonObject();
-		System.out.println(json.get("name"));
-		for (Consumer consumer : consumerRepository.findTop60ByNameOrderByIdDesc(json.get("name"))) {
+		for (Consumer consumer : consumerRepository.findTop60ByNameOrderByIdDesc(json.get("outletName"))) {
 
 			outletPowerConsumptionInfo.addProperty(consumer.getTimestamp().toString(), consumer.getPowerConsumed());
 		}
@@ -114,18 +113,7 @@ public class RestFunctions {
 		return outletPowerConsumptionInfo.toString();
 	}
 
-	public String getLastConsumersPowerConsumed(Map<String, String> json) throws ServletException, IOException {
-
-		JsonObject last60recordsOfPowerConsumptionforOutlet = new JsonObject();
-
-		for (Consumer consumer : consumerRepository.findTop60ByNameOrderByIdDesc(json.get("name"))) {
-
-			last60recordsOfPowerConsumptionforOutlet.addProperty(consumer.getTimestamp().toString(), consumer.getPowerConsumed());
-		}
-
-		return last60recordsOfPowerConsumptionforOutlet.toString();
-	}
-
+	
 	public List<String> getAllOutlets() {
 		List<String> outlets = new Vector<String>();
 		for (Consumer consumer : consumerRepository.findAll()) {
