@@ -41,7 +41,6 @@ public class CEPFunctions {
 		// source
 		double consumedPower = calculateConsumedPowerForPowerSource(powerSource.getCircuits());
 
-		System.out.println("generated power "+generatedPower+" consumedPower "+consumedPower);
 		if (generatedPower > consumedPower) {
 			// if the power generated is greater then the one consumed
 			// see if a circuit can be added for consumption

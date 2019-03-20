@@ -14,14 +14,7 @@ import com.server.rest.security.JwtFilter;
 @EnableJpaRepositories
 public class ServerApplication {
 	
-	@Bean
-	public FilterRegistrationBean jwtFilter() {
-		final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-		registrationBean.setFilter(new JwtFilter());
-		registrationBean.addUrlPatterns("/user/resources/*");
-		registrationBean.addUrlPatterns("/rest1/*");
-		return registrationBean;
-	}
+	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ServerApplication.class, args);

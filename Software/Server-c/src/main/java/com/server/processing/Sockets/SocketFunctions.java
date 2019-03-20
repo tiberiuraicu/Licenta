@@ -1,11 +1,8 @@
 package com.server.processing.Sockets;
 
-import java.text.DecimalFormat;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.server.entites.Circuit;
 import com.server.socket.NotificationBroadcaster;
 

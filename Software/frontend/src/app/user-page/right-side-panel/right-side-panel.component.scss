@@ -70,16 +70,10 @@
   height: 45vh;
   width: 90%;
 
-  .notifications {
-  
-    
+  .notifications {  
     overflow: auto;
-    
-
     .notification {
       background-color: rgba(5, 10, 40, 0.2);
-   
-
     }
 
     &::-webkit-scrollbar {

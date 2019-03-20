@@ -31,6 +31,7 @@ public class UnusedOutletSubscriber {
 
 		String  outletName=(String)eventMap.get("outlet.name");
 		Instruction instruction = new Instruction();
+		instruction.setType("OnOff");
 		instruction.setDeviceName(outletName);
 		instruction.setOnOffValue("0");
 

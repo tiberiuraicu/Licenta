@@ -20,7 +20,6 @@ import com.server.entites.Sensor;
 import com.server.entites.User;
 import com.server.processing.Sockets.SocketFunctions;
 
-
 @Component
 public class DatabaseFunctions {
 
@@ -36,7 +35,7 @@ public class DatabaseFunctions {
 	InstructionsSender instructionsSender;
 	@Autowired
 	SocketFunctions socketFunctions;
-	
+
 	// make the connection between Consumer and a Circuit or,
 	// if it already exists in circuit update its dates
 	public Circuit makeConsumerAndCircuitConnection(Consumer consumer, Circuit circuit) {
@@ -118,7 +117,7 @@ public class DatabaseFunctions {
 
 		// and set the new set of circuits to be powerd by the power source
 		powerSource.setCircuits(circuitsForPowerSource);
-		
+
 		return powerSource;
 
 	}
@@ -131,15 +130,26 @@ public class DatabaseFunctions {
 		// first : get the normal power source entity form the database
 		PowerSource normalPowerSource = powerSourceRepository.getPowerSourceById(2);
 
-		// then set all circuits from home to this power source
+		// then set all circuits that are not in the new configuration
+		// to the normal power source
 		for (Circuit circuitFromDatabase : circuitRepository.findAll()) {
+
+			// initially we suppose the selected circuit
+			// from database is not powerd by solar panel
 			boolean exists = false;
+
+			// iterate trough the circuits that will be
+			// powerd by solar panel
 			for (Circuit circuitForSolarPanel : circuits) {
+
+				// if the circuit exists in the new configuration we'll leave it there
 				if (circuitFromDatabase.getId().equals(circuitForSolarPanel.getId())) {
 					exists = true;
 				}
 			}
-			if (exists==false) {
+			// if not, change its power source to normal power source
+			if (exists == false) {
+
 				circuitFromDatabase.setPowerSource(normalPowerSource);
 
 				normalPowerSource = makeCircuitAndPowerSourceConnection(circuitFromDatabase, normalPowerSource);
@@ -154,25 +164,34 @@ public class DatabaseFunctions {
 
 		// set the given array of circuits to this power source
 		for (Circuit circuitForSolarPanel : circuits) {
+
+			// initially we suppose the selected circuit
+			// from database is not powerd by solar panel
 			boolean exists = false;
+
 			for (Circuit circuitInSolarPanel : solarPowerSource.getCircuits()) {
+
+				// if the circuit is already powerd by solar panel we will not add it again
 				if (circuitInSolarPanel.getId().equals(circuitForSolarPanel.getId())) {
 					exists = true;
 				}
 			}
-			if(exists==false)
-				solarPowerSource = makeCircuitAndPowerSourceConnection(circuitForSolarPanel, solarPowerSource);
+			// if not,change its power source to solar panel
+			if (exists == false)
 
+				solarPowerSource = makeCircuitAndPowerSourceConnection(circuitForSolarPanel, solarPowerSource);
 		}
 
 		// save in database the new configuration of circuits for solar power source
 		powerSourceRepository.save(solarPowerSource);
 
+		//send instruction to the electric panel with the new configuration
 		circuitPowerSourceChangedInstructionSender();
-		
-		//send notification to front end with the new power source consumption
-		socketFunctions.sendNewPowerConsumptionNotification(solarPowerSource.getCircuits(),normalPowerSource.getCircuits());
-		
+
+		// send notification to front end with the new power source consumption
+		socketFunctions.sendNewPowerConsumptionNotification(solarPowerSource.getCircuits(),
+				normalPowerSource.getCircuits());
+
 		return solarPowerSource;
 	}
 
@@ -246,6 +265,7 @@ public class DatabaseFunctions {
 
 	}
 
+	// TODO *test
 	public User makeDeviceAndUserConnection(User user, Device device) {
 		device.getUsers().add(user);
 		user.getDevices().add(device);
@@ -305,6 +325,5 @@ public class DatabaseFunctions {
 			}
 		}
 	}
-	
 
 }

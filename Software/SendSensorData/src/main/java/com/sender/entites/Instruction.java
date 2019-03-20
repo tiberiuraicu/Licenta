@@ -44,5 +44,11 @@ public class Instruction {
 	public void setPowerSource(String powerSource) {
 		this.powerSource = powerSource;
 	}
+
+	@Override
+	public String toString() {
+		return "Instruction [type=" + type + ", deviceName=" + deviceName + ", onOffValue=" + onOffValue
+				+ ", powerSource=" + powerSource + "]";
+	}
 	
 }
