@@ -1,10 +1,8 @@
 package com.server.processing.Database;
 
-import java.text.DecimalFormat;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
@@ -20,7 +18,8 @@ import com.server.entites.PowerSource;
 import com.server.entites.Role;
 import com.server.entites.Sensor;
 import com.server.entites.User;
-import com.server.socket.NotificationBroadcaster;
+import com.server.processing.Sockets.SocketFunctions;
+
 
 @Component
 public class DatabaseFunctions {
@@ -36,10 +35,7 @@ public class DatabaseFunctions {
 	@Autowired
 	InstructionsSender instructionsSender;
 	@Autowired
-	NotificationBroadcaster notificationBroadcaster;
-	
-	
-	DecimalFormat df = new DecimalFormat("####.##");
+	SocketFunctions socketFunctions;
 	
 	// make the connection between Consumer and a Circuit or,
 	// if it already exists in circuit update its dates
@@ -174,16 +170,9 @@ public class DatabaseFunctions {
 
 		circuitPowerSourceChangedInstructionSender();
 		
-		notificationBroadcaster.sendOutletPower(
-				"New power consumption : Solar panel : "+df.format(calculateConsumedPowerForPowerSource(solarPowerSource.getCircuits()))+ " kW -> " + 
-		         calculatePercentage(calculateConsumedPowerForPowerSource(solarPowerSource.getCircuits()),
-		        		 calculateConsumedPowerForPowerSource(solarPowerSource.getCircuits())
-		        		 +calculateConsumedPowerForPowerSource(normalPowerSource.getCircuits()))+"%,"+
-		        " Normal power source : "+df.format(calculateConsumedPowerForPowerSource(normalPowerSource.getCircuits()))+" kW -> " +
-		        calculatePercentage(calculateConsumedPowerForPowerSource(normalPowerSource.getCircuits()),
-		        		 calculateConsumedPowerForPowerSource(solarPowerSource.getCircuits())+
-		        		 calculateConsumedPowerForPowerSource(normalPowerSource.getCircuits()))+"%,"
-				);
+		//send notification to front end with the new power source consumption
+		socketFunctions.sendNewPowerConsumptionNotification(solarPowerSource.getCircuits(),normalPowerSource.getCircuits());
+		
 		return solarPowerSource;
 	}
 
@@ -317,22 +306,5 @@ public class DatabaseFunctions {
 		}
 	}
 	
-	public String calculatePercentage(double obtained, double total) {
-		
-        return df.format(obtained * 100 / total);
-    }
-	
-	public double calculateConsumedPowerForPowerSource(List<Circuit> circuits) {
-
-		// initially the consumed power is 0
-		double consumedPower = 0;
-
-		// iterate trough every circuit
-		for (Circuit circuit : circuits) {
-			// adds its consumed power to the total
-			consumedPower += circuit.getPowerConsumed();
-		}
-		return consumedPower;
-	}
 
 }

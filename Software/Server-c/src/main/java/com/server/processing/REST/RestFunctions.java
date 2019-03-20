@@ -1,12 +1,10 @@
 package com.server.processing.REST;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,8 +20,6 @@ import com.server.entites.Consumer;
 import com.server.entites.Device;
 import com.server.entites.User;
 import com.server.processing.Database.DatabaseFunctions;
-import com.server.socket.NotificationBroadcaster;
-
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -81,9 +77,6 @@ public class RestFunctions {
 		return "user inregistrat";
 
 	}
-
-	
-	
 	
 	public String getTotalPowerConsumed() throws ServletException, IOException {
 	
