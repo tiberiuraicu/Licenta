@@ -62,7 +62,8 @@ public class CEPFunctions {
 
 		// calculates if exists unused generated power
 		Double powerAvailable = powerSource.getGeneratedPower() - consumedPower;
-
+		
+        //TODO -> make this a function
 		// if there is unused power
 		if (powerAvailable > 0) {
 			// iterate trough every circuit from home

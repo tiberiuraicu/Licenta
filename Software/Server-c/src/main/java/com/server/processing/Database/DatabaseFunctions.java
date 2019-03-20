@@ -20,7 +20,6 @@ import com.server.entites.Sensor;
 import com.server.entites.User;
 import com.server.processing.Sockets.SocketFunctions;
 
-
 @Component
 public class DatabaseFunctions {
 
@@ -36,7 +35,7 @@ public class DatabaseFunctions {
 	InstructionsSender instructionsSender;
 	@Autowired
 	SocketFunctions socketFunctions;
-	
+
 	// make the connection between Consumer and a Circuit or,
 	// if it already exists in circuit update its dates
 	public Circuit makeConsumerAndCircuitConnection(Consumer consumer, Circuit circuit) {
@@ -118,7 +117,7 @@ public class DatabaseFunctions {
 
 		// and set the new set of circuits to be powerd by the power source
 		powerSource.setCircuits(circuitsForPowerSource);
-		
+
 		return powerSource;
 
 	}
@@ -127,7 +126,6 @@ public class DatabaseFunctions {
 	// *mostly used for setting the best configuration after calculating it
 	public PowerSource setNewSetOfCircuitsToPowerSource(PowerSource powerSource, List<Circuit> circuits) {
 
-		// TODO -> make this more optimized
 		// first : get the normal power source entity form the database
 		PowerSource normalPowerSource = powerSourceRepository.getPowerSourceById(2);
 
@@ -139,7 +137,7 @@ public class DatabaseFunctions {
 					exists = true;
 				}
 			}
-			if (exists==false) {
+			if (exists == false) {
 				circuitFromDatabase.setPowerSource(normalPowerSource);
 
 				normalPowerSource = makeCircuitAndPowerSourceConnection(circuitFromDatabase, normalPowerSource);
@@ -160,7 +158,7 @@ public class DatabaseFunctions {
 					exists = true;
 				}
 			}
-			if(exists==false)
+			if (exists == false)
 				solarPowerSource = makeCircuitAndPowerSourceConnection(circuitForSolarPanel, solarPowerSource);
 
 		}
@@ -169,10 +167,11 @@ public class DatabaseFunctions {
 		powerSourceRepository.save(solarPowerSource);
 
 		circuitPowerSourceChangedInstructionSender();
-		
-		//send notification to front end with the new power source consumption
-		socketFunctions.sendNewPowerConsumptionNotification(solarPowerSource.getCircuits(),normalPowerSource.getCircuits());
-		
+
+		// send notification to front end with the new power source consumption
+		socketFunctions.sendNewPowerConsumptionNotification(solarPowerSource.getCircuits(),
+				normalPowerSource.getCircuits());
+
 		return solarPowerSource;
 	}
 
@@ -305,6 +304,5 @@ public class DatabaseFunctions {
 			}
 		}
 	}
-	
 
 }
