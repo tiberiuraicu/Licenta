@@ -31,7 +31,7 @@ public class Circuit {
 	@JoinColumn(name = "device_id")
 	private Device device;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.REMOVE}, fetch = FetchType.EAGER)
 	@JoinColumn(name = "powerSource_id")
 	private PowerSource powerSource;
 

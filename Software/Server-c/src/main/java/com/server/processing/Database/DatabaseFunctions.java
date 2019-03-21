@@ -3,7 +3,6 @@ package com.server.processing.Database;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
 import com.server.database.repositories.PowerSourceRepository;
@@ -12,7 +11,6 @@ import com.server.devicesInstructionsSender.InstructionsSender;
 import com.server.entites.Circuit;
 import com.server.entites.Consumer;
 import com.server.entites.Device;
-import com.server.entites.Instruction;
 import com.server.entites.Notification;
 import com.server.entites.PowerSource;
 import com.server.entites.Role;
@@ -146,13 +144,10 @@ public class DatabaseFunctions {
 					exists = true;
 				}
 			}
-<<<<<<< HEAD
-			if (exists == false) {
-=======
+
 			// if not, change its power source to normal power source
 			if (exists == false) {
 
->>>>>>> 5f3dfc6ff7ee24e2b453fb6539c0b25ba66b2d98
 				circuitFromDatabase.setPowerSource(normalPowerSource);
 
 				normalPowerSource = makeCircuitAndPowerSourceConnection(circuitFromDatabase, normalPowerSource);
@@ -179,22 +174,17 @@ public class DatabaseFunctions {
 					exists = true;
 				}
 			}
-<<<<<<< HEAD
-			if (exists == false)
-				solarPowerSource = makeCircuitAndPowerSourceConnection(circuitForSolarPanel, solarPowerSource);
-=======
+
 			// if not,change its power source to solar panel
 			if (exists == false)
->>>>>>> 5f3dfc6ff7ee24e2b453fb6539c0b25ba66b2d98
-
 				solarPowerSource = makeCircuitAndPowerSourceConnection(circuitForSolarPanel, solarPowerSource);
 		}
 
 		// save in database the new configuration of circuits for solar power source
 		powerSourceRepository.save(solarPowerSource);
 
-		//send instruction to the electric panel with the new configuration
-		circuitPowerSourceChangedInstructionSender();
+		// send instruction to the electric panel with the new configuration
+		instructionsSender.changeCircuitPowerSource();
 
 		// send notification to front end with the new power source consumption
 		socketFunctions.sendNewPowerConsumptionNotification(solarPowerSource.getCircuits(),
@@ -300,38 +290,6 @@ public class DatabaseFunctions {
 		circuit.setPowerConsumed(cumulatedPowerConsumed);
 
 		return circuit;
-	}
-
-	public void circuitPowerSourceChangedInstructionSender() {
-
-		// for every circuit from home
-		for (Circuit circuit : circuitRepository.findAll()) {
-
-			// create a new instruction
-			Instruction instruction = new Instruction();
-
-			// with the type PowerSourceChange
-			instruction.setType("PowerSourceChange");
-
-			// set the device name = the circuit ID
-			instruction.setDeviceName(circuit.getId().toString());
-
-			// if the circuit is powerd by solar panel
-			if (circuit.getPowerSource().getType().equals("solarPanel")) {
-				instruction.setPowerSource("solarPowerSource");
-
-				// if the circuit is powerd by the normal power source
-			} else if (circuit.getPowerSource().getType().equals("normalPowerSource")) {
-				instruction.setPowerSource("normalPowerSource");
-			}
-
-			try {
-				// send the instruction to the electric panel
-				instructionsSender.instructionSender(instruction);
-			} catch (JsonProcessingException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 }

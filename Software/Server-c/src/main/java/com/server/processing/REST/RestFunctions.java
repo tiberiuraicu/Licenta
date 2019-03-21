@@ -139,5 +139,10 @@ public class RestFunctions {
 		return outletPowerConsumptionInfo.toString();
 		
 	}
+
+	public int getID(String email) {
+		return userRepository.getUserByEmail(email).getId();
+		
+	}
 	 
 }

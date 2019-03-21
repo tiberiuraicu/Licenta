@@ -25,6 +25,13 @@ export class LoginService {
     return this.http.get(tokenUrl, { headers: getHeaders });
   }
 
+  getUserId(token) {
+    let tokenUrl = "http://localhost:8080/user/getId";
+    console.log('Bearer ' + token);
+    let getHeaders = new Headers({ 'Authorization': 'Bearer ' + token });
+    return this.http.post(tokenUrl,localStorage.getItem("currentEmail"), { headers: getHeaders });
+  }
+
   logout() {
     localStorage.setItem("token", "");
     localStorage.setItem("currentEmail", "")

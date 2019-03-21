@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.Map;
 import javax.servlet.ServletException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.MessagingException;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,9 +31,14 @@ public class UserController {
 	@Autowired
 	RestFunctions restFunctions;
 
-	@RequestMapping(value = "login", method = RequestMethod.POST)
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(@RequestBody Map<String, String> json) throws ServletException {
 		return restFunctions.login(json);
+	}
+	
+	@RequestMapping(value = "/getId", method = RequestMethod.POST)
+	public int getId(@RequestBody String email) throws ServletException {
+		return restFunctions.getID(email);
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)

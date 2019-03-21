@@ -9,7 +9,7 @@ import com.server.entites.Device;
 // This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
 // CRUD refers Create, Read, Update, Delete
 
-public interface DieviceRepository extends JpaRepository<Device, Integer> {
+public interface DeviceRepository extends JpaRepository<Device, Integer> {
 
 	Device getDispozitivByName(String name);
 	

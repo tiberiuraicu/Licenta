@@ -1,4 +1,4 @@
-package com.server.devicesDataConfiguration;
+package com.server.beanConfiguration;
 
 import org.apache.log4j.Logger;
 import org.springframework.amqp.core.Binding;
@@ -8,12 +8,10 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-
+import com.server.constants.Constants;
 import com.server.devicesDataReceiver.Receiver;
 import com.server.devicesInstructionsSender.InstructionsSender;
 import com.server.processing.CEP.CEPFunctions;
@@ -23,37 +21,18 @@ import com.server.processing.REST.RestFunctions;
 import com.server.socket.DataBroadcaster;
 import com.server.socket.NotificationBroadcaster;
 
-
 @Configuration
 @ComponentScan(basePackages="com.server")
-@PropertySource("classpath:config.properties")
-public class RabbitMQConfiguration {
-	@Value("${factory.host}")
-	String host;
-	@Value("${rabbit.username}")
-	String rabbitUsername;
-	@Value("${rabbit.password}")
-	String rabbitPassword;
-	@Value("${exchange}")
-	String exchange;
-	@Value("${queue.consumer}")
-	String queueConsumer;
-	@Value("${consumer.key}")
-	String consumerKey;
-	@Value("${queue.sensor}")
-	String queueSensor;
-	@Value("${sensor.key}")
-	String sensorKey;
-
-	final static Logger logger = Logger.getLogger(RabbitMQConfiguration.class);
+public class BeanConfiguration {
+	
+	final static Logger logger = Logger.getLogger(BeanConfiguration.class);
 
 		@Bean
 		public CachingConnectionFactory connectionFactory() {
 			CachingConnectionFactory conn = new CachingConnectionFactory();
-
-			conn.setHost(host);
-			conn.setUsername(rabbitUsername);
-			conn.setPassword(rabbitPassword);
+			conn.setHost(Constants.FACTORY_HOST);
+			conn.setUsername(Constants.RABBITMQ_USERNAME);
+			conn.setPassword(Constants.RABBITMQ_PASSWORD);
 			return conn;
 		}
 
@@ -68,28 +47,28 @@ public class RabbitMQConfiguration {
 		@Bean
 		@Qualifier("queueConsumer")
 		public Queue queueConsumer() {
-			return new Queue(queueConsumer);
+			return new Queue(Constants.QUEUE_CONSUMER);
 		}
 		
 		@Bean
 		@Qualifier("queueSensor")
 		public Queue queueSensor() {
-			return new Queue(queueSensor);
+			return new Queue(Constants.QUEUE_SENSOR);
 		}
 
 		@Bean
 		public DirectExchange exchange() {
-			return new DirectExchange(exchange);
+			return new DirectExchange(Constants.EXCHANGE_NAME);
 		}
 	
 		@Bean
 		public Binding bindingConsumator(DirectExchange exchange, Queue queueConsumer) {
-			return BindingBuilder.bind(queueConsumer).to(exchange).with(consumerKey);
+			return BindingBuilder.bind(queueConsumer).to(exchange).with(Constants.CONSUMER_KEY);
 		}
 		
 		@Bean
 		public Binding bindingSensor(DirectExchange exchange, Queue queueSensor) {
-			return BindingBuilder.bind(queueSensor).to(exchange).with(sensorKey);
+			return BindingBuilder.bind(queueSensor).to(exchange).with(Constants.SENSOR_KEY);
 		}
 
 		@Bean

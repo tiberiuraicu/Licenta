@@ -77,6 +77,17 @@ public class HelperFunctions {
 		return device;
 
 	}
+	
+	// TODO *test
+		public User makeDeviceAndUserConnection(User user, Device device) {
+			
+			device.getUsers().add(user);
+			
+			user.getDevices().add(device);
+			
+			return user;
+
+		}
 
 	public PowerSource makeCircuitAndPowerSourceConnection(Circuit circuit, PowerSource powerSource) {
 

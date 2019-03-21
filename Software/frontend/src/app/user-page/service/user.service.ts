@@ -9,6 +9,7 @@ import Config from "../../config/config";
   providedIn: "root"
 })
 export class UserService {
+  
   selectedOutlet: any;
   stompClient;
   pieChart: any;
@@ -142,7 +143,8 @@ export class UserService {
   };
 
   getTotalPowerconsumedForPieChart = () => {
-    this.stompClient.subscribe("/totalPowerConsumed", response => {
+    let userID = localStorage.getItem("currentId");
+    this.stompClient.subscribe("/totalPowerConsumed/"+userID, response => {
       var responseAsJson = JSON.parse(response.body);
       let powerConsumedFromSolarPanel =
         responseAsJson.powerConsumedFromSolarPanel;
@@ -157,7 +159,8 @@ export class UserService {
   };
 
   getOutletPowerConsumedForLineChart = () => {
-    this.stompClient.subscribe("/outletPowerConsumed", response => {
+    let userID = localStorage.getItem("currentId");
+    this.stompClient.subscribe("/outletPowerConsumed/"+userID, response => {
       var responseAsJson = JSON.parse(response.body);
       for (var outlet in responseAsJson) {
         if (outlet == this.selectedOutlet) {

@@ -18,12 +18,12 @@ public class DataBroadcaster {
 	private SimpMessagingTemplate template;
 
 	@Scheduled(fixedDelay = 1000)
-	public void sendTotalPowerConsumed() throws MessagingException, ServletException, IOException {
+	public void sendTotalPowerConsumed(String id) throws MessagingException, ServletException, IOException {
 		this.template.convertAndSend("/totalPowerConsumed", restFunctions.getTotalPowerConsumed());
 	}
 
 	@Scheduled(fixedDelay = 1000)
-	public void sendOutletPower() throws MessagingException, ServletException, IOException {
+	public void sendOutletPower(String id) throws MessagingException, ServletException, IOException {
 			this.template.convertAndSend("/outletPowerConsumed",
 					restFunctions.getLastRegistratedPowerConsumedForEveryOutlet());
 		

@@ -26,6 +26,9 @@ export class LoginComponent {
        
         localStorage.setItem("token", data._body)
         localStorage.setItem("currentEmail", this.model.email);
+        this.loginService.getUserId(data._body).subscribe(response=>{
+          localStorage.setItem("currentId", response._body);
+        })
          this.router.navigate(['/user'])
          location.reload();
       },

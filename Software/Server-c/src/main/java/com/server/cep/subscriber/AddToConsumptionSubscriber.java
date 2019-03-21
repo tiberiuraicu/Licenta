@@ -41,13 +41,9 @@ public class AddToConsumptionSubscriber {
 	 */
 	public void update(Map<String, Consumer> eventMap) throws InterruptedException {
 		
-		
 		PowerSource solarPowerSource = powerSourceRepository.getPowerSourceById(1);
-			
+	
 		CEPFunctions.energyStatusCheckForSolarPanel(solarPowerSource);
-
-		
-		
 
 	}
 

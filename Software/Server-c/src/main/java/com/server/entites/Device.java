@@ -30,6 +30,10 @@ public class Device {
 	private String locality;
 
 	private String street;
+	
+	@OneToMany(mappedBy="device",fetch = FetchType.LAZY,cascade =
+		{CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.REMOVE})
+	private List<PowerSource> powerSources = new Vector<PowerSource>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="device")
 	@Fetch(value = FetchMode.SUBSELECT)
@@ -117,4 +121,13 @@ public class Device {
 	public void setUsers(List<User> users) {
 		this.users = users;
 	}
+
+	public List<PowerSource> getPowerSources() {
+		return powerSources;
+	}
+
+	public void setPowerSources(List<PowerSource> powerSources) {
+		this.powerSources = powerSources;
+	}
+	
 }

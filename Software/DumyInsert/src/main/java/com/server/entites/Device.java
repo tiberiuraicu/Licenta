@@ -5,8 +5,7 @@ import java.util.Vector;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -18,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Entity
 @Transactional
 @Proxy(lazy = false)
+
 public class Device {
 
 	@Id
@@ -33,7 +33,10 @@ public class Device {
 
 	private String street;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="device")
+	@OneToMany(mappedBy="device",fetch = FetchType.LAZY)
+	private List<PowerSource> powerSources = new Vector<PowerSource>();
+	
+	@OneToMany( fetch = FetchType.EAGER, mappedBy="device")
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Circuit> circuits = new Vector<Circuit>();
 
@@ -119,4 +122,13 @@ public class Device {
 	public void setUsers(List<User> users) {
 		this.users = users;
 	}
+
+	public List<PowerSource> getPowerSources() {
+		return powerSources;
+	}
+
+	public void setPowerSources(List<PowerSource> powerSources) {
+		this.powerSources = powerSources;
+	}
+	
 }
