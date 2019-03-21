@@ -1,10 +1,13 @@
 package com.server.rest.config;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+
+import com.server.rest.security.JwtFilter;
 
 @Configuration
 public class RestConfig {
@@ -23,4 +26,13 @@ public class RestConfig {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
+    
+    @Bean
+	public FilterRegistrationBean jwtFilter() {
+		final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+		registrationBean.setFilter(new JwtFilter());
+		registrationBean.addUrlPatterns("/user/resources/*");
+		registrationBean.addUrlPatterns("/rest1/*");
+		return registrationBean;
+	}
 }

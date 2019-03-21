@@ -61,7 +61,7 @@ public class DataInfoSenderToRaspberry {
 	public void sendOneLine(String[] lineValues) throws NumberFormatException, FileNotFoundException, IOException {
 
 		for (int i = 1; i < lineValues.length; i++) {
-			System.out.println(tableHeadValues[i]);
+	
 			if (tableHeadValues[i].contains("outlet"))
 				sendOutletValues(Double.parseDouble(lineValues[i]), tableHeadValues[i]);
 			else if (tableHeadValues[i].contains("switch"))
@@ -88,7 +88,7 @@ public class DataInfoSenderToRaspberry {
 		String callBackMessage = (String) this.template.convertSendAndReceive(this.exchange.getName(),
 				Constants.OUTLET_KEY, outletAsJSON.toString().getBytes());
 
-		System.out.println(callBackMessage);
+		//System.out.println(callBackMessage);
 
 	}
 
@@ -107,7 +107,7 @@ public class DataInfoSenderToRaspberry {
 		String callBackMessage = (String) this.template.convertSendAndReceive(this.exchange.getName(),
 				Constants.SWITCH_KEY, switchAsJSON.toString().getBytes());
 
-		System.out.println(callBackMessage);
+		//System.out.println(callBackMessage);
 
 	}
 
@@ -127,7 +127,7 @@ public class DataInfoSenderToRaspberry {
 		String callBackMessage = (String) this.template.convertSendAndReceive(this.exchange.getName(),
 				Constants.SENSOR_KEY, sensorAsJSON.toString().getBytes());
 
-		System.out.println(callBackMessage);
+		//System.out.println(callBackMessage);
 
 	}
 }

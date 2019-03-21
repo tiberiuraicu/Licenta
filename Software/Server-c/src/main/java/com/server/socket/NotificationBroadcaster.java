@@ -11,7 +11,6 @@ public class NotificationBroadcaster {
 	private SimpMessagingTemplate template;
 
 	public void sendOutletPower(String notification)  {
-	System.out.println("da");
 		this.template.convertAndSend("/notification", notification);
 
 	}
