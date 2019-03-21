@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.database.repositories.UserRepository;
 import com.server.processing.Database.DatabaseFunctions;
 import com.server.processing.REST.RestFunctions;
+import com.server.socket.DataBroadcaster;
 
 
 @RestController
@@ -30,6 +31,9 @@ public class UserController {
 
 	@Autowired
 	RestFunctions restFunctions;
+	
+	@Autowired
+	DataBroadcaster dataBroadcaster;
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(@RequestBody Map<String, String> json) throws ServletException {
@@ -57,7 +61,22 @@ public class UserController {
 	@RequestMapping(value = "/resources/getOutlets", method = RequestMethod.GET)
 	public String getOutlets()
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
+		
 		return restFunctions.getAllOutlets().toString();
+	}
+	
+	@RequestMapping(value = "/resources/pieChart", method = RequestMethod.POST)
+	public void initializePieChart(@RequestBody Map<String, String> json)
+			throws JsonParseException, JsonMappingException, IOException, ServletException {
+
+		dataBroadcaster.sendTotalPowerConsumed(json.get("userId"));
+		
+	}
+	@RequestMapping(value = "/resources/lineChart", method = RequestMethod.POST)
+	public void initializeLineChart(@RequestBody Map<String, String> json)
+			throws JsonParseException, JsonMappingException, IOException, ServletException {
+		dataBroadcaster.sendOutletPower(json.get("userId"));
+		
 	}
 	
 	

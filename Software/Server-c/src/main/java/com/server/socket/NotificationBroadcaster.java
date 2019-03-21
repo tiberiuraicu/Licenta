@@ -10,8 +10,8 @@ public class NotificationBroadcaster {
 	@Autowired
 	private SimpMessagingTemplate template;
 
-	public void sendOutletPower(String notification)  {
-		this.template.convertAndSend("/notification", notification);
+	public void sendOutletPower(String notification, int id)  {
+		this.template.convertAndSend("/notification/"+id, notification);
 
 	}
 	

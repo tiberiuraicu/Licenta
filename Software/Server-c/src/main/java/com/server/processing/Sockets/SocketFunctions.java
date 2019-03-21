@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.server.entites.Circuit;
+import com.server.entites.PowerSource;
 import com.server.socket.NotificationBroadcaster;
 
 @Component
@@ -17,14 +18,14 @@ public class SocketFunctions {
 		return (double) Math.round((obtained * 100 / total)* 100) / 100;
 	}
 
-	public void sendNewPowerConsumptionNotification(List<Circuit> solarCircuits, List<Circuit> normalCircuits) {
-		Double solarPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(solarCircuits) * 100) / 100;
-		Double normalPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(normalCircuits) * 100) / 100;
+	public void sendNewPowerConsumptionNotification(PowerSource solarPowerSource, PowerSource normalPowerSource) {
+		Double solarPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(solarPowerSource.getCircuits()) * 100) / 100;
+		Double normalPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(normalPowerSource.getCircuits()) * 100) / 100;
 
 		notificationBroadcaster.sendOutletPower("New power consumption : Solar panel : " + solarPowerConsumed
 				+ " kW -> " + calculatePercentage(solarPowerConsumed, solarPowerConsumed + normalPowerConsumed) + "%,"
 				+ " Normal power source : " + normalPowerConsumed + " kW -> "
-				+ calculatePercentage(normalPowerConsumed, solarPowerConsumed + normalPowerConsumed) + "%,");
+				+ calculatePercentage(normalPowerConsumed, solarPowerConsumed + normalPowerConsumed) + "%,",solarPowerSource.getDevice().getUsers().get(0).getId());
 	}
 
 	public double calculateConsumedPowerForPowerSource(List<Circuit> circuits) {

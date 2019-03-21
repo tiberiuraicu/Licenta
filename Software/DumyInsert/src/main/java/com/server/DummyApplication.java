@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import com.server.cep.processing.FunctiiAjutor;
 import com.server.database.repositories.PowerSourceRepository;
+import com.server.entites.Device;
 import com.server.entites.NormalPowerSource;
 
 @SpringBootApplication
@@ -28,8 +29,7 @@ public class DummyApplication implements CommandLineRunner {
 	
 	@Override
 	public void run(String... strings) throws Exception {	
-		NormalPowerSource normalPowerSource=new NormalPowerSource();
-		powerSourceRepository.save(normalPowerSource);
+	
 		powerSourceRepository.save(fnctiiAjutor.getAlimentator());
 	}
 }

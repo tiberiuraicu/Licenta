@@ -187,8 +187,8 @@ public class DatabaseFunctions {
 		instructionsSender.changeCircuitPowerSource();
 
 		// send notification to front end with the new power source consumption
-		socketFunctions.sendNewPowerConsumptionNotification(solarPowerSource.getCircuits(),
-				normalPowerSource.getCircuits());
+		socketFunctions.sendNewPowerConsumptionNotification(solarPowerSource,
+				normalPowerSource);
 
 		return solarPowerSource;
 	}

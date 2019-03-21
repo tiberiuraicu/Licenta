@@ -91,9 +91,7 @@ public class CEPFunctions {
 			if (foundOne == false) {
 				break;
 			}
-
 		}
-
 		return powerSource;
 
 	}

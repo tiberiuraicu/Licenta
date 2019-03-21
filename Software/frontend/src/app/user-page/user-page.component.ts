@@ -19,6 +19,7 @@ export class UserPageComponent implements OnInit {
     });
     this.initializeLineChart(0);
     this.userService.initializePieChart();
+    this.userService.startOutletBroadcast();
     this.userService.initializeWebSocketConnection();
   }
 

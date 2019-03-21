@@ -214,6 +214,10 @@ public class FunctiiAjutor {
 		user = helperFunctions.makeDeviceAndUserConnection(user, device);
 		userRepository.save(user);
 
+		NormalPowerSource normalPowerSource=new NormalPowerSource();
+		normalPowerSource.setDevice(device);
+		powerSourceRepository.save(normalPowerSource);
+		
 		powerSource.setDevice(device);
 		
 		return powerSource;

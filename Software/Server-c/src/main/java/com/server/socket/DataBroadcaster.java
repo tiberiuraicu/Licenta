@@ -1,11 +1,12 @@
 package com.server.socket;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.servlet.ServletException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import com.server.processing.REST.RestFunctions;
 
@@ -17,15 +18,52 @@ public class DataBroadcaster {
 	@Autowired
 	private SimpMessagingTemplate template;
 
-	@Scheduled(fixedDelay = 1000)
-	public void sendTotalPowerConsumed(String id) throws MessagingException, ServletException, IOException {
-		this.template.convertAndSend("/totalPowerConsumed", restFunctions.getTotalPowerConsumed());
+	Timer timer = new Timer();
+
+	TimerTask timerTaskPowerConsumed;
+
+	TimerTask timerTaskOutletPowerConsumed;
+
+	public void sendTotalPowerConsumed(String id) {
+		try {
+			timerTaskPowerConsumed.cancel();
+		} catch (Exception e) {
+		}
+		timerTaskPowerConsumed = new TimerTask() {
+			@Override
+			public void run() {
+				try {
+					template.convertAndSend("/totalPowerConsumed/" + id, restFunctions.getTotalPowerConsumed());
+				} catch (MessagingException | ServletException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			};
+		};
+
+		timer.schedule(timerTaskPowerConsumed, 1000, 1000);
+
 	}
 
-	@Scheduled(fixedDelay = 1000)
-	public void sendOutletPower(String id) throws MessagingException, ServletException, IOException {
-			this.template.convertAndSend("/outletPowerConsumed",
-					restFunctions.getLastRegistratedPowerConsumedForEveryOutlet());
-		
+	public void sendOutletPower(String id) {
+		try {
+			timerTaskOutletPowerConsumed.cancel();
+		} catch (Exception e) {
+		}
+		timerTaskOutletPowerConsumed = new TimerTask() {
+
+			@Override
+			public void run() {
+				try {
+
+					template.convertAndSend("/outletPowerConsumed/" + id,
+							restFunctions.getLastRegistratedPowerConsumedForEveryOutlet());
+				} catch (MessagingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
+		timer.schedule(timerTaskOutletPowerConsumed, 1000, 1000);
 	}
 }

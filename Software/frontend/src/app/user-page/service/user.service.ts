@@ -28,11 +28,19 @@ export class UserService {
       headers: this.userAuthentificationHeader
     });
   }
+ startOutletBroadcast() {
+     this.http.post("http://localhost:8080/user/resources/lineChart", { userId:localStorage.getItem("currentId") }, {
+      headers: this.userAuthentificationHeader
+    }).subscribe(res=>{
+      
+    });
+  }
 
   //initialize the line chart with information fron server about the selected outlet
   initializeLineChart = name => {
     //set the global selected outlet
     this.selectedOutlet = name;
+
 
     let last60RecordsTimestamp = [];
     let last60RecordsPowerConsumed = [];
@@ -42,7 +50,8 @@ export class UserService {
     this.http
       .post(
         "http://localhost:8080/user/resources/last60Consumers",
-        { outletName: name },
+        { outletName: name,
+         userId:localStorage.getItem("currentId") },
         { headers: this.userAuthentificationHeader }
       )
       .subscribe(response => {
@@ -107,7 +116,11 @@ export class UserService {
   };
 
   initializePieChart = () => {
-    this.http.get("http://localhost:8080/user/resources/pieChart");
+    
+    this.http.post("http://localhost:8080/user/resources/pieChart",
+    {userId:localStorage.getItem("currentId")},{ headers: this.userAuthentificationHeader }).subscribe(res=>{
+      
+    })
     this.pieChart = new Chart(document.getElementById("doughnut-chart"), {
       type: "doughnut",
       data: {
@@ -145,6 +158,7 @@ export class UserService {
   getTotalPowerconsumedForPieChart = () => {
     let userID = localStorage.getItem("currentId");
     this.stompClient.subscribe("/totalPowerConsumed/"+userID, response => {
+      console.log(response)
       var responseAsJson = JSON.parse(response.body);
       let powerConsumedFromSolarPanel =
         responseAsJson.powerConsumedFromSolarPanel;
@@ -161,6 +175,7 @@ export class UserService {
   getOutletPowerConsumedForLineChart = () => {
     let userID = localStorage.getItem("currentId");
     this.stompClient.subscribe("/outletPowerConsumed/"+userID, response => {
+      console.log(response);
       var responseAsJson = JSON.parse(response.body);
       for (var outlet in responseAsJson) {
         if (outlet == this.selectedOutlet) {

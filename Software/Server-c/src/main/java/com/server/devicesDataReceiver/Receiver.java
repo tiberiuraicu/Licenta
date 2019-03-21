@@ -19,8 +19,6 @@ public class Receiver {
 
 	@RabbitListener(queues = "Consumer")
 	public String consumerDataReceiver(byte[] body) throws Exception {
-		System.out.println("------------------------------------------------------");
-		System.out.println(powerSourceRepository.getPowerSourceById(1).getCircuits());
 		return receiverFunctions.consumerDataProcess(body);
 	}
 

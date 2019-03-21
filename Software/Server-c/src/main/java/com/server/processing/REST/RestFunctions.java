@@ -20,6 +20,8 @@ import com.server.entites.Consumer;
 import com.server.entites.Device;
 import com.server.entites.User;
 import com.server.processing.Database.DatabaseFunctions;
+import com.server.socket.DataBroadcaster;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -40,8 +42,8 @@ public class RestFunctions {
 	HttpServletResponse httpServletResponse;
 	@Autowired
 	DatabaseFunctions databaseFunctions;
-	
-	 
+
+
 	public String login(Map<String, String> json) throws ServletException {
 		if (json.get("email") == null || json.get("password") == null) {
 			throw new ServletException("Please fill in username and password");
@@ -77,9 +79,8 @@ public class RestFunctions {
 		return "user inregistrat";
 
 	}
-	
+
 	public String getTotalPowerConsumed() throws ServletException, IOException {
-	
 
 		Double powerConsumedFromSolarPanel = 0.0;
 		Double powerConsumedFromNormalPowerSource = 0.0;
@@ -95,7 +96,7 @@ public class RestFunctions {
 		}
 		powerConsumptionInfo.addProperty("powerConsumedFromSolarPanel", powerConsumedFromSolarPanel);
 		powerConsumptionInfo.addProperty("powerConsumedFromNormalPowerSource", powerConsumedFromNormalPowerSource);
-		
+
 		return powerConsumptionInfo.toString();
 	}
 
@@ -106,16 +107,15 @@ public class RestFunctions {
 
 			outletPowerConsumptionInfo.addProperty(consumer.getTimestamp().toString(), consumer.getPowerConsumed());
 		}
-
+		
 		return outletPowerConsumptionInfo.toString();
 	}
 
-	
 	public List<String> getAllOutlets() {
 		List<String> outlets = new Vector<String>();
 		for (Consumer consumer : consumerRepository.findAll()) {
 			if (consumer.getType().equals("outlet")) {
-				if(!outlets.contains(consumer.getName()))
+				if (!outlets.contains(consumer.getName()))
 					outlets.add(consumer.getName());
 			}
 		}
@@ -125,24 +125,22 @@ public class RestFunctions {
 	public String getLastRegistratedPowerConsumedForEveryOutlet() {
 		JsonObject outletPowerConsumptionInfo = new JsonObject();
 		List<String> outletNames = getAllOutlets();
-		for(String outletName : outletNames ) {
-			JsonObject outletChartData= new JsonObject();
-			outletChartData.addProperty(
-					"powerConsumed",
+		for (String outletName : outletNames) {
+			JsonObject outletChartData = new JsonObject();
+			outletChartData.addProperty("powerConsumed",
 					consumerRepository.findTopByNameOrderByIdDesc(outletName).getPowerConsumed());
-			outletChartData.addProperty(
-					"timestamp",
+			outletChartData.addProperty("timestamp",
 					consumerRepository.findTopByNameOrderByIdDesc(outletName).getTimestamp().toString());
 			outletPowerConsumptionInfo.add(outletName, outletChartData);
-			
+
 		}
 		return outletPowerConsumptionInfo.toString();
-		
+
 	}
 
 	public int getID(String email) {
 		return userRepository.getUserByEmail(email).getId();
-		
+
 	}
-	 
+
 }
