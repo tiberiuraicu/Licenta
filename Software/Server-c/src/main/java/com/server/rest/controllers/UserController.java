@@ -54,7 +54,6 @@ public class UserController {
 	@RequestMapping(value = "/resources/last60Consumers", method = RequestMethod.POST)
 	public String getTotalPowerConsumed(@RequestBody Map<String, String> json)
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
-		
 		return restFunctions.getLast60ConsumersPowerConsumed(json);
 	}
 	
@@ -62,7 +61,7 @@ public class UserController {
 	public String getOutlets()
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
 		
-		return restFunctions.getAllOutlets().toString();
+		return restFunctions.getAllOutletsAndLocations();
 	}
 	
 	@RequestMapping(value = "/resources/pieChart", method = RequestMethod.POST)

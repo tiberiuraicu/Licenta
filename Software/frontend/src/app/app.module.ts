@@ -12,8 +12,8 @@ import { NavBarComponent } from './user-page/nav-bar/nav-bar.component';
 import { LeftSideMenuComponent } from './user-page/left-side-menu/left-side-menu.component';
 import { RightSidePanelComponent } from './user-page/right-side-panel/right-side-panel.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-
-
+import { CdkTreeModule } from '@angular/cdk/tree';
+import {MatButtonModule, MatIconModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -33,6 +33,9 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     HttpModule,
     FormsModule,
     NgbModule,
+    CdkTreeModule,
+    MatButtonModule,
+    MatIconModule,
     RouterModule.forRoot([
      
       { path: "login", component: LoginComponent },

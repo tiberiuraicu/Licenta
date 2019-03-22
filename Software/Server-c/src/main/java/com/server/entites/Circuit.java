@@ -14,31 +14,39 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Circuit {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Integer id;
-	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,mappedBy="circuit")
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "circuit")
 	@Fetch(value = FetchMode.SUBSELECT)
 	private java.util.List<Consumer> consumers = new Vector<Consumer>();
 
 	private double powerConsumed;
-	
+
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "device_id")
 	private Device device;
-	
-	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.REMOVE}, fetch = FetchType.EAGER)
+
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH,
+			CascadeType.REMOVE }, fetch = FetchType.EAGER)
 	@JoinColumn(name = "powerSource_id")
 	private PowerSource powerSource;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="circuit")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "circuit")
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Sensor> sensors = new Vector<Sensor>();
-	
+
 	public Circuit() {
 		super();
 	}
@@ -93,8 +101,7 @@ public class Circuit {
 
 	@Override
 	public String toString() {
-		return "Circuit [  powerConsumed=" + powerConsumed  + "]";
+		return "Circuit [  powerConsumed=" + powerConsumed + "]";
 	}
-	
 
 }

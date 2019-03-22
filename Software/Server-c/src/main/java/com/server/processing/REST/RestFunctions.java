@@ -2,6 +2,8 @@ package com.server.processing.REST;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -11,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
@@ -42,7 +46,6 @@ public class RestFunctions {
 	HttpServletResponse httpServletResponse;
 	@Autowired
 	DatabaseFunctions databaseFunctions;
-
 
 	public String login(Map<String, String> json) throws ServletException {
 		if (json.get("email") == null || json.get("password") == null) {
@@ -107,8 +110,42 @@ public class RestFunctions {
 
 			outletPowerConsumptionInfo.addProperty(consumer.getTimestamp().toString(), consumer.getPowerConsumed());
 		}
-		
+
 		return outletPowerConsumptionInfo.toString();
+	}
+
+	@SuppressWarnings("unchecked")
+	public String getAllOutletsAndLocations() {
+		Map<String, List<String>> outletsLocation = new HashMap<String, List<String>>();
+
+		for (Consumer consumer : consumerRepository.findAll()) {
+			if (consumer.getType().equals("outlet")) {
+
+				if (outletsLocation.get(consumer.getLocation()) == null) {
+					Vector<String> outlets = new Vector<String>();
+					outlets.add(consumer.getName());
+					outletsLocation.put(consumer.getLocation(), outlets);
+				} else {
+					List<String> outlets = outletsLocation.get(consumer.getLocation());
+					if (!outlets.contains(consumer.getName()))
+						outlets.add(consumer.getName());
+				}
+			}
+		}
+
+		JsonObject outletsAndLocationJson = new JsonObject();
+		Iterator it = outletsLocation.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry pair = (Map.Entry) it.next();
+			List<String> listOfOutletsNames = (List<String>) pair.getValue();
+			JsonObject oneOutletLocationJson = new JsonObject();
+			for (int i =0;i<listOfOutletsNames.size();i++) {
+				oneOutletLocationJson.addProperty(Integer.toString(i), listOfOutletsNames.get(i));
+			}
+			outletsAndLocationJson.add(pair.getKey().toString(), oneOutletLocationJson);
+		}
+
+		return outletsAndLocationJson.toString();
 	}
 
 	public List<String> getAllOutlets() {
