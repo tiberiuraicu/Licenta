@@ -70,7 +70,9 @@ public class CEPFunctions {
 	public PowerSource addCircuitToPoweSource(Double powerAvailable, List<Circuit> allCircuitsFormHome,
 			PowerSource powerSource) {
 		// if there is unused power
+	
 		while (powerAvailable > 0) {
+		
 			boolean foundOne = false;
 			// iterate trough every circuit from home
 			if (allCircuitsFormHome.size() != 0)
@@ -93,7 +95,6 @@ public class CEPFunctions {
 			}
 		}
 		return powerSource;
-
 	}
 
 	public double calculateConsumedPowerForPowerSource(List<Circuit> circuits) {

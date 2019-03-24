@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
+
+import com.server.database.repositories.PowerSourceRepository;
+import com.server.entites.PowerSource;
 import com.server.processing.REST.RestFunctions;
 
 @Component
@@ -15,6 +18,9 @@ public class DataBroadcaster {
 	@Autowired
 	RestFunctions restFunctions;
 
+	@Autowired
+	PowerSourceRepository powerSourceRepository;
+	
 	@Autowired
 	private SimpMessagingTemplate template;
 
@@ -25,6 +31,7 @@ public class DataBroadcaster {
 	TimerTask timerTaskOutletPowerConsumed;
 
 	public void sendTotalPowerConsumed(String id) {
+		
 		try {
 			timerTaskPowerConsumed.cancel();
 		} catch (Exception e) {
@@ -33,6 +40,7 @@ public class DataBroadcaster {
 			@Override
 			public void run() {
 				try {
+					
 					template.convertAndSend("/totalPowerConsumed/" + id, restFunctions.getTotalPowerConsumed());
 				} catch (MessagingException | ServletException | IOException e) {
 					// TODO Auto-generated catch block

@@ -1,1 +1,2 @@
 onOff moved to raspberry app
+modificat sa fie sate in baza de date dupa fiecare conexiune intre circuit si powersource(!!!!!!!!!!)

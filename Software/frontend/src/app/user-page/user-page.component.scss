@@ -23,47 +23,67 @@
   width: 68%;
   height: 79vh;
 }
+@mixin border-radius {
+  border-radius: 7px 7px 7px 7px;
+  -moz-border-radius: 7px 7px 7px 7px;
+  -webkit-border-radius: 7px 7px 7px 7px;
+  
+}
 
 .row {
-  margin-left: 8%;
+  margin-left: 3%;
   width: 100%;
 
-  .outlet-list {
+  .treeContainer {
+    @include border-radius;
     @keyframes example {
       from {
-        background-color: rgba(81, 98, 148, 0.1);
+       
       }
       to {
-        background-color: rgba(129, 143, 243, 0.5);
+        background-color: #808c99;
         color: black;
       }
     }
-    li {
-      background-color: rgba(81, 98, 148, 0.1);
-      cursor: pointer;
-      &:hover {
-        animation-fill-mode: forwards;
-        animation-name: example;
-        animation-duration: 0.2s;
-      }
-    }
+    
     margin-top: 10%;
     overflow-y: scroll;
     height: 29.5vh;
-    width: 10vw;
-    border-width: 3px;
-    border-style: solid;
+    width: 15vw;
+  
     border-color: rgba(0, 0, 0, 0.2);
     &::-webkit-scrollbar {
       display: none;
     }
+    .example-tree-invisible {
+      display: none;
+    }
+
+    .example-tree-node {
+      display: block;
+
+      .example-tree-node {
+        @include border-radius;
+        cursor: pointer;
+        margin-bottom: 2%;
+        padding-bottom: 2%;
+        padding-left: 6%;
+        margin-left: 19%;
+        margin-right: 50%;
+        &:hover {
+          animation-fill-mode: forwards;
+          animation-name: example;
+          animation-duration: 0.5s;
+        }
+      }
+    }
   }
 
   .line-chart-container {
-    margin-top: 10%;
+    margin-top: 7.5%;
     float: right;
     margin-bottom: 5%;
-    margin-left: 10%;
+    margin-left: 5%;
     height: 40vh;
     width: 38vw;
   }

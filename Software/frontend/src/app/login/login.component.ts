@@ -30,7 +30,7 @@ export class LoginComponent {
           localStorage.setItem("currentId", response._body);
         })
          this.router.navigate(['/user'])
-         location.reload();
+         //location.reload();
       },
       error => console.log(error)
     );

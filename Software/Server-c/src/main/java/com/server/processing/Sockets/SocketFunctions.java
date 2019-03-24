@@ -3,6 +3,8 @@ package com.server.processing.Sockets;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.server.database.repositories.PowerSourceRepository;
 import com.server.entites.Circuit;
 import com.server.entites.PowerSource;
 import com.server.socket.NotificationBroadcaster;
@@ -12,6 +14,9 @@ public class SocketFunctions {
 
 	@Autowired
 	NotificationBroadcaster notificationBroadcaster;
+	
+	@Autowired
+	PowerSourceRepository powerSourceRepository;
 
 	public double calculatePercentage(double obtained, double total) {
 
@@ -22,6 +27,13 @@ public class SocketFunctions {
 		Double solarPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(solarPowerSource.getCircuits()) * 100) / 100;
 		Double normalPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(normalPowerSource.getCircuits()) * 100) / 100;
 
+		//Double solarPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(powerSourceRepository.getPowerSourceById(1).getCircuits()) * 100) / 100;
+		//System.out.println(powerSourceRepository.getPowerSourceById(1).getCircuits());
+		//Double normalPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(powerSourceRepository.getPowerSourceById(2).getCircuits()) * 100) / 100;
+		//System.out.println(powerSourceRepository.getPowerSourceById(2).getCircuits());
+
+		
+		//System.out.println(solarPowerConsumed.toString() + ' '+ normalPowerConsumed.toString()+ ' '+solarPowerConsumed1.toString()+' '+normalPowerConsumed1.toString());
 		notificationBroadcaster.sendOutletPower("New power consumption : Solar panel : " + solarPowerConsumed
 				+ " kW -> " + calculatePercentage(solarPowerConsumed, solarPowerConsumed + normalPowerConsumed) + "%,"
 				+ " Normal power source : " + normalPowerConsumed + " kW -> "

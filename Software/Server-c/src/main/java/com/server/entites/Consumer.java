@@ -119,8 +119,10 @@ public class Consumer {
 
 	@Override
 	public String toString() {
-		return "Consumer [id=" + id + ", type=" + type + ", deviceId=" + deviceId + ", powerConsumed=" + powerConsumed
-				+ ", location=" + location + ", timestamp=" + timestamp + ", state=" + state + ", name=" + name + "]";
+		return "Consumer [" + powerConsumed + "]";
 	}
+
+	
+	
 	
 }

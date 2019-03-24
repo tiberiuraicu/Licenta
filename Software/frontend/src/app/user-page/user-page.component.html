@@ -21,16 +21,15 @@
           {{ outlet }}
         </li>
       </ul> -->
-      
+      <div class="treeContainer bg-dark text-light">
       <cdk-tree [dataSource]="dataSource" [treeControl]="treeControl">
           <!-- This is the tree node template for leaf nodes -->
-          <cdk-nested-tree-node *cdkTreeNodeDef="let node" class="example-tree-node">
-            <!-- use a disabled button to provide padding for tree leaf -->
-            <button mat-icon-button disabled></button>
+          <cdk-nested-tree-node *cdkTreeNodeDef="let node" class="example-tree-node" (click)="initializeLineChart(node.name)">
+           
             {{node.name}}
           </cdk-nested-tree-node>
           <!-- This is the tree node template for expandable nodes -->
-          <cdk-nested-tree-node *cdkTreeNodeDef="let node; when: hasChild" class="example-tree-node">
+          <cdk-nested-tree-node *cdkTreeNodeDef="let node; when: hasChild" class="example-tree-node" >
             <button mat-icon-button [attr.aria-label]="'toggle ' + node.name" cdkTreeNodeToggle>
               <mat-icon class="mat-icon-rtl-mirror">
                 {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
@@ -42,7 +41,7 @@
             </div>
           </cdk-nested-tree-node>
         </cdk-tree>
-
+      </div>
       <div class="line-chart-container">
         <canvas id="line-chart"></canvas>
       </div>

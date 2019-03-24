@@ -28,7 +28,8 @@ public class Circuit {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Integer id;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "circuit")
+	@OneToMany(cascade = { CascadeType.DETACH, CascadeType.REFRESH,
+			CascadeType.REMOVE }, fetch = FetchType.EAGER, mappedBy = "circuit")
 	@Fetch(value = FetchMode.SUBSELECT)
 	private java.util.List<Consumer> consumers = new Vector<Consumer>();
 
@@ -43,7 +44,8 @@ public class Circuit {
 	@JoinColumn(name = "powerSource_id")
 	private PowerSource powerSource;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "circuit")
+	@OneToMany(cascade ={ CascadeType.DETACH, CascadeType.REFRESH,
+			CascadeType.REMOVE }, fetch = FetchType.EAGER, mappedBy = "circuit")
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Sensor> sensors = new Vector<Sensor>();
 
@@ -101,7 +103,10 @@ public class Circuit {
 
 	@Override
 	public String toString() {
-		return "Circuit [  powerConsumed=" + powerConsumed + "]";
+		return "Circuit [id=" + id + ",c" + consumers + ", p" + powerConsumed +" s" + sensors + "]";
 	}
+
+	
+
 
 }
