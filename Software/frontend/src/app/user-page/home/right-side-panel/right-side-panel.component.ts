@@ -1,8 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import * as Stomp from "stompjs";
 import * as SockJS from "sockjs-client";
-import Chart from "chart.js";
-import Config from "../../config/config";
+import Config from "../../../config/config";
 @Component({
   selector: "app-right-side-panel",
   templateUrl: "./right-side-panel.component.html",

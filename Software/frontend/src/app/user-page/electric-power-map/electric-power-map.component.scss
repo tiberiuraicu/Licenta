@@ -1,0 +1,29 @@
+.power-map {
+  width: 88%;
+  height: 80%;
+
+  margin-left: 10%;
+  .surface {
+      float: left;
+      height: 100%;
+      width: 17%;
+  }
+  .circuit {
+    width: 70%;
+    float: right;
+    height: 10%;
+  }
+}
+
+.power-source-panel {
+  width: 13%;
+  height: 100%;
+  float: left;
+  .power-source {
+    margin-top: 70%;
+    width: 90%;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #2eb9ce;
+  }
+}

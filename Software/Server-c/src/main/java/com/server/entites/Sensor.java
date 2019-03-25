@@ -113,8 +113,10 @@ public class Sensor {
 
 	@Override
 	public String toString() {
-		return "Sensor [id=" + id + ", name=" + name + ", powerConsumed=" + powerConsumed + "]";
+		return "Sensor [powerConsumed=" + powerConsumed + "]";
 	}
+
+	
 
 	
 	

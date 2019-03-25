@@ -24,14 +24,14 @@ public class SocketFunctions {
 	}
 
 	public void sendNewPowerConsumptionNotification(PowerSource solarPowerSource, PowerSource normalPowerSource) {
-		Double solarPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(solarPowerSource.getCircuits()) * 100) / 100;
-		Double normalPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(normalPowerSource.getCircuits()) * 100) / 100;
+		//Double solarPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(solarPowerSource.getCircuits()) * 100) / 100;
+		//Double normalPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(normalPowerSource.getCircuits()) * 100) / 100;
 
-		//Double solarPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(powerSourceRepository.getPowerSourceById(1).getCircuits()) * 100) / 100;
-		//System.out.println(powerSourceRepository.getPowerSourceById(1).getCircuits());
-		//Double normalPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(powerSourceRepository.getPowerSourceById(2).getCircuits()) * 100) / 100;
-		//System.out.println(powerSourceRepository.getPowerSourceById(2).getCircuits());
-
+		
+		Double solarPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(powerSourceRepository.getPowerSourceById(1).getCircuits()) * 100) / 100;
+		
+		Double normalPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(powerSourceRepository.getPowerSourceById(2).getCircuits()) * 100) / 100;
+		
 		
 		//System.out.println(solarPowerConsumed.toString() + ' '+ normalPowerConsumed.toString()+ ' '+solarPowerConsumed1.toString()+' '+normalPowerConsumed1.toString());
 		notificationBroadcaster.sendOutletPower("New power consumption : Solar panel : " + solarPowerConsumed

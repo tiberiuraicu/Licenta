@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
-
 import com.server.database.repositories.PowerSourceRepository;
-import com.server.entites.PowerSource;
 import com.server.processing.REST.RestFunctions;
 
 @Component

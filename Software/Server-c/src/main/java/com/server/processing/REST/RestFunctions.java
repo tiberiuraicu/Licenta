@@ -114,7 +114,6 @@ public class RestFunctions {
 		return outletPowerConsumptionInfo.toString();
 	}
 
-	@SuppressWarnings("unchecked")
 	public String getAllOutletsAndLocations() {
 		Map<String, List<String>> outletsLocation = new HashMap<String, List<String>>();
 

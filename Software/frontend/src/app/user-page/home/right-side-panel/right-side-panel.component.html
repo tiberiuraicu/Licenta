@@ -36,7 +36,7 @@
 
   <div class="card text-white bg-dark recent-activity">
     <div class="card-header">Recent Activity</div>
-    <div class="card-body notifications" >
+    <div class="card-body notifications" #notificationsPanel [scrollTop]="notificationsPanel.scrollHeight">
       <p *ngFor="let notification of notifications" class="card-text notification">
         {{ notification }}
       </p>

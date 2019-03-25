@@ -1,0 +1,91 @@
+.user-content {
+    float: right;
+    width: 90%;
+  }
+  
+  @mixin sidePanelElementsShading {
+    -webkit-box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
+    box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
+  }
+  
+  .pie-chart-container {
+    margin-top: 2%;
+  
+    display: block;
+    float: right;
+    height: 30vh;
+    width: 30vw;
+  }
+  
+  .basic-content {
+    @include sidePanelElementsShading;
+    width: 68%;
+    height: 79vh;
+  }
+  @mixin border-radius {
+    border-radius: 7px 7px 7px 7px;
+    -moz-border-radius: 7px 7px 7px 7px;
+    -webkit-border-radius: 7px 7px 7px 7px;
+    
+  }
+  
+  .row {
+    margin-left: 3%;
+    width: 100%;
+  
+    .treeContainer {
+      @include border-radius;
+      @keyframes example {
+        from {
+         
+        }
+        to {
+          background-color: #808c99;
+          color: black;
+        }
+      }
+      
+      margin-top: 10%;
+      overflow-y: scroll;
+      height: 29.5vh;
+      width: 15vw;
+    
+      border-color: rgba(0, 0, 0, 0.2);
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      .example-tree-invisible {
+        display: none;
+      }
+  
+      .example-tree-node {
+        display: block;
+  
+        .example-tree-node {
+          @include border-radius;
+          cursor: pointer;
+          margin-bottom: 2%;
+          padding-bottom: 2%;
+          padding-left: 6%;
+          margin-left: 19%;
+          margin-right: 50%;
+          &:hover {
+            animation-fill-mode: forwards;
+            animation-name: example;
+            animation-duration: 0.5s;
+          }
+        }
+      }
+    }
+  
+    .line-chart-container {
+      margin-top: 7.5%;
+      float: right;
+      margin-bottom: 5%;
+      margin-left: 5%;
+      height: 40vh;
+      width: 38vw;
+    }
+  }
+  

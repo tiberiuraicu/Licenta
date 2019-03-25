@@ -13,6 +13,7 @@ import com.server.entites.Consumer;
 import com.server.entites.Outlet;
 import com.server.entites.Sensor;
 import com.server.entites.Switch;
+import com.server.processing.CEP.CEPFunctions;
 import com.server.processing.Database.DatabaseFunctions;
 
 @Component
@@ -34,7 +35,9 @@ public class MqReceiverFunctions {
 	CircuitRepository circuitRepository;
 
 	@Autowired
-	DatabaseFunctions helperFunctions;
+	DatabaseFunctions databaseFunctions;
+	@Autowired
+	CEPFunctions cepFunctions;
 
 	ObjectMapper mapper = new ObjectMapper();
 
@@ -50,22 +53,22 @@ public class MqReceiverFunctions {
 				// convert the json message to an Outlet object
 				Consumer outlet = mapper.readValue(consumerMessage, Outlet.class);
 
-//				//if the outlet is off
-//				if (outlet.getState() == 0)
-//					
-//					//it's power consumed is zero
-//					outlet.setPowerConsumed(0.0);
+				// //if the outlet is off
+				// if (outlet.getState() == 0)
+				//
+				// //it's power consumed is zero
+				// outlet.setPowerConsumed(0.0);
 
 				// get its location from database(by name) and set it
 				outlet.setLocation(consumerRepository.findTopByNameOrderByIdDesc(outlet.getName()).getLocation());
 
 				// create the link between the new arrived information of the outlet and its
 				// circuit
-				Circuit circuit = helperFunctions.makeConsumerAndCircuitConnection(outlet,
+				Circuit circuit = databaseFunctions.makeConsumerAndCircuitConnection(outlet,
 						consumerRepository.findTopByNameOrderByIdDesc(outlet.getName()).getCircuit());
 
 				// calculate the circuit new power consumed
-				circuit = helperFunctions.calculateAndSetCircuitPowerConsumed(circuit);
+				circuit = databaseFunctions.calculateAndSetCircuitPowerConsumed(circuit);
 
 				// save the new circuit configuration in database
 				circuitRepository.save(circuit);
@@ -81,22 +84,22 @@ public class MqReceiverFunctions {
 				// convert the json message to an Switch object
 				Consumer switcher = mapper.readValue(consumerMessage, Switch.class);
 
-//				//if the switcher is off
-//				if (switcher.getState() == 0)
-//					
-//					//it's power consumed is zero
-//					switcher.setPowerConsumed(0.0);
+				// //if the switcher is off
+				// if (switcher.getState() == 0)
+				//
+				// //it's power consumed is zero
+				// switcher.setPowerConsumed(0.0);
 
 				// get its location from database(by name) and set it
 				switcher.setLocation(consumerRepository.findTopByNameOrderByIdDesc(switcher.getName()).getLocation());
 
 				// create the link between the new arrived information of the switch and its
 				// circuit
-				Circuit circuit = helperFunctions.makeConsumerAndCircuitConnection(switcher,
+				Circuit circuit = databaseFunctions.makeConsumerAndCircuitConnection(switcher,
 						consumerRepository.findTopByNameOrderByIdDesc(switcher.getName()).getCircuit());
 
 				// calculate the circuit new power consumed
-				circuit = helperFunctions.calculateAndSetCircuitPowerConsumed(circuit);
+				circuit = databaseFunctions.calculateAndSetCircuitPowerConsumed(circuit);
 
 				// save the new circuit configuration in database
 				circuitRepository.save(circuit);
@@ -120,9 +123,9 @@ public class MqReceiverFunctions {
 	}
 
 	public String sensorDataProcess(byte[] sensorMessageBody) {
-		
+
 		String returnMessage = null;
-		
+
 		try {
 			// transform the received message from byte to String
 			String sensorMessage = new String(sensorMessageBody, "UTF-8");
@@ -133,11 +136,11 @@ public class MqReceiverFunctions {
 				// convert the json message to an Sensor object
 				Sensor sensor = mapper.readValue(sensorMessage, Sensor.class);
 
-//				//if the sensor is off
-//				if (sensor.getState() == 0)
-//					//it's power consumed is zero
-//					sensor.setPowerConsumed(0.0);
-//				
+				// //if the sensor is off
+				// if (sensor.getState() == 0)
+				// //it's power consumed is zero
+				// sensor.setPowerConsumed(0.0);
+				//
 				// get its location from database(by name) and set it
 				sensor.setLocation(sensorRepository.findTopByNameOrderByIdDesc(sensor.getName()).getLocation());
 
@@ -148,11 +151,11 @@ public class MqReceiverFunctions {
 
 				// create the link between the new arrived information of the sensor and its
 				// circuit
-				Circuit circuit = helperFunctions.makeSensorAndCircuitConnection(sensor,
+				Circuit circuit = databaseFunctions.makeSensorAndCircuitConnection(sensor,
 						sensorRepository.findTopByNameOrderByIdDesc(sensor.getName()).getCircuit());
 
 				// calculate the circuit new power consumed
-				circuit = helperFunctions.calculateAndSetCircuitPowerConsumed(circuit);
+				circuit = databaseFunctions.calculateAndSetCircuitPowerConsumed(circuit);
 
 				// save the new circuit configuration in database
 				circuitRepository.save(circuit);
@@ -162,9 +165,9 @@ public class MqReceiverFunctions {
 
 				returnMessage = "Sensor message received -> movement.";
 			}
-			
+
 			return returnMessage;
-			
+
 		} catch (Exception e) {
 
 			e.printStackTrace();

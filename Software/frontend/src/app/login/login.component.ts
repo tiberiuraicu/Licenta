@@ -29,7 +29,7 @@ export class LoginComponent {
         this.loginService.getUserId(data._body).subscribe(response=>{
           localStorage.setItem("currentId", response._body);
         })
-         this.router.navigate(['/user'])
+         this.router.navigate(['/user/home'])
          //location.reload();
       },
       error => console.log(error)

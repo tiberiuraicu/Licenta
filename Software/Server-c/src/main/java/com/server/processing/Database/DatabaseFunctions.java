@@ -1,21 +1,9 @@
 package com.server.processing.Database;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.servlet.ServletException;
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.google.gson.JsonObject;
 import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
 import com.server.database.repositories.PowerSourceRepository;
@@ -80,7 +68,6 @@ public class DatabaseFunctions {
 			consumerToBeReplaced.setCircuit(null);
 			// save in database
 			consumerRepository.save(consumerToBeReplaced);
-
 			// sets the circuit for the specific Consumer
 			consumer.setCircuit(circuit);
 
@@ -185,6 +172,8 @@ public class DatabaseFunctions {
 
 			// if not, change its power source to normal power source
 			if (exists == false) {
+				//but first verify and eliminate the circuits from the other power source array
+				//this is for not being the same circuit in both arrays of the power spurces
 				List<Circuit> list = solarPowerSource.getCircuits();
 
 				for (Iterator<Circuit> it = list.iterator(); it.hasNext();) {
@@ -196,7 +185,9 @@ public class DatabaseFunctions {
 				}
 
 				solarPowerSource.setCircuits(list);
+				
 				powerSourceRepository.save(solarPowerSource);
+				
 				normalPowerSource = makeCircuitAndPowerSourceConnection(circuitFromDatabase, normalPowerSource);
 			}
 		}
@@ -221,7 +212,9 @@ public class DatabaseFunctions {
 
 			// if not,change its power source to solar panel
 			if (exists == false) {
-				List<Circuit> list = solarPowerSource.getCircuits();
+				//but first verify and eliminate the circuits from the other power source array
+				//this is for not being the same circuit in both arrays of the power spurces
+				List<Circuit> list = normalPowerSource.getCircuits();
 
 				for (Iterator<Circuit> it = list.iterator(); it.hasNext();) {
 
@@ -231,9 +224,10 @@ public class DatabaseFunctions {
 					}
 				}
 
-				solarPowerSource.setCircuits(list);
-//				
-				powerSourceRepository.save(solarPowerSource);
+				normalPowerSource.setCircuits(list);
+				
+				powerSourceRepository.save(normalPowerSource);
+				
 				solarPowerSource = makeCircuitAndPowerSourceConnection(circuitForSolarPanel, solarPowerSource);
 			}
 		}
@@ -355,23 +349,5 @@ public class DatabaseFunctions {
 		return circuit;
 	}
 
-	public String getTotalPowerConsumed() throws ServletException, IOException {
-
-		Double powerConsumedFromSolarPanel = 0.0;
-		Double powerConsumedFromNormalPowerSource = 0.0;
-
-		JsonObject powerConsumptionInfo = new JsonObject();
-
-		for (Circuit circuit : circuitRepository.findAll()) {
-			if (circuit.getPowerSource().getType().equals("solarPanel")) {
-				powerConsumedFromSolarPanel += circuit.getPowerConsumed();
-			} else if (circuit.getPowerSource().getType().equals("normalPowerSource")) {
-				powerConsumedFromNormalPowerSource += circuit.getPowerConsumed();
-			}
-		}
-		powerConsumptionInfo.addProperty("powerConsumedFromSolarPanel", powerConsumedFromSolarPanel);
-		powerConsumptionInfo.addProperty("powerConsumedFromNormalPowerSource", powerConsumedFromNormalPowerSource);
-
-		return powerConsumptionInfo.toString();
-	}
+	
 }
