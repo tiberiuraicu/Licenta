@@ -9,13 +9,10 @@
      
     </div>
     <div class="surface" #surface></div>
-    <div class="card text-white bg-dark circuit">
+    <div *ngFor="let circuit of circuits" class="card text-white bg-dark circuit">
       Power consumption map
       <div class="card-body notifications"></div>
     </div>
-    <div class="card text-white bg-dark circuit">
-      Power consumption map
-      <div class="card-body notifications"></div>
-    </div>
+    
   </div>
 </div>

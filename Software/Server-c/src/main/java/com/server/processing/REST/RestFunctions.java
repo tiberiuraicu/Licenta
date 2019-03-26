@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.server.database.repositories.CircuitRepository;
@@ -138,7 +139,7 @@ public class RestFunctions {
 			Map.Entry pair = (Map.Entry) it.next();
 			List<String> listOfOutletsNames = (List<String>) pair.getValue();
 			JsonObject oneOutletLocationJson = new JsonObject();
-			for (int i =0;i<listOfOutletsNames.size();i++) {
+			for (int i = 0; i < listOfOutletsNames.size(); i++) {
 				oneOutletLocationJson.addProperty(Integer.toString(i), listOfOutletsNames.get(i));
 			}
 			outletsAndLocationJson.add(pair.getKey().toString(), oneOutletLocationJson);
@@ -177,6 +178,30 @@ public class RestFunctions {
 	public int getID(String email) {
 		return userRepository.getUserByEmail(email).getId();
 
+	}
+
+	public String getAllCircuits() {
+		JsonArray allCircuits = new JsonArray();
+		for (Circuit circuit : circuitRepository.findAll()) {
+			
+			JsonObject outletsForCircuit = new JsonObject();
+			
+			outletsForCircuit.addProperty("circuitId", circuit.getId());
+			
+			JsonArray allOutlets = new JsonArray();
+			
+			List<Consumer> consumers = circuit.getConsumers();
+			
+			for (int i = 0; i < consumers.size(); i++) {
+				allOutlets.add(consumers.get(i).getName());
+			}
+			
+			outletsForCircuit.add("outlets", allOutlets);
+
+			allCircuits.add(outletsForCircuit);
+
+		}
+		return allCircuits.toString();
 	}
 
 }

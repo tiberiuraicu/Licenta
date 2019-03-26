@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NestedTreeControl } from "@angular/cdk/tree";
 import { ArrayDataSource } from "@angular/cdk/collections"
-import { UserService } from '../service/user.service';
+import { UserService } from '../service/home-service/user.service';
 
 interface Location {
   name: string;

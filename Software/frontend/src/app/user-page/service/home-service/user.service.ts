@@ -3,13 +3,12 @@ import { Http, Headers } from "@angular/http";
 import * as Stomp from "stompjs";
 import * as SockJS from "sockjs-client";
 import Chart from "chart.js";
-import Config from "../../config/config";
+import Config from "../../../config/config";
 
 @Injectable({
   providedIn: "root"
 })
 export class UserService {
-  
   selectedOutlet: any;
   stompClient;
   pieChart: any;
@@ -17,30 +16,33 @@ export class UserService {
 
   constructor(private http: Http) {}
 
-  //the headers of the authentificated user (without this no resource can be obtained from server)
+  // the headers of the authentificated user (without this no resource can be obtained from server)
   userAuthentificationHeader = new Headers({
     Authorization: "Bearer " + localStorage.getItem("token")
   });
 
-  //getting all existing outlets from server
+  // getting all existing outlets from server
   getAllOutlets() {
     return this.http.get("http://localhost:8080/user/resources/getOutlets", {
       headers: this.userAuthentificationHeader
     });
   }
- startOutletBroadcast() {
-     this.http.post("http://localhost:8080/user/resources/lineChart", { userId:localStorage.getItem("currentId") }, {
-      headers: this.userAuthentificationHeader
-    }).subscribe(res=>{
-      
-    });
+  startOutletBroadcast() {
+    this.http
+      .post(
+        "http://localhost:8080/user/resources/lineChart",
+        { userId: localStorage.getItem("currentId") },
+        {
+          headers: this.userAuthentificationHeader
+        }
+      )
+      .subscribe(res => {});
   }
 
-  //initialize the line chart with information fron server about the selected outlet
+  // initialize the line chart with information fron server about the selected outlet
   initializeLineChart = name => {
-    //set the global selected outlet
+    // set the global selected outlet
     this.selectedOutlet = name;
-
 
     let last60RecordsTimestamp = [];
     let last60RecordsPowerConsumed = [];
@@ -50,12 +52,11 @@ export class UserService {
     this.http
       .post(
         "http://localhost:8080/user/resources/last60Consumers",
-        { outletName: name,
-         userId:localStorage.getItem("currentId") },
+        { outletName: name, userId: localStorage.getItem("currentId") },
         { headers: this.userAuthentificationHeader }
       )
       .subscribe(response => {
-        //iterate trough response (its form: {"timestamp":".......","powerConsumed": ".........."})
+        // iterate trough response (its form: {'timestamp':'.......','powerConsumed': '..........'})
         for (var outletData in response.json()) {
           //get the timestamp
           var thisOutletRecordTimestamp = outletData.split(" ")[1]; //just the hour
@@ -63,7 +64,7 @@ export class UserService {
           last60RecordsTimestamp.push(thisOutletRecordTimestamp);
           //get the power consumed
           var thisOutletRecordPowerConsumed = response.json()[outletData];
-          //add it to the list 
+          //add it to the list
           last60RecordsPowerConsumed.push(thisOutletRecordPowerConsumed);
         }
 
@@ -82,7 +83,7 @@ export class UserService {
             ]
           },
           options: {
-            resize:true,
+            resize: true,
             animation: {
               duration: 10
             },
@@ -116,11 +117,13 @@ export class UserService {
   };
 
   initializePieChart = () => {
-    
-    this.http.post("http://localhost:8080/user/resources/pieChart",
-    {userId:localStorage.getItem("currentId")},{ headers: this.userAuthentificationHeader }).subscribe(res=>{
-      
-    })
+    this.http
+      .post(
+        "http://localhost:8080/user/resources/pieChart",
+        { userId: localStorage.getItem("currentId") },
+        { headers: this.userAuthentificationHeader }
+      )
+      .subscribe(res => {});
     this.pieChart = new Chart(document.getElementById("doughnut-chart"), {
       type: "doughnut",
       data: {
@@ -157,8 +160,8 @@ export class UserService {
 
   getTotalPowerconsumedForPieChart = () => {
     let userID = localStorage.getItem("currentId");
-    this.stompClient.subscribe("/totalPowerConsumed/"+userID, response => {
-      console.log(response)
+    this.stompClient.subscribe("/totalPowerConsumed/" + userID, response => {
+      console.log(response);
       var responseAsJson = JSON.parse(response.body);
       let powerConsumedFromSolarPanel =
         responseAsJson.powerConsumedFromSolarPanel;
@@ -174,7 +177,7 @@ export class UserService {
 
   getOutletPowerConsumedForLineChart = () => {
     let userID = localStorage.getItem("currentId");
-    this.stompClient.subscribe("/outletPowerConsumed/"+userID, response => {
+    this.stompClient.subscribe("/outletPowerConsumed/" + userID, response => {
       console.log(response);
       var responseAsJson = JSON.parse(response.body);
       for (var outlet in responseAsJson) {
