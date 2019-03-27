@@ -38,15 +38,17 @@
     height: 10%;
   }
   .circuitExpanded {
-    animation: expand;
-    animation-duration: 2s;
-    animation-fill-mode: forwards;
+    // animation: expand;
+    // animation-duration: 2s;
+    // animation-fill-mode: forwards;
+    
   }
+
   .circuitRetracted {
-    animation: expand;
-    animation-duration: 2s;
-    animation-fill-mode: forwards;
-    animation-direction: reverse;
+    // animation: expand;
+    // animation-duration: 2s;
+    // animation-fill-mode: forwards;
+    // animation-direction: reverse;
   }
   .fadeIn {
     animation: fade-in;

@@ -16,7 +16,7 @@ import { MatButtonModule, MatIconModule } from "@angular/material";
 import { HomeComponent } from "./user-page/home/home.component";
 import { RightSidePanelComponent } from "./user-page/home/right-side-panel/right-side-panel.component";
 import { ElectricPowerMapComponent } from "./user-page/electric-power-map/electric-power-map.component";
-
+import{BrowserAnimationsModule} from '@angular/platform-browser/animations'
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,6 +31,7 @@ import { ElectricPowerMapComponent } from "./user-page/electric-power-map/electr
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpModule,
     FormsModule,

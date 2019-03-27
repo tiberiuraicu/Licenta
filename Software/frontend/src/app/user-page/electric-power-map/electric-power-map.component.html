@@ -5,18 +5,17 @@
 
       <div class=" power-source">Column</div>
     </div>
-    <div class="surface" #surface></div>
-    <div
+
+    <div 
       *ngFor="let circuit of circuits"
-      class="card  text-dark bg-light "
-      [ngClass]="{
-        circuit: !circuit.expanded,
-        circuitExpanded: circuit.expanded,
-        circuitRetracted: circuit.retracted
-      }"
+      class="card  text-dark bg-light circuit "
+      [@fade]=circuit.currentState
+      [@hidden]=circuit.hidden
+      
       id="{{ circuit.circuitId }}"
-      [hidden]="circuit.hidden"
+
       (click)="changeSize(circuit)"
+      (click)="changeX($event)"
     >
       <div
        
