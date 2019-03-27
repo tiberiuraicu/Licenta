@@ -1,18 +1,44 @@
 <div class="card text-white bg-dark power-map">
-  <div class="card-header">Power consumption map</div>
   <div class="card-body ">
     <div class="power-source-panel">
       <div class=" power-source">Column</div>
 
       <div class=" power-source">Column</div>
-
-     
     </div>
     <div class="surface" #surface></div>
-    <div *ngFor="let circuit of circuits" class="card text-white bg-dark circuit">
-      Power consumption map
-      <div class="card-body notifications"></div>
+    <div
+      *ngFor="let circuit of circuits"
+      class="card  text-dark bg-light "
+      [ngClass]="{
+        circuit: !circuit.expanded,
+        circuitExpanded: circuit.expanded,
+        circuitRetracted: circuit.retracted
+      }"
+      id="{{ circuit.circuitId }}"
+      [hidden]="circuit.hidden"
+      (click)="changeSize(circuit)"
+    >
+      <div
+       
+      >
+        <div class="card-header">Power consumption map{{ circuit.circuitId }}</div>
+      </div>
+      <div
+      [hidden]="!circuit.expanded"
+      [ngClass]="{
+        fadeIn: circuit.expanded
+      }"
+    >
+      <div class="card-header">Power consumption map</div>
     </div>
-    
+    <div
+    [hidden]="!circuit.expanded"
+    [ngClass]="{
+      fadeIn: circuit.expanded
+    }"
+  >
+    <div class="card-header">Power consumption map</div>
+  </div>
+    </div>
   </div>
 </div>
