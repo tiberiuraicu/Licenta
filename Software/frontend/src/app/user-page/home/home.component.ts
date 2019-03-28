@@ -31,7 +31,9 @@ export class HomeComponent implements OnInit {
     this.userService.getAllOutlets().subscribe(result => {
       //got response as string
       let resultAsJson = JSON.parse(result._body);
+      console.log(resultAsJson)
       for (var location in resultAsJson) {
+        console.log(location)
         var outletsInLocation: Outlet[] = [];
 
         for (var outlet in resultAsJson[location]) {
