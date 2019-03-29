@@ -76,13 +76,15 @@ export class UserService {
               {
                 label: "Outlet power consumed",
                 data: last60RecordsPowerConsumed,
-                backgroundColor: ["rgba(255, 99, 132, 0.2)"],
-                borderColor: ["rgba(255, 99, 132, 1)"],
-                borderWidth: 1
+                backgroundColor: ["rgba(248, 249, 250, 0.1)"],
+                borderColor: ["rgba(60, 148, 150, 1)"],
+
+                borderWidth: 2
               }
             ]
           },
           options: {
+            legend: { labels: { fontColor: "rgba(248, 249, 250, 0.9)" } },
             resize: true,
             animation: {
               duration: 10
@@ -91,11 +93,13 @@ export class UserService {
               yAxes: [
                 {
                   scaleLabel: {
+                    fontColor: "rgba(248, 249, 250, 0.9)",
                     display: true,
                     labelString: "Power Consumed"
                   },
                   ticks: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    fontColor: "rgba(248, 249, 250, 0.9)"
                   }
                 }
               ],
@@ -103,10 +107,12 @@ export class UserService {
                 {
                   scaleLabel: {
                     display: true,
-                    labelString: "TimeStamp"
+                    labelString: "TimeStamp",
+                    fontColor: "rgba(248, 249, 250, 0.9)"
                   },
                   ticks: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    fontColor: "rgba(248, 249, 250, 0.9)"
                   }
                 }
               ]
@@ -131,21 +137,30 @@ export class UserService {
         datasets: [
           {
             label: "Consumption(kW)",
-            backgroundColor: ["#3e95cd", "#F7464A"],
-            data: [0, 0]
+            backgroundColor: ["rgba(62, 149, 205, 0.7)", "rgba(247, 70, 74, 0.9)"],
+            data: [0, 0],
+            borderColor :"rgba(248, 249, 250, 0.1)",
+           
           }
         ]
       },
       options: {
+        legend : {
+          labels : {
+            fontColor : '#ffffff'  
+          }
+      },
         animation: {
           duration: 0
         },
         title: {
           display: true,
-          text: "Power consumption"
+          text: "Power consumption",
+          fontColor:"rgba(248, 249, 250, 0.9)"
         }
       }
     });
+
   };
 
   initializeWebSocketConnection = () => {

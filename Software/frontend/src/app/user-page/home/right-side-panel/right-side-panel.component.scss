@@ -8,7 +8,7 @@
   @include sidePanelElementsShading;
   float: right;
   height: 30vh;
-  width: 90%;
+  width: 100%;
 }
 
 @mixin statisticsPanelElementsSize {
@@ -23,9 +23,9 @@
 }
 
 .side-panel {
-  width: 30%;
+  width: 25%;
   float: right;
-  margin-right: 2%;
+  margin-right: 1%;
 
   .today-consumption {
     margin-left: 7%;
@@ -65,10 +65,10 @@
 
 .recent-activity {
   @include sidePanelElementsShading;
-  margin-top: 7%;
+  margin-top: 4%;
   float: right;
-  height: 45vh;
-  width: 90%;
+  height: 53vh;
+  width: 100%;
 
   .notifications {  
     overflow: auto;

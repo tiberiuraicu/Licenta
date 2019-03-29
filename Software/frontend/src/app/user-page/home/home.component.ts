@@ -33,7 +33,8 @@ export class HomeComponent implements OnInit {
       let resultAsJson = JSON.parse(result._body);
       console.log(resultAsJson)
       for (var location in resultAsJson) {
-        console.log(location)
+        console.log(location
+          )
         var outletsInLocation: Outlet[] = [];
 
         for (var outlet in resultAsJson[location]) {

@@ -119,8 +119,7 @@ public class FunctiiAjutor {
 		sensor2.setTimestamp(new Date());
 
 		Circuit c4 = new Circuit();
-		Circuit c5 = new Circuit();
-		Circuit c6 = new Circuit();
+		
 
 		Consumer sapte = new Outlet();
 		sapte.setPowerConsumed(1);
@@ -173,43 +172,41 @@ public class FunctiiAjutor {
 		c1 = helperFunctions.makeSensorAndCircuitConnection(sensor1, c1);
 		c1 = helperFunctions.makeSensorAndCircuitConnection(sensor2, c1);
 		c2 = helperFunctions.makeConsumerAndCircuitConnection(unu, c2);
+		c2 = helperFunctions.makeConsumerAndCircuitConnection(noua, c2);
 		c2 = helperFunctions.makeConsumerAndCircuitConnection(doi, c2);
 		c3 = helperFunctions.makeConsumerAndCircuitConnection(trei, c3);
 		c3 = helperFunctions.makeConsumerAndCircuitConnection(patru, c3);
 		c1 = helperFunctions.makeConsumerAndCircuitConnection(cinci, c1);
 		c2 = helperFunctions.makeConsumerAndCircuitConnection(sase, c2);
-//
-//		c4 = helperFunctions.makeSensorAndCircuitConnection(sensor3, c4);
-//		c4 = helperFunctions.makeSensorAndCircuitConnection(sensor4, c4);
-//		c5 = helperFunctions.makeConsumerAndCircuitConnection(sapte, c5);
-//		c5 = helperFunctions.makeConsumerAndCircuitConnection(opt, c5);
-//		c6 = helperFunctions.makeConsumerAndCircuitConnection(noua, c6);
-//		c6 = helperFunctions.makeConsumerAndCircuitConnection(zece, c6);
-//		c4 = helperFunctions.makeConsumerAndCircuitConnection(unsprezece, c4);
-//		c5 = helperFunctions.makeConsumerAndCircuitConnection(doisprezece, c5);
+
+		c4 = helperFunctions.makeSensorAndCircuitConnection(sensor3, c4);
+		c4 = helperFunctions.makeSensorAndCircuitConnection(sensor4, c4);
+		c3 = helperFunctions.makeConsumerAndCircuitConnection(sapte, c3);
+		c4 = helperFunctions.makeConsumerAndCircuitConnection(opt, c4);
+		c1 = helperFunctions.makeConsumerAndCircuitConnection(noua, c1);
+		c2 = helperFunctions.makeConsumerAndCircuitConnection(zece, c2);
+		c4 = helperFunctions.makeConsumerAndCircuitConnection(unsprezece, c4);
+		c3 = helperFunctions.makeConsumerAndCircuitConnection(doisprezece, c3);
 
 		c1.setPowerConsumed(calculateCircuitPowerConsumption(c1));
 		c2.setPowerConsumed(calculateCircuitPowerConsumption(c2));
 		c3.setPowerConsumed(calculateCircuitPowerConsumption(c3));
-//		c4.setPowerConsumed(calculateCircuitPowerConsumption(c4));
-//		c5.setPowerConsumed(calculateCircuitPowerConsumption(c5));
-//		c6.setPowerConsumed(calculateCircuitPowerConsumption(c6));
+		c4.setPowerConsumed(calculateCircuitPowerConsumption(c4));
+		c4.setPowerConsumed(calculateCircuitPowerConsumption(c4));
+		c1.setPowerConsumed(calculateCircuitPowerConsumption(c1));
 
 		powerSource = helperFunctions.makeCircuitAndPowerSourceConnection(c1, powerSource);
 		powerSource = helperFunctions.makeCircuitAndPowerSourceConnection(c2, powerSource);
 		powerSource = helperFunctions.makeCircuitAndPowerSourceConnection(c3, powerSource);
-//		powerSource = helperFunctions.makeCircuitAndPowerSourceConnection(c4, powerSource);
-//		powerSource = helperFunctions.makeCircuitAndPowerSourceConnection(c5, powerSource);
-//		powerSource = helperFunctions.makeCircuitAndPowerSourceConnection(c6, powerSource);
+		powerSource = helperFunctions.makeCircuitAndPowerSourceConnection(c4, powerSource);
+
 
 		Device device = new Device();
 		device.setId(5);
 		device = helperFunctions.makeCircuitAndDeviceConnection(c1, device);
 		device = helperFunctions.makeCircuitAndDeviceConnection(c2, device);
 		device = helperFunctions.makeCircuitAndDeviceConnection(c3, device);
-//		device = helperFunctions.makeCircuitAndDeviceConnection(c4, device);
-//		device = helperFunctions.makeCircuitAndDeviceConnection(c5, device);
-//		device = helperFunctions.makeCircuitAndDeviceConnection(c6, device);
+		device = helperFunctions.makeCircuitAndDeviceConnection(c4, device);
 
 		user = helperFunctions.makeDeviceAndUserConnection(user, device);
 		userRepository.save(user);

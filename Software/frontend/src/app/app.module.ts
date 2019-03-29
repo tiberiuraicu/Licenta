@@ -16,7 +16,9 @@ import { MatButtonModule, MatIconModule } from "@angular/material";
 import { HomeComponent } from "./user-page/home/home.component";
 import { RightSidePanelComponent } from "./user-page/home/right-side-panel/right-side-panel.component";
 import { ElectricPowerMapComponent } from "./user-page/electric-power-map/electric-power-map.component";
-import{BrowserAnimationsModule} from '@angular/platform-browser/animations'
+import{BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { InfoBoxComponent } from './user-page/electric-power-map/info-box/info-box.component';
+import { PowerSourceComponent } from './user-page/electric-power-map/power-source/power-source.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +29,9 @@ import{BrowserAnimationsModule} from '@angular/platform-browser/animations'
     LeftSideMenuComponent,
     RightSidePanelComponent,
     HomeComponent,
-    ElectricPowerMapComponent
+    ElectricPowerMapComponent,
+    InfoBoxComponent,
+    PowerSourceComponent
   ],
   imports: [
     BrowserModule,

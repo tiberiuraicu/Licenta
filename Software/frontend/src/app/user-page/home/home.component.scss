@@ -1,12 +1,18 @@
 .user-content {
     float: right;
-    width: 90%;
+    width: 93%;
   }
   
   @mixin sidePanelElementsShading {
     -webkit-box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
     box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
+  }
+  @mixin border-radius {
+    border-radius: 7px 7px 7px 7px;
+    -moz-border-radius: 7px 7px 7px 7px;
+    -webkit-border-radius: 7px 7px 7px 7px;
+    
   }
   
   .pie-chart-container {
@@ -20,21 +26,19 @@
   
   .basic-content {
     @include sidePanelElementsShading;
-    width: 68%;
-    height: 79vh;
+    @include border-radius;
+    width: 73%;
+    height: 85vh;
+    float:left;
   }
-  @mixin border-radius {
-    border-radius: 7px 7px 7px 7px;
-    -moz-border-radius: 7px 7px 7px 7px;
-    -webkit-border-radius: 7px 7px 7px 7px;
-    
-  }
+ 
   
   .row {
     margin-left: 3%;
     width: 100%;
   
     .treeContainer {
+     
       @include border-radius;
       @keyframes example {
         from {
@@ -77,6 +81,7 @@
           }
         }
       }
+      background-color: rgba(248, 249, 250, 0.7);
     }
   
     .line-chart-container {

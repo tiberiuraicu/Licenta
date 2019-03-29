@@ -65,22 +65,25 @@ public class UserController {
 	@RequestMapping(value = "/resources/pieChart", method = RequestMethod.POST)
 	public void initializePieChart(@RequestBody Map<String, String> json)
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
-
 		dataBroadcaster.sendTotalPowerConsumed(json.get("userId"));
-
 	}
 
 	@RequestMapping(value = "/resources/lineChart", method = RequestMethod.POST)
 	public void initializeLineChart(@RequestBody Map<String, String> json)
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
 		dataBroadcaster.sendOutletPower(json.get("userId"));
-
 	}
 
 	@RequestMapping(value = "/resources/getCircuits", method = RequestMethod.GET)
 	public String getCircuits()
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
 		return restFunctions.getAllCircuits();
+	}
+	@RequestMapping(value = "/resources/getCircuitsForMapPage", method = RequestMethod.POST)
+	public String getCircuitsForMapPage(@RequestBody Map<String, String> json)
+			throws JsonParseException, JsonMappingException, IOException, ServletException {
+		return restFunctions.getAllOutletsAndLocationsForMapPage(json.get("circuitId"));
+
 	}
 
 }

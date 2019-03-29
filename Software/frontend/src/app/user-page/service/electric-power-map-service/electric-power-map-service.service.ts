@@ -15,4 +15,9 @@ export class ElectricPowerMapServiceService {
   getCircuits = () => {
     return this.http.get("http://localhost:8080/user/resources/getCircuits",{headers:this.userAuthentificationHeader});
   };
+
+
+  getCircuitsForTreeMap = (circuitId) => {
+    return this.http.post("http://localhost:8080/user/resources/getCircuitsForMapPage",{circuitId:circuitId},{headers:this.userAuthentificationHeader});
+  };
 }

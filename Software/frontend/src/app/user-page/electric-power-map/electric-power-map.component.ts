@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { ElectricPowerMapServiceService } from "../service/electric-power-map-service/electric-power-map-service.service";
 import { Observable, Subscriber, of } from "rxjs";
 import { tap, map, filter } from "rxjs/operators";
+import * as $ from "jquery";
 
 import {
   trigger,
@@ -17,35 +18,37 @@ import * as d3 from "d3";
   templateUrl: "./electric-power-map.component.html",
   styleUrls: ["./electric-power-map.component.scss"],
   animations: [
-    trigger("fade", [
+    trigger("extend", [
       state(
         "retracted",
         style({
-          marginTop: "1%",
-          width: "75%",
+          marginBottom: "1%",
+          width: "84%",
           float: "left",
-          marginLeft: "10%",
+          marginLeft: "1%",
           height: "10%"
         })
       ),
       state(
         "expanded",
         style({
-          transform: "translate(calc(0%), calc(5%))",
-          marginTop: "1%",
-          width: "75%",
+          transform: "translate(calc(0%), calc(-{{offsetTop}}px))",
+          marginTop: "3%",
+          width: "84%",
           float: "left",
-          marginLeft: "10%",
-          height: "70%"
-        })
+          marginLeft: "1%",
+          height: "90%"
+        }),
+        { params: { offsetTop: 0 } }
       ),
-      transition("retracted <=> expanded", animate(2000))
+      transition("retracted <=> expanded", animate(1000))
     ]),
     trigger("hidden", [
       state(
         "hidden",
         style({
-          opacity: 0
+          opacity: 0,
+          pointerEvents: "none"
         })
       ),
       state(
@@ -54,8 +57,8 @@ import * as d3 from "d3";
           opacity: 1
         })
       ),
-      transition("hidden => visible", animate(2000)),
-      transition("visible => hidden", animate(2000))
+      transition("visible <=> hidden", animate(500)),
+      transition("hidden => visible", animate(1000))
     ])
   ],
   encapsulation: ViewEncapsulation.None
@@ -66,65 +69,60 @@ export class ElectricPowerMapComponent implements OnInit {
   ) {}
 
   circuits = [];
+
   ngOnInit() {
     this.electricPowerMapServiceService.getCircuits().subscribe(response => {
       JSON.parse(response._body).forEach(circuit => {
         circuit["currentState"] = "retracted";
         circuit["hidden"] = "visible";
+        circuit["offsetTop"] = 5;
         this.circuits.push(circuit);
-
-        console.log(circuit);
       });
-      this.treex();
+    });
+    console.log(this.circuits);
+  }
+  showInfo(node) {
+    console.log(node);
+    if (node.depth == 0) {
+      
+    } else if (node.depth == 0) {
+    } else if (node.depth == 0) {
+    }
+  }
+  changeSize(circuit) {
+    if (circuit.currentState === "retracted") {
+      circuit.currentState = "expanded";
+      this.electricPowerMapServiceService
+        .getCircuitsForTreeMap(circuit.circuitId)
+        .subscribe(response => {
+          this.treex(JSON.parse(response._body), circuit.circuitId);
+        });
+    } else {
+      circuit.currentState = "retracted";
+      $("svg").remove();
+    }
+
+    this.circuits.map(mappedCircuit => {
+      if (
+        circuit.circuitId != mappedCircuit.circuitId &&
+        circuit.currentState === "retracted"
+      )
+        mappedCircuit.hidden = "visible";
+      if (
+        circuit.circuitId != mappedCircuit.circuitId &&
+        circuit.currentState === "expanded"
+      )
+        mappedCircuit.hidden = "hidden";
+      console.log(mappedCircuit);
     });
   }
+  changeX(circuit) {
+    circuit.offsetTop = document.getElementById(
+      "circuit" + circuit.circuitId
+    ).offsetTop;
+  }
 
-  // changeSize(circuit) {
-  //   circuit.currentState =
-  //     circuit.currentState === "retracted" ? "expanded" : "retracted";
-
-  //   this.circuits.map(mappedCircuit => {
-  //     if (
-  //       circuit.circuitId != mappedCircuit.circuitId &&
-  //       circuit.currentState === "retracted"
-  //     )
-  //       mappedCircuit.hidden = "visible";
-  //     if (
-  //       circuit.circuitId != mappedCircuit.circuitId &&
-  //       circuit.currentState === "expanded"
-  //     )
-  //       mappedCircuit.hidden = "hidden";
-  //       console.log(mappedCircuit)
-  //   });
-
-  // }
-  // changeX(event){
-
-  //     let offsetLeft = 0;
-  //     let offsetTop = 0;
-
-  //     let el = event.srcElement;
-
-  //     while(el){
-  //         offsetLeft += el.offsetLeft;
-  //         offsetTop += el.offsetTop;
-  //         el = el.parentElement;
-  //     }
-  //     console.log(offsetTop , offsetLeft )
-  // }
-
-  treex() {
-    var treeData = {
-      name: "Top Level",
-      children: [
-        {
-          name: "Level 2: A",
-          children: [{ name: "Son of A" }, { name: "Daughter of A" }]
-        },
-        { name: "Level 2: B" }
-      ]
-    };
-
+  treex(treeData, circuitId) {
     // set the dimensions and margins of the diagram
     var margin = { top: 40, right: 90, bottom: 50, left: 90 },
       width = 660 - margin.left - margin.right,
@@ -143,7 +141,7 @@ export class ElectricPowerMapComponent implements OnInit {
     // appends a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
     var svg = d3
-        .select("body")
+        .select("#circuit" + circuitId)
         .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom),
@@ -195,6 +193,7 @@ export class ElectricPowerMapComponent implements OnInit {
     // adds the circle to the node
     node.append("circle").attr("r", 10);
 
+    node.on("click", this.showInfo.bind(this));
     // adds the text to the node
     node
       .append("text")
@@ -207,5 +206,4 @@ export class ElectricPowerMapComponent implements OnInit {
         return d.data.name;
       });
   }
- 
 }

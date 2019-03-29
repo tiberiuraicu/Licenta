@@ -23,6 +23,7 @@ import com.server.database.repositories.UserRepository;
 import com.server.entites.Circuit;
 import com.server.entites.Consumer;
 import com.server.entites.Device;
+import com.server.entites.Sensor;
 import com.server.entites.User;
 import com.server.processing.Database.DatabaseFunctions;
 import com.server.socket.DataBroadcaster;
@@ -61,7 +62,7 @@ public class RestFunctions {
 		if (user != null)
 			if (user.getPassword().equals(password))
 				return Jwts.builder().setSubject(email).claim("roles", "user").setIssuedAt(new Date())
-						.setExpiration(new Date(System.currentTimeMillis() + 3600000))
+						.setExpiration(new Date(System.currentTimeMillis() + 36000000))
 						.signWith(SignatureAlgorithm.HS256, "este1234").compact();
 
 		return "nu exista";
@@ -148,6 +149,67 @@ public class RestFunctions {
 		return outletsAndLocationJson.toString();
 	}
 
+	public String getAllOutletsAndLocationsForMapPage(String circuitId) {
+		JsonObject circuit = new JsonObject();
+		JsonArray locations = new JsonArray();
+		Map<String, List<String>> outletsLocation = new HashMap<String, List<String>>();
+
+		for (Consumer consumer : circuitRepository.getCircuitById(Integer.parseInt(circuitId)).getConsumers()) {
+
+			if (outletsLocation.get(consumer.getLocation()) == null) {
+
+				Vector<String> outlets = new Vector<String>();
+				outlets.add(consumer.getName());
+				outletsLocation.put(consumer.getLocation(), outlets);
+			} else {
+
+				List<String> outlets = outletsLocation.get(consumer.getLocation());
+				if (!outlets.contains(consumer.getName()))
+					outlets.add(consumer.getName());
+			}
+
+		}
+
+		for (Sensor sensor : circuitRepository.getCircuitById(Integer.parseInt(circuitId)).getSensors()) {
+
+			if (outletsLocation.get(sensor.getLocation()) == null) {
+
+				Vector<String> sensors = new Vector<String>();
+				sensors.add(sensor.getName());
+				outletsLocation.put(sensor.getLocation(), sensors);
+			} else {
+
+				List<String> sensors = outletsLocation.get(sensor.getLocation());
+				if (!sensors.contains(sensor.getName()))
+					sensors.add(sensor.getName());
+			}
+
+		}
+
+		Iterator it = outletsLocation.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry pair = (Map.Entry) it.next();
+
+			JsonObject location = new JsonObject();
+			JsonArray consumers = new JsonArray();
+
+			List<String> listOfOutletsNames = (List<String>) pair.getValue();
+
+			for (int i = 0; i < listOfOutletsNames.size(); i++) {
+				JsonObject consumer = new JsonObject();
+				consumer.addProperty("name", listOfOutletsNames.get(i));
+				consumers.add(consumer);
+			}
+			location.addProperty("name", pair.getKey().toString());
+			location.add("children", consumers);
+			locations.add(location);
+		}
+		circuit.addProperty("name", circuitId);
+		circuit.add("children", locations);
+
+		return circuit.toString();
+	}
+
 	public List<String> getAllOutlets() {
 		List<String> outlets = new Vector<String>();
 		for (Consumer consumer : consumerRepository.findAll()) {
@@ -183,19 +245,19 @@ public class RestFunctions {
 	public String getAllCircuits() {
 		JsonArray allCircuits = new JsonArray();
 		for (Circuit circuit : circuitRepository.findAll()) {
-			
+
 			JsonObject outletsForCircuit = new JsonObject();
-			
+
 			outletsForCircuit.addProperty("circuitId", circuit.getId());
-			
+
 			JsonArray allOutlets = new JsonArray();
-			
+
 			List<Consumer> consumers = circuit.getConsumers();
-			
+
 			for (int i = 0; i < consumers.size(); i++) {
 				allOutlets.add(consumers.get(i).getName());
 			}
-			
+
 			outletsForCircuit.add("outlets", allOutlets);
 
 			allCircuits.add(outletsForCircuit);
