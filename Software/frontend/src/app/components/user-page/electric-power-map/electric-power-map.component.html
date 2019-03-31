@@ -1,0 +1,44 @@
+<div class="card text-white bg-dark power-map mat-elevation-z24">
+  <div class="card-body ">
+    <div class="info-panel">
+      <app-power-source></app-power-source>
+      <app-info-box
+        [icon]="infoBoxIcon"
+        [name]="name"
+        [lastHourConsumption]="lastHourConsumption"
+        [todayConsumption]="todayConsumption"
+      ></app-info-box>
+    </div>
+
+    <div
+      *ngFor="let circuit of circuits"
+      class="card text-dark bg-light circuit mat-elevation-z24 "
+      [@fade]="circuit.hidden"
+      [@extend]="{
+        value: circuit.currentState,
+        params: { offsetTop: circuit.offsetTop }
+      }"
+      id="circuit{{ circuit.circuitId }}"
+    >
+      <h5
+        (click)="changeSize(circuit)"
+        (click)="repositionCircuit(circuit)"
+        class="title"
+      >
+        <img
+          id="expand-retract-icon"
+          [src]="
+            circuit.currentState == 'retracted'
+              ? './assets/resources/expand.png'
+              : './assets/resources/retract.png'
+          "
+        />
+        &nbsp;&nbsp; Circuit {{ circuit.circuitId }}
+      </h5>
+    </div>
+  </div>
+</div>
+  <app-electric-map-right-side-panel
+    [cards]="circuitChildren"
+  ></app-electric-map-right-side-panel>
+

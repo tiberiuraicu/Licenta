@@ -3,22 +3,25 @@ import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { LoginComponent } from "./login/login.component";
 import { HttpModule } from "@angular/http";
-import { RegisterComponent } from "./register/register.component";
-import { RouterModule } from "@angular/router";
-import { UserPageComponent } from "./user-page/user-page.component";
-import { NavBarComponent } from "./user-page/nav-bar/nav-bar.component";
-import { LeftSideMenuComponent } from "./user-page/left-side-menu/left-side-menu.component";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { CdkTreeModule } from "@angular/cdk/tree";
 import { MatButtonModule, MatIconModule } from "@angular/material";
-import { HomeComponent } from "./user-page/home/home.component";
-import { RightSidePanelComponent } from "./user-page/home/right-side-panel/right-side-panel.component";
-import { ElectricPowerMapComponent } from "./user-page/electric-power-map/electric-power-map.component";
-import{BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { InfoBoxComponent } from './user-page/electric-power-map/info-box/info-box.component';
-import { PowerSourceComponent } from './user-page/electric-power-map/power-source/power-source.component'
+import { LoginComponent } from "./components/login/login.component";
+import { RegisterComponent } from "./components/register/register.component";
+import { UserPageComponent } from "./components/user-page/user-page.component";
+import { NavBarComponent } from "./components/user-page/nav-bar/nav-bar.component";
+import { LeftSideMenuComponent } from "./components/user-page/left-side-menu/left-side-menu.component";
+import { RightSidePanelComponent } from "./components/user-page/home/right-side-panel/right-side-panel.component";
+import { HomeComponent } from "./components/user-page/home/home.component";
+import { ElectricPowerMapComponent } from "./components/user-page/electric-power-map/electric-power-map.component";
+import { InfoBoxComponent } from "./components/user-page/electric-power-map/info-box/info-box.component";
+import { PowerSourceComponent } from "./components/user-page/electric-power-map/power-source/power-source.component";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatCardModule} from '@angular/material/card';
+import { ElectricMapRightSidePanelComponent } from './components/user-page/electric-power-map/electric-map-right-side-panel/electric-map-right-side-panel.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +34,8 @@ import { PowerSourceComponent } from './user-page/electric-power-map/power-sourc
     HomeComponent,
     ElectricPowerMapComponent,
     InfoBoxComponent,
-    PowerSourceComponent
+    PowerSourceComponent,
+    ElectricMapRightSidePanelComponent
   ],
   imports: [
     BrowserModule,
@@ -43,19 +47,8 @@ import { PowerSourceComponent } from './user-page/electric-power-map/power-sourc
     CdkTreeModule,
     MatButtonModule,
     MatIconModule,
-    RouterModule.forRoot([
-      { path: "login", component: LoginComponent },
-      { path: "register", component: RegisterComponent },
-      {
-        path: "user",
-        component: UserPageComponent,
-        children: [
-          { path: "", redirectTo: "", pathMatch: "full" },
-          { path: "home", component: HomeComponent },
-          { path: "electricMap", component: ElectricPowerMapComponent }
-        ]
-      }
-    ])
+    MatSlideToggleModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

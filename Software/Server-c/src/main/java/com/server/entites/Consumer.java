@@ -2,6 +2,7 @@ package com.server.entites;
 
 import java.util.Date;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,7 +16,7 @@ public class Consumer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Integer id;
-
+	
 	protected String type;
 
 	protected Integer deviceId;

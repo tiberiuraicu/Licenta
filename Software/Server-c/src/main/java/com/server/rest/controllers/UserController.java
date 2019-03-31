@@ -1,6 +1,7 @@
 package com.server.rest.controllers;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Map;
 import javax.servlet.ServletException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.server.database.repositories.ConsumerRepository;
 import com.server.database.repositories.UserRepository;
 import com.server.processing.Database.DatabaseFunctions;
 import com.server.processing.REST.RestFunctions;
@@ -31,8 +33,9 @@ public class UserController {
 	@Autowired
 	RestFunctions restFunctions;
 
+	
 	@Autowired
-	DataBroadcaster dataBroadcaster;
+	ConsumerRepository consumerRepository;
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(@RequestBody Map<String, String> json) throws ServletException {
@@ -50,40 +53,6 @@ public class UserController {
 		return restFunctions.registerUser(userForm);
 	}
 
-	@RequestMapping(value = "/resources/last60Consumers", method = RequestMethod.POST)
-	public String getTotalPowerConsumed(@RequestBody Map<String, String> json)
-			throws JsonParseException, JsonMappingException, IOException, ServletException {
-		return restFunctions.getLast60ConsumersPowerConsumed(json);
-	}
-
-	@RequestMapping(value = "/resources/getOutlets", method = RequestMethod.GET)
-	public String getOutlets() throws JsonParseException, JsonMappingException, IOException, ServletException {
-
-		return restFunctions.getAllOutletsAndLocations();
-	}
-
-	@RequestMapping(value = "/resources/pieChart", method = RequestMethod.POST)
-	public void initializePieChart(@RequestBody Map<String, String> json)
-			throws JsonParseException, JsonMappingException, IOException, ServletException {
-		dataBroadcaster.sendTotalPowerConsumed(json.get("userId"));
-	}
-
-	@RequestMapping(value = "/resources/lineChart", method = RequestMethod.POST)
-	public void initializeLineChart(@RequestBody Map<String, String> json)
-			throws JsonParseException, JsonMappingException, IOException, ServletException {
-		dataBroadcaster.sendOutletPower(json.get("userId"));
-	}
-
-	@RequestMapping(value = "/resources/getCircuits", method = RequestMethod.GET)
-	public String getCircuits()
-			throws JsonParseException, JsonMappingException, IOException, ServletException {
-		return restFunctions.getAllCircuits();
-	}
-	@RequestMapping(value = "/resources/getCircuitsForMapPage", method = RequestMethod.POST)
-	public String getCircuitsForMapPage(@RequestBody Map<String, String> json)
-			throws JsonParseException, JsonMappingException, IOException, ServletException {
-		return restFunctions.getAllOutletsAndLocationsForMapPage(json.get("circuitId"));
-
-	}
+	
 
 }

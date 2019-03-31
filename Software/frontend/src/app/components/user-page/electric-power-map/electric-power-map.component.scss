@@ -1,0 +1,62 @@
+.power-map {
+  width: 65%;
+  height: 85%;
+  margin-left: 1%;
+  float: left;
+  overflow: hidden;
+  .circuit {
+    height: 10%;
+    .title {
+      margin-top: 0.5%;
+      margin-left: 0.5%;
+      float: left;
+      cursor: pointer;
+    }
+  }
+  .info-panel {
+    width: 15%;
+    height: 100%;
+    float: left;
+  }
+}
+#expand-retract-icon {
+  width: 2%;
+  height: 80%;
+  float: left;
+}
+
+.node {
+  cursor: pointer;
+
+  circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 3px;
+  }
+
+  text {
+    font: 12px sans-serif;
+  }
+}
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 2px;
+}
+
+.right-size-consumers{
+  overflow-y:scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  float:right;
+  width:26.2%;
+  height: 85%;
+
+  margin-right: 1%;
+  .right-consumer{
+    height: 20%;
+    margin-top: 2%;
+  }
+}

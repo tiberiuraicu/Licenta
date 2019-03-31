@@ -1,7 +1,6 @@
 package com.server.database.repositories;
 
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.server.entites.Consumer;
 
@@ -12,7 +11,9 @@ public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
 	List<Consumer> getConsumerByName(String name);
 	List<Consumer>findTop60ByNameOrderByIdDesc(String name);
-	//Consumer getConsumerByName(String name);
+	List<Consumer>findTop3600ByNameOrderByIdDesc(String name);
    Consumer findTopByNameOrderByIdDesc(String name);
+   List<Consumer>findTop1800ByNameOrderByIdDesc(String name);
+   
 
 }

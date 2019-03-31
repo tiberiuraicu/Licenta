@@ -1,6 +1,7 @@
 package com.server.processing.REST;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -19,6 +22,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
+import com.server.database.repositories.SensorRepository;
 import com.server.database.repositories.UserRepository;
 import com.server.entites.Circuit;
 import com.server.entites.Consumer;
@@ -40,6 +44,8 @@ public class RestFunctions {
 	UserRepository userRepository;
 	@Autowired
 	ConsumerRepository consumerRepository;
+	@Autowired
+	SensorRepository sensorRepository;
 	@Autowired
 	CircuitRepository circuitRepository;
 	@Autowired
@@ -85,8 +91,11 @@ public class RestFunctions {
 
 	}
 
+	// get the total power consumed by the circuits connected to every power source
 	public String getTotalPowerConsumed() throws ServletException, IOException {
 
+		// declare the variables which will
+		// contain the total power consumed
 		Double powerConsumedFromSolarPanel = 0.0;
 		Double powerConsumedFromNormalPowerSource = 0.0;
 
@@ -243,7 +252,9 @@ public class RestFunctions {
 	}
 
 	public String getAllCircuits() {
+
 		JsonArray allCircuits = new JsonArray();
+
 		for (Circuit circuit : circuitRepository.findAll()) {
 
 			JsonObject outletsForCircuit = new JsonObject();
@@ -264,6 +275,88 @@ public class RestFunctions {
 
 		}
 		return allCircuits.toString();
+	}
+
+	public String getTodayConsumptionForConsumer(String name) {
+		JsonObject powerConsumed = new JsonObject();
+		Double powerCosnumedToday = 0.0;
+		if (name.contains("sensor")) {
+			int counter = 0;
+			for (Sensor sensor : sensorRepository.findTop3600ByNameOrderByIdDesc(name)) {
+				if (sensor.getTimestamp().toString().contains(LocalDate.now().toString())) {
+					powerCosnumedToday += sensor.getPowerConsumed();
+					counter++;
+				}
+			}
+			powerCosnumedToday /= counter;
+			powerConsumed.addProperty("lastHour", powerCosnumedToday);
+			powerCosnumedToday *= 24;
+			powerConsumed.addProperty("today", powerCosnumedToday);
+			powerConsumed.addProperty("onOff", sensorRepository.findTopByNameOrderByIdDesc(name).getState());
+		} else {
+			int counter = 0;
+			for (Consumer consumer : consumerRepository.findTop3600ByNameOrderByIdDesc(name)) {
+				if (consumer.getTimestamp().toString().contains(LocalDate.now().toString())) {
+					powerCosnumedToday += consumer.getPowerConsumed();
+					counter++;
+				}
+			}
+			powerCosnumedToday /= counter;
+			powerConsumed.addProperty("lastHour", powerCosnumedToday);
+			powerCosnumedToday *= 24;
+			powerConsumed.addProperty("today", powerCosnumedToday);
+			powerConsumed.addProperty("onOff", consumerRepository.findTopByNameOrderByIdDesc(name).getState());
+		}
+		System.out.println(powerConsumed);
+		return powerConsumed.toString();
+	}
+
+	public String getStateForConsumers(@RequestBody List<Map<String, String>> consumers) {
+
+		JsonArray consumersState = new JsonArray();
+
+		for (Map<String, String> consumerData : consumers) {
+			String consumerName = (String) consumerData.get("name");
+			JsonObject consumer = new JsonObject();
+			consumer.addProperty("name", consumerName);
+			if (consumerName.contains("sensor")) {
+				consumer.addProperty("value", getLast60ValuesForSensor(consumerName));
+				int state = sensorRepository.findTopByNameOrderByIdDesc(consumerName).getState();
+				if (state == 0) {
+					consumer.addProperty("state", false);
+				} else if (state == 1) {
+					consumer.addProperty("state", true);
+				}
+
+			} else if (consumerName.contains("outlet") || consumerName.contains("switch")) {
+				consumer.addProperty("value", getHalfHourValues(consumerName));
+				int state = consumerRepository.findTopByNameOrderByIdDesc(consumerName).getState();
+				if (state == 0) {
+					consumer.addProperty("state", false);
+				} else if (state == 1) {
+					consumer.addProperty("state", true);
+				}
+			}
+			consumersState.add(consumer);
+		}
+		return consumersState.toString();
+	}
+
+	public Double getHalfHourValues(String name) {
+
+		Double consumedPower = 0.0;
+		for (Consumer consumer : consumerRepository.findTop1800ByNameOrderByIdDesc(name)) {
+			consumedPower += consumer.getPowerConsumed();
+		}
+
+		return consumedPower/1800;
+	}
+
+	public Integer getLast60ValuesForSensor(String name) {
+		
+		sensorRepository.findTopByNameOrderByIdDesc(name).getTriggered();
+	
+		return sensorRepository.findTopByNameOrderByIdDesc(name).getTriggered();
 	}
 
 }

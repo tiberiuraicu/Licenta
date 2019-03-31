@@ -1,0 +1,201 @@
+import {
+  Component,
+  OnInit,
+  ViewEncapsulation,
+  ViewChild,
+  ViewContainerRef,
+  ViewRef,
+  TemplateRef
+} from "@angular/core";
+import * as $ from "jquery";
+import * as d3 from "d3";
+import { ElectricPowerMapServiceService } from "src/app/services/electric-power-map-service/electric-power-map-service.service";
+import { extend, fade } from "src/app/animations/electric-power-map.animations";
+
+@Component({
+  selector: "app-electric-power-map",
+  templateUrl: "./electric-power-map.component.html",
+  styleUrls: ["./electric-power-map.component.scss"],
+  animations: [extend, fade],
+  encapsulation: ViewEncapsulation.None
+})
+export class ElectricPowerMapComponent implements OnInit {
+  constructor(
+    private electricPowerMapServiceService: ElectricPowerMapServiceService
+  ) {}
+
+  infoBoxIcon;
+  name;
+  lastHourConsumption;
+  todayConsumption;
+  circuits = [];
+  circuitChildren = [];
+
+  ngOnInit() {
+    this.electricPowerMapServiceService.getCircuits().subscribe(response => {
+      JSON.parse(response._body).forEach(circuit => {
+        circuit["currentState"] = "retracted";
+        circuit["hidden"] = "visible";
+        circuit["offsetTop"] = 5;
+        this.circuits.push(circuit);
+      });
+    });
+  }
+
+  showInfo(node) {
+    if (node.depth == 0) {
+    } else if (node.depth == 1) {
+    } else if (node.depth == 2) {
+      if (node.data.name.includes("outlet"))
+        this.infoBoxIcon = "./assets/resources/outlet.png";
+      if (node.data.name.includes("sensor"))
+        this.infoBoxIcon = "./assets/resources/sensor.png";
+      if (node.data.name.includes("switch"))
+        this.infoBoxIcon = "./assets/resources/switch.png";
+      this.electricPowerMapServiceService
+        .getTodayConsumptionForConsumer(node.data.name)
+        .subscribe(response => {
+          let consumerInfo = JSON.parse(response._body);
+          this.lastHourConsumption = consumerInfo["lastHour"];
+          this.todayConsumption = consumerInfo["today"];
+          this.name = node.data.name;
+        });
+    }
+  }
+  changeSize(circuit) {
+    if (circuit.currentState === "retracted") {
+      circuit.currentState = "expanded";
+      this.electricPowerMapServiceService
+        .getCircuitsForTreeMap(circuit.circuitId)
+        .subscribe(response => {
+          let treeData = JSON.parse(response._body);
+
+          this.createTree(treeData, circuit.circuitId);
+
+          // get the consumers -> json lvl 3 depth -> 2 loops
+          this.circuitChildren = [];
+          var circuitChildrenToBeSend = [];
+
+          for (var location in treeData.children) {
+            var locationChildren = treeData.children[location];
+
+            for (var consumer in locationChildren.children) {
+        
+              circuitChildrenToBeSend.push({
+                name: locationChildren.children[consumer].name
+              });
+            }
+          }
+          this.electricPowerMapServiceService.getStateForConsumers(circuitChildrenToBeSend).subscribe(response=>{
+            this.circuitChildren=JSON.parse(response._body);
+          })
+        });
+    } else {
+      circuit.currentState = "retracted";
+      $("svg").remove();
+    }
+
+    this.circuits.map(mappedCircuit => {
+      if (
+        circuit.circuitId != mappedCircuit.circuitId &&
+        circuit.currentState === "retracted"
+      )
+        mappedCircuit.hidden = "visible";
+      if (
+        circuit.circuitId != mappedCircuit.circuitId &&
+        circuit.currentState === "expanded"
+      )
+        mappedCircuit.hidden = "hidden";
+    });
+  }
+  repositionCircuit(circuit) {
+    circuit.offsetTop = document.getElementById(
+      "circuit" + circuit.circuitId
+    ).offsetTop;
+  }
+
+  createTree = (treeData, circuitId) => {
+    // set the dimensions and margins of the diagram
+    var margin = { top: 140, right: 140, bottom: 50, left: 20 },
+      width = 1020 - margin.left - margin.right,
+      height = 550 - margin.top - margin.bottom;
+
+    // declares a tree layout and assigns the size
+    var treemap = d3.tree().size([width, height]);
+
+    //  assigns the data to a hierarchy using parent-child relationships
+    var nodes = d3.hierarchy(treeData);
+
+    // maps the node data to the tree layout
+    nodes = treemap(nodes);
+
+    // append the svg obgect to the body of the page
+    // appends a 'group' element to 'svg'
+    // moves the 'group' element to the top left margin
+    var svg = d3
+        .select("#circuit" + circuitId)
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom),
+      g = svg
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // adds the links between the nodes
+    var link = g
+      .selectAll(".link")
+      .data(nodes.descendants().slice(1))
+      .enter()
+      .append("path")
+      .attr("class", "link")
+      .attr("d", function(d) {
+        return (
+          "M" +
+          d.x +
+          "," +
+          d.y +
+          "C" +
+          d.x +
+          "," +
+          (d.y + d.parent.y) / 2 +
+          " " +
+          d.parent.x +
+          "," +
+          (d.y + d.parent.y) / 2 +
+          " " +
+          d.parent.x +
+          "," +
+          d.parent.y
+        );
+      });
+
+    // adds each node as a group
+    var node = g
+      .selectAll(".node")
+      .data(nodes.descendants())
+      .enter()
+      .append("g")
+      .attr("class", function(d) {
+        return "node" + (d.children ? " node--internal" : " node--leaf");
+      })
+      .attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+      });
+
+    // adds the circle to the node
+    node.append("circle").attr("r", 10);
+
+    node.on("click", this.showInfo.bind(this));
+    // adds the text to the node
+    node
+      .append("text")
+      .attr("dy", ".35em")
+      .attr("y", function(d) {
+        return d.children ? -20 : 20;
+      })
+      .style("text-anchor", "middle")
+      .text(function(d) {
+        return d.data.name;
+      });
+  };
+}

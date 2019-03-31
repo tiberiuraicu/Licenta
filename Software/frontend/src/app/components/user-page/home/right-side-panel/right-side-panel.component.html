@@ -1,0 +1,47 @@
+<div class="side-panel ">
+  <div class="card text-white bg-dark statistics">
+    <div class="card-header">Statistics</div>
+    <div class="card-body">
+      <div class="container">
+        <div class="row">
+          <div class="col today-consumption ">
+            <img
+              src="assets/resources/today-consumption.png"
+              class="icon-image"
+              alt=""
+            />
+          </div>
+          <div class="col month-consumption">
+            <img
+              src="assets/resources/monthly-consumption.png"
+              class="icon-image"
+              alt=""
+            />
+          </div>
+          <div class="w-100"></div>
+          <div class="col tendencies">
+            <img
+              src="assets/resources/tendencies.png"
+              class="icon-image"
+              alt=""
+            />
+          </div>
+          <div class="col predictions">
+            <img src="assets/resources/imagine.jpg" class="icon-image" alt="" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card text-white bg-dark recent-activity">
+    <div class="card-header">Recent Activity</div>
+    <div class="card-body notifications" #notificationsPanel [scrollTop]="notificationsPanel.scrollHeight">
+      <p *ngFor="let notification of notifications" class="card-text notification">
+        {{ notification }}
+      </p>
+     
+    </div>
+  </div>
+  <!-- <button (click)="this.notifications=[]">Clear</button> -->
+</div>
