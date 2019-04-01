@@ -13,10 +13,9 @@ export class ElectricMapRightSidePanelComponent implements OnInit {
   iterableDiffer;
   constructor(
     private _iterableDiffers: IterableDiffers,
+    private electricPowerMapServiceService: ElectricPowerMapServiceService
   ) {
     this.iterableDiffer = this._iterableDiffers.find([]).create(null);
-
-    
   }
 
   ngDoCheck() {
@@ -28,15 +27,33 @@ export class ElectricMapRightSidePanelComponent implements OnInit {
         });
       }, 20);
     }
-   
   }
 
   ngOnInit() {}
 
-  testChange(card) {
-    if (card.onOff == "On") card.onOff = "Off";
-    if (card.onOff == "Off") card.onOff = "On";
+  changeState(card) {
+    var state;
+    if(card.state===true){
+       state=0;
+    }
+    if(card.state===false){
+      state=1;
+    }
+    console.log(state);
+    if (card.name.includes("sensor"))
+      this.electricPowerMapServiceService
+        .changeSensorState({ state: state, name: card.name })
+        .subscribe(response => {
+          console.log(response);
+        });
+    if (card.name.includes("outlet") || card.name.includes("switch"))
+      this.electricPowerMapServiceService
+        .changeConsumerState({ state: state, name: card.name })
+        .subscribe(response => {
+          console.log(response);
+        });
   }
+
   makeLineChart(card) {
     console.log(card);
 

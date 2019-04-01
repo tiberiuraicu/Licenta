@@ -64,7 +64,7 @@ export class ElectricPowerMapComponent implements OnInit {
     if (circuit.currentState === "retracted") {
       circuit.currentState = "expanded";
       this.electricPowerMapServiceService
-        .getCircuitsForTreeMap(circuit.circuitId)
+        .getLocationAndConsumersForCircuit(circuit.circuitId)
         .subscribe(response => {
           let treeData = JSON.parse(response._body);
 

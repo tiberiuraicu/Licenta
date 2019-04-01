@@ -136,7 +136,7 @@ public class RestMapPageFunctions {
 		}
 		return allCircuits.toString();
 	}
-	public String getAllOutletsAndLocationsForMapPage(String circuitId) {
+	public String getLocationAndConsumersForCircuit(String circuitId) {
 		JsonObject circuit = new JsonObject();
 		JsonArray locations = new JsonArray();
 		Map<String, List<String>> outletsLocation = new HashMap<String, List<String>>();
@@ -195,6 +195,24 @@ public class RestMapPageFunctions {
 		circuit.add("children", locations);
 
 		return circuit.toString();
+	}
+
+	public String changeSensorState(Map<String, String> sensor) {
+		System.out.println(sensor);
+		Sensor sensorFromDb=sensorRepository.findTopByNameOrderByIdDesc(sensor.get("name"));
+		sensorFromDb.setState(Integer.parseInt(sensor.get("state")));
+		sensorRepository.save(sensorFromDb);
+		return "Sensor state saved";
+	}
+
+	public String changeConsumerState(Map<String, String> consumer) {
+		System.out.println(consumer);
+		Consumer consumerFromDb=consumerRepository.findTopByNameOrderByIdDesc(consumer.get("name"));
+		consumerFromDb.setState(Integer.parseInt(consumer.get("state")));
+		System.out.println(consumerFromDb.getState());
+		consumerRepository.save(consumerFromDb);
+		
+		return "Consumer state saved";
 	}
 
 }

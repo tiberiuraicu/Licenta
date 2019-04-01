@@ -47,13 +47,13 @@ public class ResourcesControllers {
 		return homePageFunctions.getAllOutletsAndLocations();
 	}
 
-	@RequestMapping(value = "/pieChart", method = RequestMethod.POST)
+	@RequestMapping(value = "/boradcastDataForPieChart", method = RequestMethod.POST)
 	public void initializePieChart(@RequestBody Map<String, String> json)
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
 		dataBroadcaster.sendTotalPowerConsumed(json.get("userId"));
 	}
 
-	@RequestMapping(value = "/lineChart", method = RequestMethod.POST)
+	@RequestMapping(value = "/boradcastDataForLineChart", method = RequestMethod.POST)
 	public void initializeLineChart(@RequestBody Map<String, String> json)
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
 		dataBroadcaster.sendOutletPower(json.get("userId"));
@@ -66,10 +66,10 @@ public class ResourcesControllers {
 		return restMapPageFunctions.getCircuits();
 	}
 
-	@RequestMapping(value = "/getCircuitsForMapPage", method = RequestMethod.POST)
+	@RequestMapping(value = "/getLocationAndConsumersForCircuit", method = RequestMethod.POST)
 	public String getCircuitsForMapPage(@RequestBody Map<String, String> json)
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
-		return restMapPageFunctions.getAllOutletsAndLocationsForMapPage(json.get("circuitId"));
+		return restMapPageFunctions.getLocationAndConsumersForCircuit(json.get("circuitId"));
 	}
 
 	@RequestMapping(value = "/getTodayConsumptionForConsumer", method = RequestMethod.POST)
@@ -83,5 +83,19 @@ public class ResourcesControllers {
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
 		return restMapPageFunctions.getStateForConsumers(consumers);
 	}
+	
+	
+	@RequestMapping(value = "/changeSensorState", method = RequestMethod.POST)
+	public String changeSensorState(@RequestBody Map<String, String> sensor)
+			throws JsonParseException, JsonMappingException, IOException, ServletException {
+		return restMapPageFunctions.changeSensorState(sensor);
+	}
+	
+	@RequestMapping(value = "/changeConsumerState", method = RequestMethod.POST)
+	public String changeConsumerState(@RequestBody Map<String, String> consumer)
+			throws JsonParseException, JsonMappingException, IOException, ServletException {
+		return restMapPageFunctions.changeConsumerState(consumer);
+	}
+	
 
 }

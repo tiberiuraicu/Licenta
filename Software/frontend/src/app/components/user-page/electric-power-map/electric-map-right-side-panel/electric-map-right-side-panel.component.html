@@ -6,7 +6,7 @@
       ><h5>{{ card.name }}</h5>
       On/Off
       <mat-slide-toggle  
-      (change)="testChange(card)" width="10%" color="primary" checked={{card.state}}></mat-slide-toggle>
+      (change)="changeState(card)" width="10%" color="primary" checked={{card.state}}></mat-slide-toggle>
       <div style="height:5vh; width: 12vw; float: right; margin-right: 5%;">
       <canvas id="{{card.name}}line-chart" ></canvas></div> </mat-card
     >

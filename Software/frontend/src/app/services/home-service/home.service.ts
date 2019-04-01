@@ -32,7 +32,7 @@ export class UserService {
   startOutletBroadcast() {
     this.http
       .post(
-        Config.host+"/resources/lineChart",
+        Config.host+"/resources/boradcastDataForLineChart",
         { userId: localStorage.getItem("currentId") },
         {
           headers: this.userAuthentificationHeader
@@ -127,7 +127,7 @@ export class UserService {
   initializePieChart = () => {
     this.http
       .post(
-        Config.host+"/resources/pieChart",
+        Config.host+"/resources/boradcastDataForPieChart",
         { userId: localStorage.getItem("currentId") },
         { headers: this.userAuthentificationHeader }
       )
