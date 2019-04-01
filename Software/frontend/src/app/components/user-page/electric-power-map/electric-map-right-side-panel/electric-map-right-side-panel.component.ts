@@ -13,9 +13,10 @@ export class ElectricMapRightSidePanelComponent implements OnInit {
   iterableDiffer;
   constructor(
     private _iterableDiffers: IterableDiffers,
-    private electricPowerMapServiceService: ElectricPowerMapServiceService
   ) {
     this.iterableDiffer = this._iterableDiffers.find([]).create(null);
+
+    
   }
 
   ngDoCheck() {
@@ -27,6 +28,7 @@ export class ElectricMapRightSidePanelComponent implements OnInit {
         });
       }, 20);
     }
+   
   }
 
   ngOnInit() {}

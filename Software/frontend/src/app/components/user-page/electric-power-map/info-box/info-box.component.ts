@@ -6,6 +6,7 @@ import { Component, OnInit, Input } from "@angular/core";
   styleUrls: ["./info-box.component.scss"]
 })
 export class InfoBoxComponent implements OnInit {
+  @Input("infoBox") infoBox;
   @Input("icon") icon;
   @Input("name") name;
   @Input("lastHourConsumption") lastHourConsumption;

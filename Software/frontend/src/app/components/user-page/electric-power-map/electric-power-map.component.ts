@@ -1,11 +1,7 @@
 import {
   Component,
   OnInit,
-  ViewEncapsulation,
-  ViewChild,
-  ViewContainerRef,
-  ViewRef,
-  TemplateRef
+  ViewEncapsulation 
 } from "@angular/core";
 import * as $ from "jquery";
 import * as d3 from "d3";
@@ -30,6 +26,7 @@ export class ElectricPowerMapComponent implements OnInit {
   todayConsumption;
   circuits = [];
   circuitChildren = [];
+  infoBox = { circuit: false, location: false, consumer: false };
 
   ngOnInit() {
     this.electricPowerMapServiceService.getCircuits().subscribe(response => {
@@ -46,6 +43,7 @@ export class ElectricPowerMapComponent implements OnInit {
     if (node.depth == 0) {
     } else if (node.depth == 1) {
     } else if (node.depth == 2) {
+      this.infoBox.consumer = true;
       if (node.data.name.includes("outlet"))
         this.infoBoxIcon = "./assets/resources/outlet.png";
       if (node.data.name.includes("sensor"))
@@ -80,19 +78,24 @@ export class ElectricPowerMapComponent implements OnInit {
             var locationChildren = treeData.children[location];
 
             for (var consumer in locationChildren.children) {
-        
               circuitChildrenToBeSend.push({
                 name: locationChildren.children[consumer].name
               });
             }
           }
-          this.electricPowerMapServiceService.getStateForConsumers(circuitChildrenToBeSend).subscribe(response=>{
-            this.circuitChildren=JSON.parse(response._body);
-          })
+          this.electricPowerMapServiceService
+            .getStateForConsumers(circuitChildrenToBeSend)
+            .subscribe(response => {
+              this.circuitChildren = JSON.parse(response._body);
+            });
         });
     } else {
       circuit.currentState = "retracted";
       $("svg").remove();
+      this.circuitChildren=[];
+      for (var element in this.infoBox) {
+        this.infoBox[element] = false;
+      }
     }
 
     this.circuits.map(mappedCircuit => {
