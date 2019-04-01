@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import * as Stomp from "stompjs";
 import * as SockJS from "sockjs-client";
-import Config from "../../../../config/config"
+import Config, { SocketConfig } from "../../../../config/config"
 @Component({
   selector: "app-right-side-panel",
   templateUrl: "./right-side-panel.component.html",
@@ -15,7 +15,7 @@ export class RightSidePanelComponent implements OnInit {
   }
   stompClient;
   initializeWebSocketConnection = () => {
-    const ws = new SockJS(Config.serverSocketURL);
+    const ws = new SockJS(SocketConfig.serverSocketURL);
     this.stompClient = Stomp.over(ws);
     let that = this;
     this.stompClient.connect({}, function(frame) {

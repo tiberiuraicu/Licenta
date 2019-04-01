@@ -17,7 +17,9 @@ import com.server.devicesInstructionsSender.InstructionsSender;
 import com.server.processing.CEP.CEPFunctions;
 import com.server.processing.Database.DatabaseFunctions;
 import com.server.processing.MqReceiver.MqReceiverFunctions;
-import com.server.processing.REST.RestFunctions;
+import com.server.processing.REST.RestMapPageFunctions;
+import com.server.processing.REST.HomePageFunctions;
+import com.server.processing.REST.AuthentificationFunctions;
 import com.server.socket.DataBroadcaster;
 import com.server.socket.NotificationBroadcaster;
 
@@ -93,12 +95,19 @@ public class BeanConfiguration {
 		
 		@Bean
 		public MqReceiverFunctions receiverFunctions() {
-			return new MqReceiverFunctions();
-			
+			return new MqReceiverFunctions();		
 		}
 		@Bean
-		public RestFunctions restFunctions() {
-			return new RestFunctions();
+		public AuthentificationFunctions authentificationFunctions() {
+			return new AuthentificationFunctions();
+		}
+		@Bean
+		public RestMapPageFunctions restMapPageFunctions() {
+			return new RestMapPageFunctions();
+		}
+		@Bean
+		public HomePageFunctions homePageFunctions() {
+			return new HomePageFunctions();
 		}
 		@Bean
 		public DataBroadcaster dataBroadcaster() {

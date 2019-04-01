@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.database.repositories.ConsumerRepository;
 import com.server.database.repositories.UserRepository;
 import com.server.processing.Database.DatabaseFunctions;
-import com.server.processing.REST.RestFunctions;
+import com.server.processing.REST.AuthentificationFunctions;
 import com.server.socket.DataBroadcaster;
 
 @RestController
@@ -31,7 +31,7 @@ public class UserController {
 	DatabaseFunctions databaseFunctions;
 
 	@Autowired
-	RestFunctions restFunctions;
+	AuthentificationFunctions authentificationFunctions;
 
 	
 	@Autowired
@@ -39,18 +39,18 @@ public class UserController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(@RequestBody Map<String, String> json) throws ServletException {
-		return restFunctions.login(json);
+		return authentificationFunctions.login(json);
 	}
 
 	@RequestMapping(value = "/getId", method = RequestMethod.POST)
 	public int getId(@RequestBody String email) throws ServletException {
-		return restFunctions.getID(email);
+		return authentificationFunctions.getID(email);
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String registerUser(@RequestBody Map<String, String> userForm)
 			throws JsonParseException, JsonMappingException, IOException {
-		return restFunctions.registerUser(userForm);
+		return authentificationFunctions.registerUser(userForm);
 	}
 
 	

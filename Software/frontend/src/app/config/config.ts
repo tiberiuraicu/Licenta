@@ -1,4 +1,8 @@
 export const Config = {
-  serverSocketURL:'http://localhost:8080/socket'
+  host: "//localhost:8080"
+  
 };
+export const SocketConfig={
+  serverSocketURL: Config.host +'/socket'
+}
 export default Config;

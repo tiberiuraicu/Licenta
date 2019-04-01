@@ -49,10 +49,11 @@ export class HomeComponent implements OnInit {
       }
       this.dataSource = new ArrayDataSource(this.tree_data);
     });
+    this.userService.initializeWebSocketConnection();
     this.initializeLineChart(0);
     this.userService.initializePieChart();
     this.userService.startOutletBroadcast();
-    this.userService.initializeWebSocketConnection();
+ 
   }
 
   initializeLineChart(name) {

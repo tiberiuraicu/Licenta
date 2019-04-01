@@ -9,15 +9,19 @@ import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import com.server.database.repositories.PowerSourceRepository;
-import com.server.processing.REST.RestFunctions;
+import com.server.processing.REST.HomePageFunctions;
+import com.server.processing.REST.AuthentificationFunctions;
 
 @Component
 public class DataBroadcaster {
 	@Autowired
-	RestFunctions restFunctions;
+	AuthentificationFunctions restFunctions;
 
 	@Autowired
 	PowerSourceRepository powerSourceRepository;
+	
+	@Autowired
+	HomePageFunctions homePageFunctions;
 	
 	@Autowired
 	private SimpMessagingTemplate template;
@@ -39,7 +43,7 @@ public class DataBroadcaster {
 			public void run() {
 				try {
 					
-					template.convertAndSend("/totalPowerConsumed/" + id, restFunctions.getTotalPowerConsumed());
+					template.convertAndSend("/totalPowerConsumed/" + id, homePageFunctions.getTotalPowerConsumed());
 				} catch (MessagingException | ServletException | IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -63,7 +67,7 @@ public class DataBroadcaster {
 				try {
 
 					template.convertAndSend("/outletPowerConsumed/" + id,
-							restFunctions.getLastRegistratedPowerConsumedForEveryOutlet());
+							homePageFunctions.getLastRegistratedPowerConsumedForEveryOutlet());
 				} catch (MessagingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

@@ -3,7 +3,7 @@ import { Http, Headers } from "@angular/http";
 import * as Stomp from "stompjs";
 import * as SockJS from "sockjs-client";
 import Chart from "chart.js";
-import Config from "../../config/config";
+import Config, { SocketConfig } from "../../config/config";
 
 @Injectable({
   providedIn: "root"
@@ -14,7 +14,9 @@ export class UserService {
   pieChart: any;
   lineChart: any;
 
-  constructor(private http: Http) {}
+  constructor(private http: Http) {
+    
+  }
 
   // the headers of the authentificated user (without this no resource can be obtained from server)
   userAuthentificationHeader = new Headers({
@@ -23,14 +25,14 @@ export class UserService {
 
   // getting all existing outlets from server
   getAllOutlets() {
-    return this.http.get("http://localhost:8080/resources/getOutlets", {
+    return this.http.get(Config.host+"/resources/getOutlets", {
       headers: this.userAuthentificationHeader
     });
   }
   startOutletBroadcast() {
     this.http
       .post(
-        "http://localhost:8080/resources/lineChart",
+        Config.host+"/resources/lineChart",
         { userId: localStorage.getItem("currentId") },
         {
           headers: this.userAuthentificationHeader
@@ -51,7 +53,7 @@ export class UserService {
     //make the request to server
     this.http
       .post(
-        "http://localhost:8080/resources/last60Consumers",
+        Config.host+"/resources/last60Consumers",
         { outletName: name, userId: localStorage.getItem("currentId") },
         { headers: this.userAuthentificationHeader }
       )
@@ -125,7 +127,7 @@ export class UserService {
   initializePieChart = () => {
     this.http
       .post(
-        "http://localhost:8080/resources/pieChart",
+        Config.host+"/resources/pieChart",
         { userId: localStorage.getItem("currentId") },
         { headers: this.userAuthentificationHeader }
       )
@@ -164,7 +166,7 @@ export class UserService {
   };
 
   initializeWebSocketConnection = () => {
-    const ws = new SockJS(Config.serverSocketURL);
+    const ws = new SockJS(SocketConfig.serverSocketURL);
     this.stompClient = Stomp.over(ws);
     let that = this;
     this.stompClient.connect({}, function(frame) {
