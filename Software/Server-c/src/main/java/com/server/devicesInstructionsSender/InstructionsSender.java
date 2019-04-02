@@ -63,12 +63,12 @@ public class InstructionsSender {
 		}
 	}
 	
-	public void turnOffTheOutlet(String outletName) {
+	public void turnOnOffTheDevice(String deviceName,String onOffValue) {
 		
 		Instruction outletStop = new Instruction();
 		outletStop.setType("OnOff");
-		outletStop.setDeviceName(outletName);
-		outletStop.setOnOffValue("0");
+		outletStop.setDeviceName(deviceName);
+		outletStop.setOnOffValue(onOffValue);
 
 		sendInstruction(outletStop);
 	}

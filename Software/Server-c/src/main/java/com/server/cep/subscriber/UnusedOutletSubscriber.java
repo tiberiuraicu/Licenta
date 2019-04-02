@@ -27,7 +27,7 @@ public class UnusedOutletSubscriber {
 	public void update(Map<String, String> eventMap) throws JsonProcessingException {
 
 		String outletName = (String) eventMap.get("outlet.name");
-		instructionsSender.turnOffTheOutlet(outletName);
+		instructionsSender.turnOnOffTheDevice(outletName,"0");
 	}
 
 }

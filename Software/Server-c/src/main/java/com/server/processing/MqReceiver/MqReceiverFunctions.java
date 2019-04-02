@@ -53,14 +53,16 @@ public class MqReceiverFunctions {
 				// convert the json message to an Outlet object
 				Consumer outlet = mapper.readValue(consumerMessage, Outlet.class);
 
-				// //if the outlet is off
-				// if (outlet.getState() == 0)
-				//
-				// //it's power consumed is zero
-				// outlet.setPowerConsumed(0.0);
-
 				// get its location from database(by name) and set it
 				outlet.setLocation(consumerRepository.findTopByNameOrderByIdDesc(outlet.getName()).getLocation());
+
+//				// get its state from database(by name) and set it
+//				outlet.setState(consumerRepository.findTopByNameOrderByIdDesc(outlet.getName()).getState());
+
+//				 //if the outlet is off
+//				 if (outlet.getState() == 0)
+//					//it's power consumed is zero
+//					 outlet.setPowerConsumed(0.0);
 
 				// create the link between the new arrived information of the outlet and its
 				// circuit
@@ -84,14 +86,17 @@ public class MqReceiverFunctions {
 				// convert the json message to an Switch object
 				Consumer switcher = mapper.readValue(consumerMessage, Switch.class);
 
-				// //if the switcher is off
-				// if (switcher.getState() == 0)
-				//
-				// //it's power consumed is zero
-				// switcher.setPowerConsumed(0.0);
-
 				// get its location from database(by name) and set it
 				switcher.setLocation(consumerRepository.findTopByNameOrderByIdDesc(switcher.getName()).getLocation());
+
+//				// get its state from database(by name) and set it
+//				switcher.setState(consumerRepository.findTopByNameOrderByIdDesc(switcher.getName()).getState());
+
+//				 //if the switcher is off
+//				 if (switcher.getState() == 0)
+//					 //it's power consumed is zero
+//					 switcher.setPowerConsumed(0.0);
+//				
 
 				// create the link between the new arrived information of the switch and its
 				// circuit
@@ -136,19 +141,9 @@ public class MqReceiverFunctions {
 				// convert the json message to an Sensor object
 				Sensor sensor = mapper.readValue(sensorMessage, Sensor.class);
 
-				// //if the sensor is off
-				// if (sensor.getState() == 0)
-				// //it's power consumed is zero
-				// sensor.setPowerConsumed(0.0);
-				//
 				// get its location from database(by name) and set it
 				sensor.setLocation(sensorRepository.findTopByNameOrderByIdDesc(sensor.getName()).getLocation());
-
-				// get it's power consumed from database(because it's always the same) and set
-				// it
-				sensor.setPowerConsumed(
-						sensorRepository.findTopByNameOrderByIdDesc(sensor.getName()).getPowerConsumed());
-
+		
 				// create the link between the new arrived information of the sensor and its
 				// circuit
 				Circuit circuit = databaseFunctions.makeSensorAndCircuitConnection(sensor,

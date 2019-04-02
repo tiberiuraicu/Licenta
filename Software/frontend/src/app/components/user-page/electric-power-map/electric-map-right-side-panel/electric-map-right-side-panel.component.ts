@@ -1,11 +1,13 @@
 import { Component, OnInit, Input, IterableDiffers } from "@angular/core";
 import Chart from "chart.js";
 import { ElectricPowerMapServiceService } from "src/app/services/electric-power-map-service/electric-power-map-service.service";
+import { cardEnter } from "src/app/animations/electric-power-map.animations";
 
 @Component({
   selector: "app-electric-map-right-side-panel",
   templateUrl: "./electric-map-right-side-panel.component.html",
-  styleUrls: ["./electric-map-right-side-panel.component.scss"]
+  styleUrls: ["./electric-map-right-side-panel.component.scss"],
+  animations:[cardEnter]
 })
 export class ElectricMapRightSidePanelComponent implements OnInit {
   @Input("cards") cards = [];
@@ -23,23 +25,26 @@ export class ElectricMapRightSidePanelComponent implements OnInit {
     if (changes) {
       setTimeout(() => {
         this.cards.forEach(card => {
+          card["animationState"]="visible";
           this.makeLineChart(card);
         });
       }, 20);
     }
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   changeState(card) {
     var state;
-    if(card.state===true){
-       state=0;
+    if (card.state) {
+      state = 0;
+      card.state = false;
     }
-    if(card.state===false){
-      state=1;
+    else if (!card.state) {
+      state = 1;
+      card.state = true;
     }
-    console.log(state);
+
     if (card.name.includes("sensor"))
       this.electricPowerMapServiceService
         .changeSensorState({ state: state, name: card.name })
@@ -55,7 +60,6 @@ export class ElectricMapRightSidePanelComponent implements OnInit {
   }
 
   makeLineChart(card) {
-    console.log(card);
 
     var label;
     if (card.name.includes("sensor")) label = "Triggerd";

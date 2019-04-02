@@ -16,6 +16,7 @@ import com.google.gson.JsonObject;
 import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
 import com.server.database.repositories.SensorRepository;
+import com.server.devicesInstructionsSender.InstructionsSender;
 import com.server.entites.Circuit;
 import com.server.entites.Consumer;
 import com.server.entites.Sensor;
@@ -29,6 +30,8 @@ public class RestMapPageFunctions {
 	SensorRepository sensorRepository;
 	@Autowired
 	CircuitRepository circuitRepository;
+	@Autowired
+	InstructionsSender instructionsSender;
 
 	public String getStateForConsumers(@RequestBody List<Map<String, String>> consumers) {
 
@@ -198,20 +201,18 @@ public class RestMapPageFunctions {
 	}
 
 	public String changeSensorState(Map<String, String> sensor) {
-		System.out.println(sensor);
-		Sensor sensorFromDb=sensorRepository.findTopByNameOrderByIdDesc(sensor.get("name"));
-		sensorFromDb.setState(Integer.parseInt(sensor.get("state")));
-		sensorRepository.save(sensorFromDb);
+//		Sensor sensorFromDb=sensorRepository.findTopByNameOrderByIdDesc(sensor.get("name"));
+//		sensorFromDb.setState(Integer.parseInt(sensor.get("state")));
+//		sensorRepository.save(sensorFromDb);
+		instructionsSender.turnOnOffTheDevice(sensor.get("name"), sensor.get("state"));
 		return "Sensor state saved";
 	}
 
 	public String changeConsumerState(Map<String, String> consumer) {
-		System.out.println(consumer);
-		Consumer consumerFromDb=consumerRepository.findTopByNameOrderByIdDesc(consumer.get("name"));
-		consumerFromDb.setState(Integer.parseInt(consumer.get("state")));
-		System.out.println(consumerFromDb.getState());
-		consumerRepository.save(consumerFromDb);
-		
+//		Consumer consumerFromDb=consumerRepository.findTopByNameOrderByIdDesc(consumer.get("name"));
+//		consumerFromDb.setState(Integer.parseInt(consumer.get("state")));
+//		consumerRepository.save(consumerFromDb);
+		instructionsSender.turnOnOffTheDevice(consumer.get("name"), consumer.get("state"));
 		return "Consumer state saved";
 	}
 
