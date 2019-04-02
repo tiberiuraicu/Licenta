@@ -172,8 +172,8 @@ public class DatabaseFunctions {
 
 			// if not, change its power source to normal power source
 			if (exists == false) {
-				//but first verify and eliminate the circuits from the other power source array
-				//this is for not being the same circuit in both arrays of the power spurces
+				// but first verify and eliminate the circuits from the other power source array
+				// this is for not being the same circuit in both arrays of the power spurces
 				List<Circuit> list = solarPowerSource.getCircuits();
 
 				for (Iterator<Circuit> it = list.iterator(); it.hasNext();) {
@@ -185,9 +185,9 @@ public class DatabaseFunctions {
 				}
 
 				solarPowerSource.setCircuits(list);
-				
+
 				powerSourceRepository.save(solarPowerSource);
-				
+
 				normalPowerSource = makeCircuitAndPowerSourceConnection(circuitFromDatabase, normalPowerSource);
 			}
 		}
@@ -212,8 +212,8 @@ public class DatabaseFunctions {
 
 			// if not,change its power source to solar panel
 			if (exists == false) {
-				//but first verify and eliminate the circuits from the other power source array
-				//this is for not being the same circuit in both arrays of the power spurces
+				// but first verify and eliminate the circuits from the other power source array
+				// this is for not being the same circuit in both arrays of the power spurces
 				List<Circuit> list = normalPowerSource.getCircuits();
 
 				for (Iterator<Circuit> it = list.iterator(); it.hasNext();) {
@@ -225,9 +225,9 @@ public class DatabaseFunctions {
 				}
 
 				normalPowerSource.setCircuits(list);
-				
+
 				powerSourceRepository.save(normalPowerSource);
-				
+
 				solarPowerSource = makeCircuitAndPowerSourceConnection(circuitForSolarPanel, solarPowerSource);
 			}
 		}
@@ -278,13 +278,13 @@ public class DatabaseFunctions {
 			sensor.setCircuit(circuit);
 
 			sensorRepository.save(sensor);
-			
+
 			// replace the old sensor with the new one
 			sensorsForCircuit.set(sensorPosition, sensor);
 
 			// if the consumer doesn't exists
-		} else if (sensorFromCircuit == null){
-		
+		} else if (sensorFromCircuit == null) {
+
 			// add the consumer to array
 			sensorsForCircuit.add(sensor);
 		}
@@ -329,25 +329,26 @@ public class DatabaseFunctions {
 	}
 
 	public Circuit calculateAndSetCircuitPowerConsumed(Circuit circuit) {
+		try {
+			// initialize the total power with zero
+			Double cumulatedPowerConsumed = 0.0;
 
-		// initialize the total power with zero
-		Double cumulatedPowerConsumed = 0.0;
+			// iterate trough every sensor
+			for (Sensor sensor : circuit.getSensors())
+				// add its power consumed to the cumulated power
+				cumulatedPowerConsumed += sensor.getPowerConsumed();
 
-		// iterate trough every sensor
-		for (Sensor sensor : circuit.getSensors())
-			// add its power consumed to the cumulated power
-			cumulatedPowerConsumed += sensor.getPowerConsumed();
+			// iterate trough every consumer
+			for (Consumer consumer : circuit.getConsumers())
+				// add its power consumed to the cumulated power
+				cumulatedPowerConsumed += consumer.getPowerConsumed();
 
-		// iterate trough every consumer
-		for (Consumer consumer : circuit.getConsumers())
-			// add its power consumed to the cumulated power
-			cumulatedPowerConsumed += consumer.getPowerConsumed();
+			// set the circuit its new consumed power
+			circuit.setPowerConsumed(cumulatedPowerConsumed);
+		} catch (Exception e) {
 
-		// set the circuit its new consumed power
-		circuit.setPowerConsumed(cumulatedPowerConsumed);
-
+		}
 		return circuit;
 	}
 
-	
 }

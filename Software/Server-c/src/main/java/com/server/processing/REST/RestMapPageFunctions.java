@@ -201,17 +201,11 @@ public class RestMapPageFunctions {
 	}
 
 	public String changeSensorState(Map<String, String> sensor) {
-//		Sensor sensorFromDb=sensorRepository.findTopByNameOrderByIdDesc(sensor.get("name"));
-//		sensorFromDb.setState(Integer.parseInt(sensor.get("state")));
-//		sensorRepository.save(sensorFromDb);
 		instructionsSender.turnOnOffTheDevice(sensor.get("name"), sensor.get("state"));
 		return "Sensor state saved";
 	}
 
 	public String changeConsumerState(Map<String, String> consumer) {
-//		Consumer consumerFromDb=consumerRepository.findTopByNameOrderByIdDesc(consumer.get("name"));
-//		consumerFromDb.setState(Integer.parseInt(consumer.get("state")));
-//		consumerRepository.save(consumerFromDb);
 		instructionsSender.turnOnOffTheDevice(consumer.get("name"), consumer.get("state"));
 		return "Consumer state saved";
 	}

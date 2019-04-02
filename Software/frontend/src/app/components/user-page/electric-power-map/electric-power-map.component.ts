@@ -54,8 +54,8 @@ export class ElectricPowerMapComponent implements OnInit {
         .getTodayConsumptionForConsumer(node.data.name)
         .subscribe(response => {
           let consumerInfo = JSON.parse(response._body);
-          this.lastHourConsumption = consumerInfo["lastHour"];
-          this.todayConsumption = consumerInfo["today"];
+          this.lastHourConsumption = Math.round(consumerInfo["lastHour"]);
+          this.todayConsumption = Math.round(consumerInfo["today"]);
           this.name = node.data.name;
         });
     }

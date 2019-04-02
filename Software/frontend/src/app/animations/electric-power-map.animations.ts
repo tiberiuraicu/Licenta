@@ -52,10 +52,10 @@ export let fade = trigger("fade", [
 
 export let cardEnter = trigger("cardEnter", [
  
-  transition(":enter", [style({ opacity:'0'}),animate(1000,style({
-    opacity:'1'
+  transition(":enter", [style({ opacity:'0', transform : 'translate(0%,15%)'}),animate('0.5s ease-in' ,style({
+    opacity:'1',transform : 'translate(0%,0%)'
   }))]),
-  transition(":leave", animate(1000,style({
-    opacity:'0'
+  transition(":leave", animate('0.5s ease-out',style({
+    opacity:'0',transform : 'translate(0%,15%)'
   }))),
 ]);
