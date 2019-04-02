@@ -46,6 +46,16 @@ export let fade = trigger("fade", [
       opacity: 1
     })
   ),
-  transition("visible <=> hidden", animate(500)),
+  transition("visible => hidden", animate(500)),
   transition("hidden => visible", animate(1000))
+]);
+
+export let cardEnter = trigger("cardEnter", [
+ 
+  transition(":enter", [style({ opacity:'0'}),animate(1000,style({
+    opacity:'1'
+  }))]),
+  transition(":leave", animate(1000,style({
+    opacity:'0'
+  }))),
 ]);
