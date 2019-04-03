@@ -20,6 +20,7 @@ export class ElectricPowerMapComponent implements OnInit {
     private electricPowerMapServiceService: ElectricPowerMapServiceService
   ) {}
 
+  selectedCircuit;
   infoBoxIcon;
   name;
   lastHourConsumption;
@@ -30,6 +31,7 @@ export class ElectricPowerMapComponent implements OnInit {
 
   ngOnInit() {
     this.electricPowerMapServiceService.getCircuits().subscribe(response => {
+      console.log(this.circuits)
       JSON.parse(response._body).forEach(circuit => {
         circuit["currentState"] = "retracted";
         circuit["hidden"] = "visible";
@@ -61,6 +63,8 @@ export class ElectricPowerMapComponent implements OnInit {
     }
   }
   changeSize(circuit) {
+    this.selectedCircuit=circuit;
+    
     if (circuit.currentState === "retracted") {
       circuit.currentState = "expanded";
       this.electricPowerMapServiceService

@@ -1,7 +1,7 @@
 <div class="card text-white bg-dark power-map mat-elevation-z24">
   <div class="card-body ">
     <div class="info-panel">
-      <app-power-source></app-power-source>
+      <app-power-source [circuit]="selectedCircuit"></app-power-source>
       <app-info-box
         [icon]="infoBoxIcon"
         [name]="name"

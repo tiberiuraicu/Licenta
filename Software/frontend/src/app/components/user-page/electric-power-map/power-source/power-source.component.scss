@@ -1,8 +1,31 @@
 .power-source {
-    height: 394.5px;
-    width: 167%;
-    .title {
-      margin-top: 2.5%;
-      margin-left: 2.5%;
-    }
+  height: 394.5px;
+  width: 167%;
+  .title {
+    margin-top: 2.5%;
+    margin-left: 2.5%;
   }
+  .power-source-image {
+    height: 30%;
+    width: 50%;
+    margin-left: 40%;
+  }
+  .main-propertyGP {
+    margin-top: 4%;
+    margin-left: 5%;
+    font-size: 110%;
+    margin-bottom: 10%;
+   
+  }
+  .main-propertyMS {
+    margin-top: 4%;
+    margin-left: 5%;
+    font-size: 90%;
+    margin-bottom: 10%;
+  
+    mat-form-field{
+      width: 40%;
+    }
+   
+  }
+}

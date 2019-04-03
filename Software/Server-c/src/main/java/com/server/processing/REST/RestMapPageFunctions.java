@@ -111,30 +111,31 @@ public class RestMapPageFunctions {
 			powerConsumed.addProperty("today", powerCosnumedToday);
 			powerConsumed.addProperty("onOff", consumerRepository.findTopByNameOrderByIdDesc(name).getState());
 		}
-		System.out.println(powerConsumed);
 		return powerConsumed.toString();
 	}
 	public String getCircuits() {
 
 		JsonArray allCircuits = new JsonArray();
 
-		for (Circuit circuit : circuitRepository.findAll()) {
+		for (Circuit circuitFromDb : circuitRepository.findAll()) {
 
-			JsonObject outletsForCircuit = new JsonObject();
+			JsonObject circuit = new JsonObject();
 
-			outletsForCircuit.addProperty("circuitId", circuit.getId());
+			circuit.addProperty("circuitId", circuitFromDb.getId());
+			circuit.addProperty("powerSource", circuitFromDb.getPowerSource().getType());
+			circuit.addProperty("powerSourceGeneratedPower", circuitFromDb.getPowerSource().getGeneratedPower());
 
-			JsonArray allOutlets = new JsonArray();
+//			JsonArray allOutlets = new JsonArray();
+//
+//			List<Consumer> consumers = circuit.getConsumers();
+//
+//			for (int i = 0; i < consumers.size(); i++) {
+//				allOutlets.add(consumers.get(i).getName());
+//			}
+//
+//			outletsForCircuit.add("outlets", allOutlets);
 
-			List<Consumer> consumers = circuit.getConsumers();
-
-			for (int i = 0; i < consumers.size(); i++) {
-				allOutlets.add(consumers.get(i).getName());
-			}
-
-			outletsForCircuit.add("outlets", allOutlets);
-
-			allCircuits.add(outletsForCircuit);
+			allCircuits.add(circuit);
 
 		}
 		return allCircuits.toString();

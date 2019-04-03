@@ -1,3 +1,12 @@
 <div class=" card text-dark bg-light power-source mat-elevation-z24">
   <h5 class="title">Power Source</h5>
+  <img src="./assets/resources/powerSource.png" alt="" class="power-source-image">
+  <div *ngIf="circuit!=undefined">
+    <!--  -->
+    <h6 *ngIf="circuit.powerSource=='solarPanel'" class="main-propertyGP">Generated power &nbsp;
+      {{circuit.powerSourceGeneratedPower}} kW</h6>
+
+    <h6 *ngIf="circuit.powerSource=='solarPanel'" class="main-propertyMS">Money saved &nbsp; {{moneySaved}} {{globalCurrencyLabel}}</h6>
+
+  </div>
 </div>

@@ -21,7 +21,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatCardModule} from '@angular/material/card';
 import { ElectricMapRightSidePanelComponent } from './components/user-page/electric-power-map/electric-map-right-side-panel/electric-map-right-side-panel.component';
-import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatSelectModule} from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 
 @NgModule({
@@ -51,7 +52,8 @@ import {MatToolbarModule} from '@angular/material/toolbar';
     MatIconModule,
     MatSlideToggleModule,
     MatCardModule,
-    MatToolbarModule
+    MatSelectModule,
+    MatFormFieldModule
   ],
   providers: [],
   bootstrap: [AppComponent]

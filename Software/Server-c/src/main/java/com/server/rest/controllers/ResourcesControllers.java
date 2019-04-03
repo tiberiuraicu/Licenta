@@ -97,5 +97,7 @@ public class ResourcesControllers {
 		return restMapPageFunctions.changeConsumerState(consumer);
 	}
 	
+	
+	
 
 }
