@@ -46,7 +46,6 @@ public class MqReceiverFunctions {
 		try {
 			// transform the received message from byte to String
 			String consumerMessage = new String(consumerMessageBody, "UTF-8");
-
 			// if the message is from an outlet
 			if (consumerMessage.contains("outlet")) {
 

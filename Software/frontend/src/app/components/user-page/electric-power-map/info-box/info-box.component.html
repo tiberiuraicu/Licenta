@@ -1,13 +1,13 @@
 <div class=" card text-dark bg-light info mat-elevation-z24">
   <h5 class="title">Info Box</h5>
-
+<div style="margin-top:8%" *ngIf="!infoBox.consumer"> <h6 class="no-information-text "><img class="info-icon" src="../../../../../assets/resources/info-icon.png"> Click on a node to find out more information about it</h6></div>
   <div *ngIf="infoBox.consumer">
     <img src="{{ icon }}" alt="" class="info-box-image" />
     <h6 class="main-property">Name {{ name }}</h6>
     <h6 class="main-property">
       Consumption
-      <h6 class="secondary-property">Last hour &nbsp; {{ lastHourConsumption }} &nbsp;  kW</h6>
-      <h6 class="secondary-property">Today &nbsp; {{ todayConsumption }} &nbsp;  kW</h6>
+      <h6 class="secondary-property">Last hour &nbsp; {{ lastHourConsumption }} &nbsp;  kW -> {{value.lastHourConsumptionMoneyValue}} &nbsp; {{value.currency}}</h6>
+      <h6 class="secondary-property">Today &nbsp; {{ todayConsumption }} &nbsp;  kW -> {{value.todayConsumptionMoneyValue}} &nbsp; {{value.currency}}</h6>
     </h6>
   </div>
 </div>

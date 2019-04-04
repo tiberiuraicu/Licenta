@@ -12,8 +12,11 @@ export class NavBarComponent implements OnInit {
   
   currencies = [];
   ngOnInit() {
+    localStorage.setItem("globalCurrencyMultiplier",'1');
+     localStorage.setItem("globalCurrencyLabel","RON");
     this.http.get("https://api.exchangeratesapi.io/latest").subscribe(response => {
-      for (var currency in JSON.parse(response._body).rates)
+      this.currencies.push("EUR") 
+    for (var currency in JSON.parse(response._body).rates)
         this.currencies.push(currency)
     })
   }

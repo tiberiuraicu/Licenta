@@ -22,10 +22,10 @@ public class InstructionsReceiverFromRaspberry {
 
 		Instruction instruction = mapper.readValue(instructionMessage, Instruction.class);
 		
-		
+		System.out.println(instruction);
 		// if instructruction type is for turning on and off rewrite devicesState file.
 		if (instruction.getType().equals("OnOff")) {
-		
+		System.out.println(instruction);
 			prop.load(new FileInputStream("devicesState.config"));
 			prop.setProperty(instruction.getDeviceName(), instruction.getOnOffValue());
 			prop.store(new FileWriter("devicesState.config"), null);

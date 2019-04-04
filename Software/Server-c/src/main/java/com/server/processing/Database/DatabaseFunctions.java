@@ -42,9 +42,11 @@ public class DatabaseFunctions {
 
 		// sets the circuit for the specific Consumer
 		consumer.setCircuit(circuit);
-
+		
 		// gets all consumers for the circuit
-		List<Consumer> consumersForCircuit = circuit.getConsumers();
+		List<Consumer> consumersForCircuit;
+
+		consumersForCircuit = circuit.getConsumers();
 
 		Consumer consumerToBeReplaced = null;
 

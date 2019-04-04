@@ -1,12 +1,15 @@
 import {
   Component,
   OnInit,
-  ViewEncapsulation 
+  ViewEncapsulation, 
+  ViewChild
 } from "@angular/core";
 import * as $ from "jquery";
 import * as d3 from "d3";
 import { ElectricPowerMapServiceService } from "src/app/services/electric-power-map-service/electric-power-map-service.service";
 import { extend, fade } from "src/app/animations/electric-power-map.animations";
+import { PowerSourceComponent } from './power-source/power-source.component';
+import { InfoBoxComponent } from './info-box/info-box.component';
 
 @Component({
   selector: "app-electric-power-map",
@@ -19,6 +22,9 @@ export class ElectricPowerMapComponent implements OnInit {
   constructor(
     private electricPowerMapServiceService: ElectricPowerMapServiceService
   ) {}
+
+  @ViewChild(PowerSourceComponent) powerSourceComponent: PowerSourceComponent
+  @ViewChild(InfoBoxComponent) infoBoxComponent: InfoBoxComponent
 
   selectedCircuit;
   infoBoxIcon;
@@ -59,6 +65,7 @@ export class ElectricPowerMapComponent implements OnInit {
           this.lastHourConsumption = Math.round(consumerInfo["lastHour"]);
           this.todayConsumption = Math.round(consumerInfo["today"]);
           this.name = node.data.name;
+          this.infoBoxComponent.startCurrencyMonitoring();
         });
     }
   }
@@ -92,7 +99,10 @@ export class ElectricPowerMapComponent implements OnInit {
             .subscribe(response => {
               this.circuitChildren = JSON.parse(response._body);
             });
+
+            this.powerSourceComponent.startCurrencyMonitoring();
         });
+
     } else {
       circuit.currentState = "retracted";
       $("svg").remove();

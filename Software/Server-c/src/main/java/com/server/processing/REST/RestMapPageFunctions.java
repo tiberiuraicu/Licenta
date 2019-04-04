@@ -207,6 +207,7 @@ public class RestMapPageFunctions {
 	}
 
 	public String changeConsumerState(Map<String, String> consumer) {
+		System.out.println(consumer);
 		instructionsSender.turnOnOffTheDevice(consumer.get("name"), consumer.get("state"));
 		return "Consumer state saved";
 	}

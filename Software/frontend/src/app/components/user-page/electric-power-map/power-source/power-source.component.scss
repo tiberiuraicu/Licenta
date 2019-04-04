@@ -20,12 +20,15 @@
   .main-propertyMS {
     margin-top: 4%;
     margin-left: 5%;
-    font-size: 90%;
+    font-size: 100%;
     margin-bottom: 10%;
   
-    mat-form-field{
-      width: 40%;
-    }
    
+  }
+  .main-propertyType {
+    margin-top: 12%;
+    margin-left: 5%;
+    font-size: 110%;
+    margin-bottom: 10%;
   }
 }
