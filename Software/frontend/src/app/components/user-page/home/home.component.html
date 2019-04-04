@@ -1,28 +1,40 @@
 <div class="user-content">
   <app-right-side-panel></app-right-side-panel>
 
-  <div class="text-light bg-dark basic-content">
+  <div class="text-light bg-dark upper-side">
     <div class="pie-chart-container">
       <canvas id="doughnut-chart"></canvas>
     </div>
-
+  </div>
+  <div class="text-light bg-dark lower-side">
     <div class="row">
-
       <div class="treeContainer  text-dark">
-      <cdk-tree [dataSource]="dataSource" [treeControl]="treeControl">
+        <cdk-tree [dataSource]="dataSource" [treeControl]="treeControl">
           <!-- This is the tree node template for leaf nodes -->
-          <cdk-nested-tree-node *cdkTreeNodeDef="let node" class="example-tree-node" (click)="initializeLineChart(node.name)">
-           
-            {{node.name}}
+          <cdk-nested-tree-node
+            *cdkTreeNodeDef="let node"
+            class="example-tree-node"
+            (click)="initializeLineChart(node.name)"
+          >
+            {{ node.name }}
           </cdk-nested-tree-node>
           <!-- This is the tree node template for expandable nodes -->
-          <cdk-nested-tree-node *cdkTreeNodeDef="let node; when: hasChild" class="example-tree-node" >
-            <button mat-icon-button [attr.aria-label]="'toggle ' + node.name" cdkTreeNodeToggle>
+          <cdk-nested-tree-node
+            *cdkTreeNodeDef="let node; when: hasChild"
+            class="example-tree-node"
+          >
+            <button
+              mat-icon-button
+              [attr.aria-label]="'toggle ' + node.name"
+              cdkTreeNodeToggle
+            >
               <mat-icon class="mat-icon-rtl-mirror">
-                {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                {{
+                  treeControl.isExpanded(node) ? "expand_more" : "chevron_right"
+                }}
               </mat-icon>
             </button>
-            {{node.name}}
+            {{ node.name }}
             <div [class.example-tree-invisible]="!treeControl.isExpanded(node)">
               <ng-container cdkTreeNodeOutlet></ng-container>
             </div>
