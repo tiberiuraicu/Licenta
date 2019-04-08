@@ -97,7 +97,16 @@ public class ResourcesControllers {
 		return restMapPageFunctions.changeConsumerState(consumer);
 	}
 	
+	@RequestMapping(value = "/getAllConsumedPowerFromHomeForToday", method = RequestMethod.GET)
+	public Double getAllConsumedPowerFromHomeForToday()
+			throws JsonParseException, JsonMappingException, IOException, ServletException {
+		return restMapPageFunctions.getAllConsumedPowerFromHomeForToday();
+	}
 	
-	
+	@RequestMapping(value = "/getAllConsumedPowerFromHomeForThisMonth", method = RequestMethod.GET)
+	public Double getAllConsumedPowerFromHomeForThisMonth()
+			throws JsonParseException, JsonMappingException, IOException, ServletException {
+		return restMapPageFunctions.getAllConsumedPowerFromHomeForThisMonth();
+	}
 
 }

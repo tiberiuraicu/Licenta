@@ -232,4 +232,16 @@ export class UserService {
     });
     this.lineChart.update();
   }
+  getAllConsumedPowerFromHomeForToday(){
+    return this.http.get(Config.host+"/resources/getAllConsumedPowerFromHomeForToday", {
+      headers: this.userAuthentificationHeader
+    });
+  
+  }
+  getAllConsumedPowerFromHomeForThisMonth(){
+    return this.http.get(Config.host+"/resources/getAllConsumedPowerFromHomeForThisMonth", {
+      headers: this.userAuthentificationHeader
+    });
+  
+  }
 }

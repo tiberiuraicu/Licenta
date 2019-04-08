@@ -1,6 +1,8 @@
 package com.server.processing.REST;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +25,7 @@ import com.server.entites.Sensor;
 
 @Component
 public class RestMapPageFunctions {
-	
+
 	@Autowired
 	ConsumerRepository consumerRepository;
 	@Autowired
@@ -71,16 +73,16 @@ public class RestMapPageFunctions {
 			consumedPower += consumer.getPowerConsumed();
 		}
 
-		return consumedPower/1800;
+		return consumedPower / 1800;
 	}
 
 	public Integer getLast60ValuesForSensor(String name) {
-		
+
 		sensorRepository.findTopByNameOrderByIdDesc(name).getTriggered();
-	
+
 		return sensorRepository.findTopByNameOrderByIdDesc(name).getTriggered();
 	}
-	
+
 	public String getTodayConsumptionForConsumer(String name) {
 		JsonObject powerConsumed = new JsonObject();
 		Double powerCosnumedToday = 0.0;
@@ -113,6 +115,7 @@ public class RestMapPageFunctions {
 		}
 		return powerConsumed.toString();
 	}
+
 	public String getCircuits() {
 
 		JsonArray allCircuits = new JsonArray();
@@ -140,6 +143,7 @@ public class RestMapPageFunctions {
 		}
 		return allCircuits.toString();
 	}
+
 	public String getLocationAndConsumersForCircuit(String circuitId) {
 		JsonObject circuit = new JsonObject();
 		JsonArray locations = new JsonArray();
@@ -207,9 +211,59 @@ public class RestMapPageFunctions {
 	}
 
 	public String changeConsumerState(Map<String, String> consumer) {
-		System.out.println(consumer);
 		instructionsSender.turnOnOffTheDevice(consumer.get("name"), consumer.get("state"));
 		return "Consumer state saved";
+	}
+
+	public Double getAllConsumedPowerFromHomeForToday() {
+
+		Double consumerPowerConsumedToday = 0.0;
+		Double sensorPowerConsumedToday = 0.0;
+
+		for (int i = 1; i <= 24; i++) {
+			String hourIndex = Integer.toString(i).length() == 2 ? Integer.toString(i) : "0" + i;
+			
+			Double consumerHourlyAverage = 0.0;
+			int consumerHoulyAverageNumberOfRecords =1;
+			
+			for (Consumer consumer : consumerRepository.findAll()) {
+
+				if (consumer.getTimestamp().toString().contains(
+						LocalDateTime.now().toString().replace("T", " ").substring(0, 10) + " " + hourIndex)) {
+				
+					consumerHourlyAverage += consumer.getPowerConsumed();
+
+					consumerHoulyAverageNumberOfRecords++;
+				}
+			}
+			consumerHourlyAverage /= consumerHoulyAverageNumberOfRecords;
+			consumerPowerConsumedToday += consumerHourlyAverage;
+			
+			Double sensorHourlyAverage = 0.0;
+			int sensorHoulyAverageNumberOfRecords = 1;
+			
+			for (Sensor sensor : sensorRepository.findAll()) {
+
+				if (sensor.getTimestamp().toString().contains(
+						LocalDateTime.now().toString().replace("T", " ").substring(0, 10) + " " + hourIndex)) {
+
+					sensorHourlyAverage += sensor.getPowerConsumed();
+					
+					sensorHoulyAverageNumberOfRecords++;
+				}
+			}
+			sensorHourlyAverage /= sensorHoulyAverageNumberOfRecords;
+			
+			sensorPowerConsumedToday += sensorHourlyAverage;
+		}
+
+		return consumerPowerConsumedToday + sensorPowerConsumedToday;
+	}
+
+	public Double getAllConsumedPowerFromHomeForThisMonth() {
+
+		return getAllConsumedPowerFromHomeForToday()*Integer.parseInt(LocalDateTime.now().toString().substring(8, 10));
+		
 	}
 
 }

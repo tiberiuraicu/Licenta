@@ -59,6 +59,7 @@ public class DataBroadcaster {
 		try {
 			timerTaskOutletPowerConsumed.cancel();
 		} catch (Exception e) {
+			e.getStackTrace();
 		}
 		timerTaskOutletPowerConsumed = new TimerTask() {
 

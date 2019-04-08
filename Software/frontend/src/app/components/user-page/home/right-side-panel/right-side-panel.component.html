@@ -5,29 +5,53 @@
       <div class="container">
         <div class="row">
           <div class="col today-consumption ">
-            <img
-              src="assets/resources/today-consumption.png"
-              class="icon-image"
-              alt=""
-            />
+            <ngx-gauge
+              [type]="gaugeType"
+              [value]="gaugeValueForToday"
+              [label]="gaugeLabelForToday"
+              [append]="gaugeAppendText"
+              [animate]="animation"
+              [size]="size"
+              [thick]="thick"
+              [max]="20"
+            >
+            </ngx-gauge>
           </div>
           <div class="col month-consumption">
-            <img
-              src="assets/resources/monthly-consumption.png"
-              class="icon-image"
-              alt=""
-            />
+            <ngx-gauge
+              [type]="gaugeType"
+              [value]="gaugeValueForThisMonth"
+              [label]="gaugeLabelForThisMonth"
+              [append]="gaugeAppendText"
+              [animate]="animation"
+              [size]="size"
+              [thick]="thick"
+              [max]="50"
+            >
+            </ngx-gauge>
           </div>
           <div class="w-100"></div>
           <div class="col tendencies">
-            <img
-              src="assets/resources/tendencies.png"
-              class="icon-image"
-              alt=""
-            />
+            <ngx-gauge
+              [type]="gaugeType"
+              [value]="gaugeValue"
+              [label]="gaugeLabel"
+              [append]="gaugeAppendText"
+              [animate]="animation"
+              [size]="size"
+            >
+            </ngx-gauge>
           </div>
           <div class="col predictions">
-            <img src="assets/resources/imagine.jpg" class="icon-image" alt="" />
+            <ngx-gauge
+              [type]="gaugeType"
+              [value]="gaugeValue"
+              [label]="gaugeLabel"
+              [append]="gaugeAppendText"
+              [animate]="animation"
+              [size]="size"
+            >
+            </ngx-gauge>
           </div>
         </div>
       </div>
@@ -36,11 +60,17 @@
 
   <div class="card text-white bg-dark recent-activity">
     <div class="card-header">Recent Activity</div>
-    <div class="card-body notifications" #notificationsPanel [scrollTop]="notificationsPanel.scrollHeight">
-      <p *ngFor="let notification of notifications" class="card-text notification">
+    <div
+      class="card-body notifications"
+      #notificationsPanel
+      [scrollTop]="notificationsPanel.scrollHeight"
+    >
+      <p
+        *ngFor="let notification of notifications"
+        class="card-text notification"
+      >
         {{ notification }}
       </p>
-     
     </div>
   </div>
   <!-- <button (click)="this.notifications=[]">Clear</button> -->

@@ -18,7 +18,9 @@ interface Outlet {
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) {
+    
+  }
 
   treeControl = new NestedTreeControl<Location>(node => node.children);
   tree_data = [];
@@ -28,6 +30,7 @@ export class HomeComponent implements OnInit {
     !!node.children && node.children.length > 0;
 
   ngOnInit() {
+    
     this.userService.getAllOutlets().subscribe(result => {
       //got response as string
       let resultAsJson = JSON.parse(result._body);
@@ -60,4 +63,5 @@ export class HomeComponent implements OnInit {
     this.userService.initializeLineChart(name);
   }
 
+ 
 }

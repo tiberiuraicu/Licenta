@@ -23,7 +23,7 @@ import {MatCardModule} from '@angular/material/card';
 import { ElectricMapRightSidePanelComponent } from './components/user-page/electric-power-map/electric-map-right-side-panel/electric-map-right-side-panel.component';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
-
+import { NgxGaugeModule } from 'ngx-gauge';
 
 @NgModule({
   declarations: [
@@ -53,7 +53,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     MatSlideToggleModule,
     MatCardModule,
     MatSelectModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    NgxGaugeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
