@@ -7,7 +7,7 @@
 .statistics {
   @include sidePanelElementsShading;
   float: right;
-  height: 35vh;
+  height: 40vh;
   width: 100%;
 }
 
@@ -28,8 +28,8 @@
   margin-right: 1%;
 
   .today-consumption {
-   margin-left: 5%;
-    font-size: 2%;
+    margin-left: 5%;
+    font-size: 90%;
     @include statisticsPanelElementsSize;
     .icon-image {
       @include statisticsPanelElementsPicture;
@@ -37,7 +37,7 @@
     }
   }
   .month-consumption {
-
+    font-size: 90%;
     margin-left: 1%;
     @include statisticsPanelElementsSize;
     .icon-image {
@@ -46,22 +46,35 @@
     }
   }
 
-  .tendencies {
-    margin-left: 5%;
-    font-size: 2%;
-    @include statisticsPanelElementsSize;
-    .icon-image {
-      @include statisticsPanelElementsPicture;
-      float: left;
+  .today-cost {
+    font-size: 100%;
+    height: 30%;
+    width: 40%;
+    h6 {
+      font-size: 110%;
+      margin-top: 10%;
     }
+    mat-card {
+      width: 110%;
+      margin-top: 13%;
+      margin-right: 20%;
+    }
+   
   }
 
-  .predictions {
+  .month-cost {
+    font-size: 100%;
     margin-left: 1%;
-    @include statisticsPanelElementsSize;
-    .icon-image {
-      @include statisticsPanelElementsPicture;
-      float: right;
+    height: 30%;
+    width: 40%;
+    h6 {
+      font-size: 110%;
+      margin-top: 10%;
+    }
+    mat-card {
+      width: 110%;
+      margin-top: 13%;
+      margin-right: 20%;
     }
   }
 }
@@ -70,10 +83,10 @@
   @include sidePanelElementsShading;
   margin-top: 4%;
   float: right;
-  height: 48vh;
+  height: 43vh;
   width: 100%;
 
-  .notifications {  
+  .notifications {
     overflow: auto;
     .notification {
       background-color: rgba(5, 10, 40, 0.2);

@@ -5,53 +5,39 @@
       <div class="container">
         <div class="row">
           <div class="col today-consumption ">
+            <h6 style="font-size:100%">Today consumption</h6>
             <ngx-gauge
               [type]="gaugeType"
               [value]="gaugeValueForToday"
-              [label]="gaugeLabelForToday"
-              [append]="gaugeAppendText"
+              [append]="gaugeConsumptionAppendText"
               [animate]="animation"
               [size]="size"
               [thick]="thick"
-              [max]="20"
+              [max]="0.5"
             >
             </ngx-gauge>
           </div>
           <div class="col month-consumption">
+              <h6 style="font-size:100%; margin-left: 15%;">This month</h6>
             <ngx-gauge
               [type]="gaugeType"
               [value]="gaugeValueForThisMonth"
-              [label]="gaugeLabelForThisMonth"
-              [append]="gaugeAppendText"
+              [append]="gaugeConsumptionAppendText"
               [animate]="animation"
               [size]="size"
               [thick]="thick"
-              [max]="50"
+              [max]="5"
             >
             </ngx-gauge>
           </div>
           <div class="w-100"></div>
-          <div class="col tendencies">
-            <ngx-gauge
-              [type]="gaugeType"
-              [value]="gaugeValue"
-              [label]="gaugeLabel"
-              [append]="gaugeAppendText"
-              [animate]="animation"
-              [size]="size"
-            >
-            </ngx-gauge>
+          <div class="col today-cost text-center">
+              <h6 >Today cost</h6>
+              <mat-card  >  {{gaugeCostForToday}} {{gaugeCostAppendText}} </mat-card>
           </div>
-          <div class="col predictions">
-            <ngx-gauge
-              [type]="gaugeType"
-              [value]="gaugeValue"
-              [label]="gaugeLabel"
-              [append]="gaugeAppendText"
-              [animate]="animation"
-              [size]="size"
-            >
-            </ngx-gauge>
+          <div class="col month-cost text-center">
+              <h6 >This month cost</h6>
+              <mat-card  >  {{gaugeCostForToday}} {{gaugeCostAppendText}} </mat-card>
           </div>
         </div>
       </div>

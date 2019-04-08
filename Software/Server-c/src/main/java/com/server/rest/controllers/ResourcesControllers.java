@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.google.gson.JsonObject;
 import com.server.processing.REST.RestMapPageFunctions;
 import com.server.processing.REST.HomePageFunctions;
 import com.server.processing.REST.AuthentificationFunctions;
@@ -97,16 +98,10 @@ public class ResourcesControllers {
 		return restMapPageFunctions.changeConsumerState(consumer);
 	}
 	
-	@RequestMapping(value = "/getAllConsumedPowerFromHomeForToday", method = RequestMethod.GET)
-	public Double getAllConsumedPowerFromHomeForToday()
+	@RequestMapping(value = "/getAllConsumedPowerFromHomeForTodayAndThisMonth", method = RequestMethod.GET)
+	public String getAllConsumedPowerFromHomeForThisMonth()
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
-		return restMapPageFunctions.getAllConsumedPowerFromHomeForToday();
-	}
-	
-	@RequestMapping(value = "/getAllConsumedPowerFromHomeForThisMonth", method = RequestMethod.GET)
-	public Double getAllConsumedPowerFromHomeForThisMonth()
-			throws JsonParseException, JsonMappingException, IOException, ServletException {
-		return restMapPageFunctions.getAllConsumedPowerFromHomeForThisMonth();
+		return restMapPageFunctions.getAllConsumedPowerFromHomeForTodayAndThisMonth();
 	}
 
 }

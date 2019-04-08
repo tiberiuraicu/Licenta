@@ -12,21 +12,33 @@ export class RightSidePanelComponent implements OnInit {
   gaugeType = "arch";
   gaugeValue = 0.5;
   gaugeLabel = "Today Consumption";
-  gaugeAppendText = "W";
+  gaugeConsumptionAppendText = "kW";
+  gaugeCostAppendText = "";
   animation = true;
   size = 130;
-  thick=6
+  thick = 6
 
-  
+
   gaugeValueForToday = 0.0;
-  gaugeLabelForToday = "Today consumption";
 
   gaugeValueForThisMonth = 0.0;
-  gaugeLabelForThisMonth = "This month";
+
+  gaugeCostForToday=0.0;
+
+  gaugeCostForThisMonth = 0.0;
+
 
   constructor(private userService: UserService) {
-    this.getAllConsumedPowerFromHomeForToday();
-    this.getAllConsumedPowerFromHomeForThisMonth();
+    this.getAllConsumedPowerFromHomeForTodayAndThisMonth();
+
+    setInterval(() => {
+      console.log(this.gaugeValueForToday)
+      this.gaugeCostForToday= Math.round(this.gaugeValueForToday * 0.5 * parseFloat(localStorage.getItem("globalCurrencyMultiplier")) * 100) / 100;
+
+      this.gaugeCostForThisMonth= Math.round(this.gaugeValueForThisMonth * 0.5 * parseFloat(localStorage.getItem("globalCurrencyMultiplier")) * 100) / 100;
+
+      this.gaugeCostAppendText = localStorage.getItem("globalCurrencyLabel");
+    }, 60)
   }
 
   notifications = [];
@@ -39,7 +51,7 @@ export class RightSidePanelComponent implements OnInit {
     const ws = new SockJS(SocketConfig.serverSocketURL);
     this.stompClient = Stomp.over(ws);
     let that = this;
-    this.stompClient.connect({}, function(frame) {
+    this.stompClient.connect({}, function (frame) {
       that.getNotifications();
     });
   };
@@ -52,22 +64,12 @@ export class RightSidePanelComponent implements OnInit {
     });
   };
 
-  getAllConsumedPowerFromHomeForToday() {
-    setInterval(() => {
-      this.userService
-        .getAllConsumedPowerFromHomeForToday()
-        .subscribe(response => {
-          this.gaugeValueForToday = response._body;
-        });
-    }, 1000);
-  }
-  getAllConsumedPowerFromHomeForThisMonth() {
-    setInterval(() => {
-      this.userService
-        .getAllConsumedPowerFromHomeForThisMonth()
-        .subscribe(response => {
-          this.gaugeValueForThisMonth = response._body;
-        });
-    }, 1000);
+  getAllConsumedPowerFromHomeForTodayAndThisMonth() {
+    this.userService
+    .getAllConsumedPowerFromHomeForTodayAndThisMonth()
+    .subscribe(response => {
+      this.gaugeValueForToday = Math.round(parseFloat(JSON.parse(response._body)["today"]) / 1000 * 100) / 100;
+      this.gaugeValueForThisMonth = Math.round(parseFloat(JSON.parse(response._body)["thisMonth"]) / 1000 * 100) / 100;
+    });
   }
 }

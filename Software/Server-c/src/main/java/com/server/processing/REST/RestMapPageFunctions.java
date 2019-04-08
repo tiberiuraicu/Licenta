@@ -216,54 +216,60 @@ public class RestMapPageFunctions {
 	}
 
 	public Double getAllConsumedPowerFromHomeForToday() {
-
 		Double consumerPowerConsumedToday = 0.0;
 		Double sensorPowerConsumedToday = 0.0;
 
-		for (int i = 1; i <= 24; i++) {
+		for (int i = 1; i <= Integer.parseInt(LocalDateTime.now().toString().substring(11, 13)); i++) {
 			String hourIndex = Integer.toString(i).length() == 2 ? Integer.toString(i) : "0" + i;
-			
-			Double consumerHourlyAverage = 0.0;
-			int consumerHoulyAverageNumberOfRecords =1;
-			
-			for (Consumer consumer : consumerRepository.findAll()) {
 
-				if (consumer.getTimestamp().toString().contains(
-						LocalDateTime.now().toString().replace("T", " ").substring(0, 10) + " " + hourIndex)) {
-				
-					consumerHourlyAverage += consumer.getPowerConsumed();
+			Double consumersHourlyConsumption = 0.0;
+			for (String consumerName : consumerRepository.findAllNotNull()) {
+				Double lastHourConsumerAverageConsumption = 0.0;
+				int consumerHoulyAverageNumberOfRecords = 1;
+				for (Consumer lastHourConsumer : consumerRepository.findAllByName(consumerName)) {
+					if (lastHourConsumer.getTimestamp().toString().contains(
+							LocalDateTime.now().toString().replace("T", " ").substring(0, 10) + " " + hourIndex)) {
 
-					consumerHoulyAverageNumberOfRecords++;
+						lastHourConsumerAverageConsumption += lastHourConsumer.getPowerConsumed();
+						consumerHoulyAverageNumberOfRecords++;
+					}
 				}
+				lastHourConsumerAverageConsumption /= consumerHoulyAverageNumberOfRecords;
+				consumersHourlyConsumption += lastHourConsumerAverageConsumption;
+
 			}
-			consumerHourlyAverage /= consumerHoulyAverageNumberOfRecords;
-			consumerPowerConsumedToday += consumerHourlyAverage;
-			
-			Double sensorHourlyAverage = 0.0;
-			int sensorHoulyAverageNumberOfRecords = 1;
-			
-			for (Sensor sensor : sensorRepository.findAll()) {
+			consumerPowerConsumedToday += consumersHourlyConsumption;
 
-				if (sensor.getTimestamp().toString().contains(
-						LocalDateTime.now().toString().replace("T", " ").substring(0, 10) + " " + hourIndex)) {
+			Double sensorsHourlyConsumption = 0.0;
+			for (String sensorName : sensorRepository.findAllNotNull()) {
 
-					sensorHourlyAverage += sensor.getPowerConsumed();
-					
-					sensorHoulyAverageNumberOfRecords++;
+				Double lastHourSensorAverageConsumption = 0.0;
+				int sensorHoulyAverageNumberOfRecords = 1;
+				for (Sensor lastHourSensor : sensorRepository.findAllByName(sensorName)) {
+					if (lastHourSensor.getTimestamp().toString().contains(
+							LocalDateTime.now().toString().replace("T", " ").substring(0, 10) + " " + hourIndex)) {
+
+						lastHourSensorAverageConsumption += lastHourSensor.getPowerConsumed();
+						sensorHoulyAverageNumberOfRecords++;
+					}
 				}
+				lastHourSensorAverageConsumption /= sensorHoulyAverageNumberOfRecords;
+				sensorsHourlyConsumption += lastHourSensorAverageConsumption;
+
 			}
-			sensorHourlyAverage /= sensorHoulyAverageNumberOfRecords;
-			
-			sensorPowerConsumedToday += sensorHourlyAverage;
+			sensorPowerConsumedToday += sensorsHourlyConsumption;
 		}
 
 		return consumerPowerConsumedToday + sensorPowerConsumedToday;
 	}
 
-	public Double getAllConsumedPowerFromHomeForThisMonth() {
+	public String getAllConsumedPowerFromHomeForTodayAndThisMonth() {
+      
+		JsonObject todayAndThisMonthConsumption= new JsonObject();
+		todayAndThisMonthConsumption.addProperty("today", getAllConsumedPowerFromHomeForToday());
+		todayAndThisMonthConsumption.addProperty("thisMonth", getAllConsumedPowerFromHomeForToday()* Integer.parseInt(LocalDateTime.now().toString().substring(8, 10)));
+		return todayAndThisMonthConsumption.toString();
 
-		return getAllConsumedPowerFromHomeForToday()*Integer.parseInt(LocalDateTime.now().toString().substring(8, 10));
-		
 	}
 
 }
