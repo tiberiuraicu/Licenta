@@ -24,6 +24,8 @@ import { ElectricMapRightSidePanelComponent } from './components/user-page/elect
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { NgxGaugeModule } from 'ngx-gauge';
+import { SettingsComponent } from './components/user-page/settings/settings.component';
+import {MatInputModule} from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,8 @@ import { NgxGaugeModule } from 'ngx-gauge';
     ElectricPowerMapComponent,
     InfoBoxComponent,
     PowerSourceComponent,
-    ElectricMapRightSidePanelComponent
+    ElectricMapRightSidePanelComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +57,8 @@ import { NgxGaugeModule } from 'ngx-gauge';
     MatCardModule,
     MatSelectModule,
     MatFormFieldModule,
-    NgxGaugeModule
+    NgxGaugeModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,42 @@
+@mixin basicCardSettings {
+  height: 82%;
+  width: 30%;
+  margin-left: 10%;
+  float: left;
+  margin-top: 1%;
+
+  border-radius: 13px 13px 13px 13px;
+  -moz-border-radius: 13px 13px 13px 13px;
+  -webkit-border-radius: 13px 13px 13px 13px;
+  border: 0px solid #000000;
+}
+
+.user-settings {
+  @include basicCardSettings;
+
+  .mat-focused .placeholder {
+    color: #00d318;
+  }
+  .mat-form-field .placeholder {
+    color: aliceblue;
+  }
+  .mat-form-field{
+      margin-left: 10%;
+      margin-top: 6%;
+      width: 70%;
+  }
+  .card-body{
+      margin-top: 5%;
+  }
+  .mat-raised-button{
+      width: 50%;
+      margin-left :48%;
+      margin-top: 10%;
+  }
+}
+
+.smart-home-settings {
+  @include basicCardSettings;
+}
+
+
