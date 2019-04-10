@@ -3,6 +3,8 @@ package com.server.database.repositories;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.scheduling.annotation.Async;
 
 import com.server.entites.Consumer;
 
@@ -24,7 +26,13 @@ public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 	@Query(value = "SELECT name FROM Consumer WHERE circuit != null")
 	List<String> findAllNotNull();
 	
+	@Query(value = "SELECT powerConsumed FROM Consumer WHERE name= :name and timestamp like CONCAT('%',:time,'%')")
+	List<Double> findConsumerRecordAtSpecificHour(@Param("name") String name,@Param("time") String time);
+	
 	
 	List<Consumer> findAllByName(String name);
+	
+	@Query(value = "SELECT sum(powerConsumed)/count(powerConsumed) FROM Consumer WHERE name= :name and timestamp like CONCAT('%',:time,'%')")
+	Double findSumConsumerRecordAtSpecificHour(@Param("name") String name,@Param("time") String time);
 
 }

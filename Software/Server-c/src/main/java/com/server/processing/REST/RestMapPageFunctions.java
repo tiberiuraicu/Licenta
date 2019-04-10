@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -216,58 +217,60 @@ public class RestMapPageFunctions {
 	}
 
 	public Double getAllConsumedPowerFromHomeForToday() {
+	
 		Double consumerPowerConsumedToday = 0.0;
 		Double sensorPowerConsumedToday = 0.0;
-
-		for (int i = 1; i <= Integer.parseInt(LocalDateTime.now().toString().substring(11, 13)); i++) {
+		
+		for (int i = 0; i <= Integer.parseInt(LocalDateTime.now().toString().substring(11, 13)); i++) {
 			String hourIndex = Integer.toString(i).length() == 2 ? Integer.toString(i) : "0" + i;
 
 			Double consumersHourlyConsumption = 0.0;
+			
 			for (String consumerName : consumerRepository.findAllNotNull()) {
+				
 				Double lastHourConsumerAverageConsumption = 0.0;
-				int consumerHoulyAverageNumberOfRecords = 1;
-				for (Consumer lastHourConsumer : consumerRepository.findAllByName(consumerName)) {
-					if (lastHourConsumer.getTimestamp().toString().contains(
-							LocalDateTime.now().toString().replace("T", " ").substring(0, 10) + " " + hourIndex)) {
+				try {
 
-						lastHourConsumerAverageConsumption += lastHourConsumer.getPowerConsumed();
-						consumerHoulyAverageNumberOfRecords++;
-					}
+					lastHourConsumerAverageConsumption = consumerRepository.findSumConsumerRecordAtSpecificHour(
+							consumerName,
+							LocalDateTime.now().toString().replace("T", " ").substring(0, 10) + " " + hourIndex);
+
+				} catch (Exception e) {
+					// System.out.println("exceptie");
 				}
-				lastHourConsumerAverageConsumption /= consumerHoulyAverageNumberOfRecords;
-				consumersHourlyConsumption += lastHourConsumerAverageConsumption;
-
+				if (lastHourConsumerAverageConsumption != null)
+					consumersHourlyConsumption += lastHourConsumerAverageConsumption;
 			}
 			consumerPowerConsumedToday += consumersHourlyConsumption;
-
+			
+			
 			Double sensorsHourlyConsumption = 0.0;
 			for (String sensorName : sensorRepository.findAllNotNull()) {
-
 				Double lastHourSensorAverageConsumption = 0.0;
-				int sensorHoulyAverageNumberOfRecords = 1;
-				for (Sensor lastHourSensor : sensorRepository.findAllByName(sensorName)) {
-					if (lastHourSensor.getTimestamp().toString().contains(
-							LocalDateTime.now().toString().replace("T", " ").substring(0, 10) + " " + hourIndex)) {
+				try {
+					lastHourSensorAverageConsumption = sensorRepository.findAvgOfPowerConsumedSensorAtSpecificHour(
+							sensorName,
+							LocalDateTime.now().toString().replace("T", " ").substring(0, 10) + " " + hourIndex);
 
-						lastHourSensorAverageConsumption += lastHourSensor.getPowerConsumed();
-						sensorHoulyAverageNumberOfRecords++;
-					}
+				} catch (Exception e) {
+					// System.out.println("exceptie");
 				}
-				lastHourSensorAverageConsumption /= sensorHoulyAverageNumberOfRecords;
-				sensorsHourlyConsumption += lastHourSensorAverageConsumption;
-
+				if (lastHourSensorAverageConsumption != null)
+					sensorsHourlyConsumption += lastHourSensorAverageConsumption;
 			}
 			sensorPowerConsumedToday += sensorsHourlyConsumption;
 		}
 
 		return consumerPowerConsumedToday + sensorPowerConsumedToday;
 	}
-
+	
 	public String getAllConsumedPowerFromHomeForTodayAndThisMonth() {
-      
-		JsonObject todayAndThisMonthConsumption= new JsonObject();
-		todayAndThisMonthConsumption.addProperty("today", getAllConsumedPowerFromHomeForToday());
-		todayAndThisMonthConsumption.addProperty("thisMonth", getAllConsumedPowerFromHomeForToday()* Integer.parseInt(LocalDateTime.now().toString().substring(8, 10)));
+
+		JsonObject todayAndThisMonthConsumption = new JsonObject();
+		Double value=getAllConsumedPowerFromHomeForToday();
+		todayAndThisMonthConsumption.addProperty("today", value);
+		todayAndThisMonthConsumption.addProperty("thisMonth", value
+				* Integer.parseInt(LocalDateTime.now().toString().substring(8, 10)));
 		return todayAndThisMonthConsumption.toString();
 
 	}

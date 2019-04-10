@@ -3,6 +3,7 @@ package com.server.database.repositories;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.server.entites.Consumer;
 import com.server.entites.Sensor;
@@ -25,5 +26,8 @@ public interface SensorRepository extends JpaRepository<Sensor, Integer> {
 	
 	
 	List<Sensor> findAllByName(String name);
+	
+	@Query(value = "SELECT sum(powerConsumed)/count(powerConsumed) FROM Sensor WHERE name= :name and timestamp like CONCAT('%',:time,'%')")
+	Double findAvgOfPowerConsumedSensorAtSpecificHour(@Param("name") String name,@Param("time") String time);
 
 }

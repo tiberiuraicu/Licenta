@@ -1,8 +1,10 @@
 package com.server.rest.controllers;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.servlet.ServletException;
 
@@ -23,16 +25,16 @@ import com.server.socket.DataBroadcaster;
 @RestController
 @RequestMapping("/resources")
 public class ResourcesControllers {
-	
+
 	@Autowired
 	AuthentificationFunctions restFunctions;
-	
+
 	@Autowired
 	RestMapPageFunctions restMapPageFunctions;
-	
+
 	@Autowired
 	HomePageFunctions homePageFunctions;
-	
+
 	@Autowired
 	DataBroadcaster dataBroadcaster;
 
@@ -60,8 +62,6 @@ public class ResourcesControllers {
 		dataBroadcaster.sendOutletPower(json.get("userId"));
 	}
 
-	
-	
 	@RequestMapping(value = "/getCircuits", method = RequestMethod.GET)
 	public String getCircuits() throws JsonParseException, JsonMappingException, IOException, ServletException {
 		return restMapPageFunctions.getCircuits();
@@ -78,30 +78,35 @@ public class ResourcesControllers {
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
 		return restMapPageFunctions.getTodayConsumptionForConsumer(json.get("consumerName"));
 	}
-	
+
 	@RequestMapping(value = "/getStateForConsumers", method = RequestMethod.POST)
 	public String getStateForConsumers(@RequestBody List<Map<String, String>> consumers)
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
 		return restMapPageFunctions.getStateForConsumers(consumers);
 	}
-	
-	
+
 	@RequestMapping(value = "/changeSensorState", method = RequestMethod.POST)
 	public String changeSensorState(@RequestBody Map<String, String> sensor)
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
 		return restMapPageFunctions.changeSensorState(sensor);
 	}
-	
+
 	@RequestMapping(value = "/changeConsumerState", method = RequestMethod.POST)
 	public String changeConsumerState(@RequestBody Map<String, String> consumer)
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
 		return restMapPageFunctions.changeConsumerState(consumer);
 	}
-	
+
 	@RequestMapping(value = "/getAllConsumedPowerFromHomeForTodayAndThisMonth", method = RequestMethod.GET)
 	public String getAllConsumedPowerFromHomeForThisMonth()
-			throws JsonParseException, JsonMappingException, IOException, ServletException {
-		return restMapPageFunctions.getAllConsumedPowerFromHomeForTodayAndThisMonth();
+			throws JsonParseException, JsonMappingException, IOException, ServletException, InterruptedException {
+		Vector<String> x = new Vector<String>();
+		Thread t = new Thread(() -> {
+			x.add(restMapPageFunctions.getAllConsumedPowerFromHomeForTodayAndThisMonth());
+		});
+		t.start();
+		t.join();
+	   return x.toString();
 	}
 
 }

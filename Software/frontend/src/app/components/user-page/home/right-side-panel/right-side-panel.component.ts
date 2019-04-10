@@ -16,29 +16,38 @@ export class RightSidePanelComponent implements OnInit {
   gaugeCostAppendText = "";
   animation = true;
   size = 130;
-  thick = 6
-
+  thick = 6;
 
   gaugeValueForToday = 0.0;
 
   gaugeValueForThisMonth = 0.0;
 
-  gaugeCostForToday=0.0;
+  gaugeCostForToday = 0.0;
 
   gaugeCostForThisMonth = 0.0;
-
 
   constructor(private userService: UserService) {
     this.getAllConsumedPowerFromHomeForTodayAndThisMonth();
 
     setInterval(() => {
-      console.log(this.gaugeValueForToday)
-      this.gaugeCostForToday= Math.round(this.gaugeValueForToday * 0.5 * parseFloat(localStorage.getItem("globalCurrencyMultiplier")) * 100) / 100;
+      this.gaugeCostForToday =
+        Math.round(
+          this.gaugeValueForToday *
+            0.5 *
+            parseFloat(localStorage.getItem("globalCurrencyMultiplier")) *
+            100
+        ) / 100;
 
-      this.gaugeCostForThisMonth= Math.round(this.gaugeValueForThisMonth * 0.5 * parseFloat(localStorage.getItem("globalCurrencyMultiplier")) * 100) / 100;
+      this.gaugeCostForThisMonth =
+        Math.round(
+          this.gaugeValueForThisMonth *
+            0.5 *
+            parseFloat(localStorage.getItem("globalCurrencyMultiplier")) *
+            100
+        ) / 100;
 
       this.gaugeCostAppendText = localStorage.getItem("globalCurrencyLabel");
-    }, 60)
+    }, 60);
   }
 
   notifications = [];
@@ -51,7 +60,7 @@ export class RightSidePanelComponent implements OnInit {
     const ws = new SockJS(SocketConfig.serverSocketURL);
     this.stompClient = Stomp.over(ws);
     let that = this;
-    this.stompClient.connect({}, function (frame) {
+    this.stompClient.connect({}, function(frame) {
       that.getNotifications();
     });
   };
@@ -65,11 +74,22 @@ export class RightSidePanelComponent implements OnInit {
   };
 
   getAllConsumedPowerFromHomeForTodayAndThisMonth() {
-    this.userService
-    .getAllConsumedPowerFromHomeForTodayAndThisMonth()
-    .subscribe(response => {
-      this.gaugeValueForToday = Math.round(parseFloat(JSON.parse(response._body)["today"]) / 1000 * 100) / 100;
-      this.gaugeValueForThisMonth = Math.round(parseFloat(JSON.parse(response._body)["thisMonth"]) / 1000 * 100) / 100;
-    });
+   setInterval(() => {
+      console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+      this.userService
+        .getAllConsumedPowerFromHomeForTodayAndThisMonth()
+        .subscribe(response => {
+          console.log("---------------------------------------------------------------------------------------")
+          console.log(response)
+          this.gaugeValueForToday =
+            Math.round(
+              (parseFloat(JSON.parse(response._body)[0]["today"]) / 1000) * 100
+            ) / 100;
+          this.gaugeValueForThisMonth =
+            Math.round(
+              (parseFloat(JSON.parse(response._body)[0]["thisMonth"]) / 1000) * 100
+            ) / 100;
+        });
+   }, 6000);
   }
 }

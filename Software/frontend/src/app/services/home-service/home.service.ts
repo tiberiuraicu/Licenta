@@ -234,6 +234,7 @@ export class UserService {
   }
  
   getAllConsumedPowerFromHomeForTodayAndThisMonth(){
+    
     return this.http.get(Config.host+"/resources/getAllConsumedPowerFromHomeForTodayAndThisMonth", {
       headers: this.userAuthentificationHeader
     });
