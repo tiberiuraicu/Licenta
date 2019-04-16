@@ -32,15 +32,10 @@ public class DataBroadcaster {
 
 	TimerTask timerTaskOutletPowerConsumed;
 
-	Thread t1;
 
-	Thread t2;
 
 	public void sendTotalPowerConsumed(String id) {
-		if (t1 != null && t1.isAlive()) {
-			t1.destroy();
-		}
-		t1 = new Thread(() -> {
+		
 			try {
 				timerTaskPowerConsumed.cancel();
 			} catch (Exception e) {
@@ -59,16 +54,12 @@ public class DataBroadcaster {
 			};
 
 			timer.schedule(timerTaskPowerConsumed, 1000, 1000);
-		});
-		t1.start();
+
 
 	}
 
 	public void sendOutletPower(String id) {
-		if (t2 != null && t2.isAlive()) {
-			t2.destroy();
-		}
-		t2 = new Thread(() -> {
+		
 			try {
 				timerTaskOutletPowerConsumed.cancel();
 			} catch (Exception e) {
@@ -89,7 +80,6 @@ public class DataBroadcaster {
 				}
 			};
 			timer.schedule(timerTaskOutletPowerConsumed, 1000, 1000);
-		});
-		t2.start();
+		
 	}
 }

@@ -12,7 +12,7 @@ import { LoginService } from './service/login.service';
 })
 export class LoginComponent {
   private info;
-  private model = { 'email': '', 'password': '' }
+   model = { 'email': '', 'password': '' }
   private currentEmail;
 
   constructor(private loginService: LoginService, private router : Router) {

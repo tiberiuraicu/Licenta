@@ -1,7 +1,7 @@
 
 
 export const Config = {
-  host: "//localhost:8080"
+  host: "//192.168.0.101:8080"
   
 };
 export const SocketConfig={

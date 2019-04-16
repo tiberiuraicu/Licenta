@@ -8,13 +8,14 @@ import { ElectricPowerMapComponent } from './components/user-page/electric-power
 import { SettingsComponent } from './components/user-page/settings/settings.component';
 
 const routes: Routes = [
+  { path: "", redirectTo: "/user/home", pathMatch: "full" },
   { path: "login", component: LoginComponent },
   { path: "register", component: RegisterComponent },
   {
     path: "user",
     component: UserPageComponent,
     children: [
-      { path: "", redirectTo: "", pathMatch: "full" },
+      { path: "", redirectTo: "/user/home", pathMatch: "full" },
       { path: "home", component: HomeComponent },
       { path: "electricMap", component: ElectricPowerMapComponent},
       { path: "settings", component: SettingsComponent}

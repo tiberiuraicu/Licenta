@@ -8,7 +8,7 @@ import { RegisterService } from './service/register.service';
 })
 export class RegisterComponent implements OnInit {
 
-  private model = { 'email': '', 'password': '', 'deviceId': '' }
+ model = { 'email': '', 'password': '', 'deviceId': '' }
   constructor(private registerService : RegisterService) { }
 
   register() {

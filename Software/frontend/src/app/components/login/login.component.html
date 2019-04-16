@@ -1,23 +1,34 @@
-<form (ngSubmit) ="onSubmit()" class="form-signin custom-style" >
+<div style="  width: 100%;
+height: 100%;">
+  <mat-card class="bg-dark text-light loginCard"
+    >Simple card
 
-  <input  
-  type="text" 
-  class="form-control custom-input" 
-  [(ngModel)]="model.email"
-  ngControl="email"
-  name="email"
-  placeholder="Email address" 
-  required autofocus>
-  
-  <input  type="password"
-   id="inputPassword"
-   class="form-control custom-input"  
-   placeholder="Password"
-   [(ngModel)]="model.password" 
-   ngControl="password"
-   name="password"
-   required>
- 
-  <button class="btn btn-lg btn-primary custom-submit-button" 
-   type="submit">Sign in</button>
-</form>
+    <form (ngSubmit)="onSubmit()" class="form-signin custom-style">
+      <input
+        type="text"
+        class="form-control custom-input"
+        [(ngModel)]="model.email"
+        ngControl="email"
+        name="email"
+        placeholder="Email address"
+        required
+        autofocus
+      />
+
+      <input
+        type="password"
+        id="inputPassword"
+        class="form-control custom-input"
+        placeholder="Password"
+        [(ngModel)]="model.password"
+        ngControl="password"
+        name="password"
+        required
+      />
+
+      <button class="btn btn-lg btn-primary custom-submit-button" type="submit">
+        Sign in
+      </button>
+    </form>
+  </mat-card>
+</div>

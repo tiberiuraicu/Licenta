@@ -27,7 +27,7 @@ export class RightSidePanelComponent implements OnInit {
   gaugeCostForThisMonth = 0.0;
 
   constructor(private userService: UserService) {
-    this.getAllConsumedPowerFromHomeForTodayAndThisMonth();
+   
 
     setInterval(() => {
       this.gaugeCostForToday =
@@ -53,6 +53,7 @@ export class RightSidePanelComponent implements OnInit {
   notifications = [];
 
   ngOnInit() {
+    this.getAllConsumedPowerFromHomeForTodayAndThisMonth();
     this.initializeWebSocketConnection();
   }
   stompClient;
@@ -74,22 +75,22 @@ export class RightSidePanelComponent implements OnInit {
   };
 
   getAllConsumedPowerFromHomeForTodayAndThisMonth() {
-   setInterval(() => {
-      console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-      this.userService
-        .getAllConsumedPowerFromHomeForTodayAndThisMonth()
-        .subscribe(response => {
-          console.log("---------------------------------------------------------------------------------------")
-          console.log(response)
-          this.gaugeValueForToday =
-            Math.round(
-              (parseFloat(JSON.parse(response._body)[0]["today"]) / 1000) * 100
-            ) / 100;
-          this.gaugeValueForThisMonth =
-            Math.round(
-              (parseFloat(JSON.parse(response._body)[0]["thisMonth"]) / 1000) * 100
-            ) / 100;
-        });
-   }, 6000);
+      
+    
+    this.userService
+      .getAllConsumedPowerFromHomeForTodayAndThisMonth()
+      .subscribe(response => {
+        console.log(response)
+        this.gaugeValueForToday =
+          Math.round(
+            (parseFloat(JSON.parse(response._body)[0]["today"]) / 1000) * 100
+          ) / 100;
+        this.gaugeValueForThisMonth =
+          Math.round(
+            (parseFloat(JSON.parse(response._body)[0]["thisMonth"]) / 1000) *
+              100
+          ) / 100;
+      });
+     
   }
 }
