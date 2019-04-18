@@ -1,22 +1,20 @@
 import { Injectable } from "@angular/core";
 import { Http, Headers } from "@angular/http";
-import * as Stomp from "stompjs";
-import * as SockJS from "sockjs-client";
 import Chart from "chart.js";
-import Config, { SocketConfig } from "../../config/config";
+import Config from "../../config/config";
 
 @Injectable({
   providedIn: "root"
 })
 export class UserService {
   selectedOutlet: any;
-  stompClient;
   pieChart: any;
   lineChart: any;
 
-  constructor(private http: Http) {
-    
-  }
+  pieChartRequestInterval: any;
+  lineChartRequestInterval: any;
+
+  constructor(private http: Http) { }
 
   // the headers of the authentificated user (without this no resource can be obtained from server)
   userAuthentificationHeader = new Headers({
@@ -25,21 +23,12 @@ export class UserService {
 
   // getting all existing outlets from server
   getAllOutlets() {
-    return this.http.get(Config.host+"/resources/getOutlets", {
+    return this.http.get(Config.host + "/resources/getOutlets", {
       headers: this.userAuthentificationHeader
     });
   }
-  startOutletBroadcast() {
-    this.http
-      .post(
-        Config.host+"/resources/boradcastDataForLineChart",
-        { userId: localStorage.getItem("currentId") },
-        {
-          headers: this.userAuthentificationHeader
-        }
-      )
-      .subscribe(res => {});
-  }
+
+
 
   // initialize the line chart with information fron server about the selected outlet
   initializeLineChart = name => {
@@ -53,7 +42,7 @@ export class UserService {
     //make the request to server
     this.http
       .post(
-        Config.host+"/resources/last60Consumers",
+        Config.host + "/resources/last60Consumers",
         { outletName: name, userId: localStorage.getItem("currentId") },
         { headers: this.userAuthentificationHeader }
       )
@@ -78,7 +67,7 @@ export class UserService {
               {
                 label: "Outlet power consumed",
                 data: last60RecordsPowerConsumed,
-                backgroundColor: ["rgba(248, 249, 250, 0.1)"],
+                backgroundColor: ["rgba(248, 249, 250, 0.2)"],
                 borderColor: ["rgba(60, 148, 150, 1)"],
 
                 borderWidth: 2
@@ -122,94 +111,127 @@ export class UserService {
           }
         });
       });
+   
   };
 
   initializePieChart = () => {
+
+    let userID = localStorage.getItem("currentId");
+    // this.stompClient.subscribe("/totalPowerConsumed/" + userID, response => {
+    //   console.log(response);
     this.http
       .post(
-        Config.host+"/resources/boradcastDataForPieChart",
+        Config.host + "/resources/getLastRecordForPieChart",
         { userId: localStorage.getItem("currentId") },
         { headers: this.userAuthentificationHeader }
       )
-      .subscribe(res => {});
-    this.pieChart = new Chart(document.getElementById("doughnut-chart"), {
-      type: "doughnut",
-      data: {
-        labels: ["Solar Panel", "Normal Power Source"],
-        datasets: [
-          {
-            label: "Consumption(kW)",
-            backgroundColor: ["rgba(62, 149, 205, 0.7)", "rgba(247, 70, 74, 0.9)"],
-            data: [0, 0],
-            borderColor :"rgba(248, 249, 250, 0.1)",
-           
+      .subscribe(response => {
+        console.log(response)
+        var responseAsJson = JSON.parse(response._body);
+        let powerConsumedFromSolarPanel =
+          responseAsJson.powerConsumedFromSolarPanel;
+        let powerConsumedFromNormalPowerSource =
+          responseAsJson.powerConsumedFromNormalPowerSource;
+        let data = [
+          powerConsumedFromSolarPanel,
+          powerConsumedFromNormalPowerSource
+        ];
+
+        //});
+        this.pieChart = new Chart(document.getElementById("doughnut-chart"), {
+          type: "doughnut",
+          data: {
+            labels: ["Solar Panel", "Normal Power Source"],
+            datasets: [
+              {
+                label: "Consumption(kW)",
+                backgroundColor: ["rgba(62, 149, 205, 1)", "rgba(247, 70, 74, 1)"],
+                data: data,
+                borderColor: "rgba(248, 249, 250, 0.4)",
+
+              }
+            ]
+          },
+          options: {
+            legend: {
+              labels: {
+                fontColor: '#ffffff'
+              }
+            },
+            animation: {
+              duration: 0
+            },
+            title: {
+              display: true,
+              text: "Power consumption",
+              fontColor: "rgba(248, 249, 250, 0.9)"
+            }
           }
-        ]
-      },
-      options: {
-        legend : {
-          labels : {
-            fontColor : '#ffffff'  
-          }
-      },
-        animation: {
-          duration: 0
-        },
-        title: {
-          display: true,
-          text: "Power consumption",
-          fontColor:"rgba(248, 249, 250, 0.9)"
-        }
-      }
-    });
+        });
+      });
+
+    this.getTotalPowerconsumedForPieChart();
+
 
   };
 
-  initializeWebSocketConnection = () => {
-    const ws = new SockJS(SocketConfig.serverSocketURL);
-    this.stompClient = Stomp.over(ws);
-    let that = this;
-    this.stompClient.connect({}, function(frame) {
-      that.getTotalPowerconsumedForPieChart();
-      that.getOutletPowerConsumedForLineChart();
-    });
-  };
+
 
   getTotalPowerconsumedForPieChart = () => {
-    let userID = localStorage.getItem("currentId");
-    this.stompClient.subscribe("/totalPowerConsumed/" + userID, response => {
-      console.log(response);
-      var responseAsJson = JSON.parse(response.body);
-      let powerConsumedFromSolarPanel =
-        responseAsJson.powerConsumedFromSolarPanel;
-      let powerConsumedFromNormalPowerSource =
-        responseAsJson.powerConsumedFromNormalPowerSource;
-      let data = [
-        powerConsumedFromSolarPanel,
-        powerConsumedFromNormalPowerSource
-      ];
-      this.addDataToPieChart(data);
-    });
+    this.pieChartRequestInterval = setInterval(() => {
+      let userID = localStorage.getItem("currentId");
+      // this.stompClient.subscribe("/totalPowerConsumed/" + userID, response => {
+      //   console.log(response);
+      this.http
+        .post(
+          Config.host + "/resources/getLastRecordForPieChart",
+          { userId: localStorage.getItem("currentId") },
+          { headers: this.userAuthentificationHeader }
+        )
+        .subscribe(response => {
+          console.log(response)
+          var responseAsJson = JSON.parse(response._body);
+          let powerConsumedFromSolarPanel =
+            responseAsJson.powerConsumedFromSolarPanel;
+          let powerConsumedFromNormalPowerSource =
+            responseAsJson.powerConsumedFromNormalPowerSource;
+          let data = [
+            powerConsumedFromSolarPanel,
+            powerConsumedFromNormalPowerSource
+          ];
+          this.addDataToPieChart(data);
+          //});
+        });
+    }, 1000)
   };
 
   getOutletPowerConsumedForLineChart = () => {
-    let userID = localStorage.getItem("currentId");
-    this.stompClient.subscribe("/outletPowerConsumed/" + userID, response => {
-      console.log(response);
-      var responseAsJson = JSON.parse(response.body);
-      for (var outlet in responseAsJson) {
-        if (outlet == this.selectedOutlet) {
-          var lastPowerConsumedForOutlet = responseAsJson[outlet].powerConsumed;
-          var lastRecordedTimestampForOutlet = responseAsJson[
-            outlet
-          ].timestamp.split(" ")[1]; //just the hour
-          this.addDataToLineChart(
-            lastPowerConsumedForOutlet,
-            lastRecordedTimestampForOutlet
-          );
-        }
-      }
-    });
+    this.lineChartRequestInterval = setInterval(() => {
+      let userID = localStorage.getItem("currentId");
+      this.http
+        .post(
+          Config.host + "/resources/getLastRecordOfEveryOutlet",
+          { userId: localStorage.getItem("currentId") },
+          { headers: this.userAuthentificationHeader }
+        )
+        .subscribe(response => {
+          console.log(response);
+          console.log("---------------------------------------------------------------------")
+          var responseAsJson = JSON.parse(response._body);
+          for (var outlet in responseAsJson) {
+            if (outlet == this.selectedOutlet) {
+              var lastPowerConsumedForOutlet = responseAsJson[outlet].powerConsumed;
+              var lastRecordedTimestampForOutlet = responseAsJson[
+                outlet
+              ].timestamp.split(" ")[1]; //just the hour
+              this.addDataToLineChart(
+                lastPowerConsumedForOutlet,
+                lastRecordedTimestampForOutlet
+              );
+            }
+          }
+        });
+    }, 1000);
   };
 
   addDataToPieChart(data) {
@@ -232,10 +254,10 @@ export class UserService {
     });
     this.lineChart.update();
   }
- 
-  getAllConsumedPowerFromHomeForTodayAndThisMonth(){
-    
-    return this.http.get(Config.host+"/resources/getAllConsumedPowerFromHomeForTodayAndThisMonth", {
+
+  getAllConsumedPowerFromHomeForTodayAndThisMonth() {
+
+    return this.http.get(Config.host + "/resources/getAllConsumedPowerFromHomeForTodayAndThisMonth", {
       headers: this.userAuthentificationHeader
     });
   }

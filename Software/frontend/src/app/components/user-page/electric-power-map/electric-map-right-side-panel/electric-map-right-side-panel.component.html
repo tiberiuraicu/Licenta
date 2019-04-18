@@ -1,6 +1,6 @@
-<div class="card text-white bg-dark right-size-consumers">
+<div class="card text-white right-size-consumers" style=" background-color: rgba(52,58,64,0.8)">
   <h6 class="title">Circuit consumers</h6>
-  <div class="card-body ">
+  <div class="card-body " style="padding-top: 2%;">
     <mat-card @cardEnter *ngFor="let card of cards" class="mat-elevation-z24 right-consumer">
       <h5>{{ card.name }}</h5>
       On/Off
@@ -10,4 +10,5 @@
         <canvas id="{{card.name}}line-chart"></canvas></div>
     </mat-card>
   </div>
+  <h6 class="title"></h6>
 </div>

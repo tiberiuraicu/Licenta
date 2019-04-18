@@ -81,32 +81,12 @@ export class ElectricPowerMapComponent implements OnInit {
 
           this.createTree(treeData, circuit.circuitId);
 
-          // get the consumers -> json lvl 3 depth -> 2 loops
-          this.circuitChildren = [];
-          var circuitChildrenToBeSend = [];
-
-          for (var location in treeData.children) {
-            var locationChildren = treeData.children[location];
-
-            for (var consumer in locationChildren.children) {
-              circuitChildrenToBeSend.push({
-                name: locationChildren.children[consumer].name
-              });
-            }
-          }
-          this.electricPowerMapServiceService
-            .getStateForConsumers(circuitChildrenToBeSend)
-            .subscribe(response => {
-              this.circuitChildren = JSON.parse(response._body);
-            });
-
             this.powerSourceComponent.startCurrencyMonitoring();
         });
 
     } else {
       circuit.currentState = "retracted";
       $("svg").remove();
-      this.circuitChildren=[];
       for (var element in this.infoBox) {
         this.infoBox[element] = false;
       }

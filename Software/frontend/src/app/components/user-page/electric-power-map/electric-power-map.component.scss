@@ -46,9 +46,12 @@
 }
 
 .right-size-consumers{
-  overflow-y:scroll;
-  &::-webkit-scrollbar {
-    display: none;
+ 
+  .card-body{
+    overflow-y:scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
   float:right;
   width:26.2%;
@@ -57,6 +60,6 @@
   margin-right: 1%;
   .right-consumer{
     height: 20%;
-    margin-top: 2%;
+    margin-bottom: 2%;
   }
 }

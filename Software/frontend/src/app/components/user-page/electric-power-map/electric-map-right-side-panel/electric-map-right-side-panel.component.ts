@@ -32,7 +32,14 @@ export class ElectricMapRightSidePanelComponent implements OnInit {
     }
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.electricPowerMapServiceService
+            .getStateForConsumers()
+            .subscribe(response => {
+              this.cards = JSON.parse(response._body);
+              console.log(this.cards)
+            });
+   }
 
   changeState(card) {
     var state;

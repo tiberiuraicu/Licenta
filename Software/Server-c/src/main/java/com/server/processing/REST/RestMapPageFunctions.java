@@ -36,12 +36,11 @@ public class RestMapPageFunctions {
 	@Autowired
 	InstructionsSender instructionsSender;
 
-	public String getStateForConsumers(@RequestBody List<Map<String, String>> consumers) {
-
+	public String getStateForConsumers() {
 		JsonArray consumersState = new JsonArray();
 
-		for (Map<String, String> consumerData : consumers) {
-			String consumerName = (String) consumerData.get("name");
+		for (String consumerName  : consumerRepository.findAllNotNull()) {
+			
 			JsonObject consumer = new JsonObject();
 			consumer.addProperty("name", consumerName);
 			if (consumerName.contains("sensor")) {
@@ -271,6 +270,7 @@ public class RestMapPageFunctions {
 		todayAndThisMonthConsumption.addProperty("today", value);
 		todayAndThisMonthConsumption.addProperty("thisMonth", value
 				* Integer.parseInt(LocalDateTime.now().toString().substring(8, 10)));
+		System.out.println(todayAndThisMonthConsumption.toString());
 		return todayAndThisMonthConsumption.toString();
 
 	}

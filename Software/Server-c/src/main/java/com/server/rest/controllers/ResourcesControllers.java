@@ -50,16 +50,16 @@ public class ResourcesControllers {
 		return homePageFunctions.getAllOutletsAndLocations();
 	}
 
-	@RequestMapping(value = "/boradcastDataForPieChart", method = RequestMethod.POST)
-	public void initializePieChart(@RequestBody Map<String, String> json)
+	@RequestMapping(value = "/getLastRecordForPieChart", method = RequestMethod.POST)
+	public String initializePieChart(@RequestBody Map<String, String> json)
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
-		dataBroadcaster.sendTotalPowerConsumed(json.get("userId"));
+		return dataBroadcaster.sendTotalPowerConsumed(json.get("userId"));
 	}
 
-	@RequestMapping(value = "/boradcastDataForLineChart", method = RequestMethod.POST)
-	public void initializeLineChart(@RequestBody Map<String, String> json)
+	@RequestMapping(value = "/getLastRecordOfEveryOutlet", method = RequestMethod.POST)
+	public String initializeLineChart(@RequestBody Map<String, String> json)
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
-		dataBroadcaster.sendOutletPower(json.get("userId"));
+		return dataBroadcaster.sendOutletPower(json.get("userId"));
 	}
 
 	@RequestMapping(value = "/getCircuits", method = RequestMethod.GET)
@@ -79,10 +79,10 @@ public class ResourcesControllers {
 		return restMapPageFunctions.getTodayConsumptionForConsumer(json.get("consumerName"));
 	}
 
-	@RequestMapping(value = "/getStateForConsumers", method = RequestMethod.POST)
-	public String getStateForConsumers(@RequestBody List<Map<String, String>> consumers)
+	@RequestMapping(value = "/getStateForConsumers", method = RequestMethod.GET)
+	public String getStateForConsumers()
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
-		return restMapPageFunctions.getStateForConsumers(consumers);
+		return restMapPageFunctions.getStateForConsumers();
 	}
 
 	@RequestMapping(value = "/changeSensorState", method = RequestMethod.POST)
@@ -106,7 +106,7 @@ public class ResourcesControllers {
 		});
 		t.start();
 		t.join();
-	   return x.toString();
+	   return restMapPageFunctions.getAllConsumedPowerFromHomeForTodayAndThisMonth();
 	}
 
 }

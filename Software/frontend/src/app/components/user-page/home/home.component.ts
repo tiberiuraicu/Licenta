@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NestedTreeControl } from "@angular/cdk/tree";
 import { ArrayDataSource } from "@angular/cdk/collections"
 import { UserService } from 'src/app/services/home-service/home.service';
@@ -16,10 +16,15 @@ interface Outlet {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit,OnDestroy {
 
-  constructor(private userService: UserService) {
-    
+  
+
+  constructor(private userService: UserService) {}
+
+  ngOnDestroy(): void {
+    clearInterval(this.userService.pieChartRequestInterval)
+    clearInterval(this.userService.lineChartRequestInterval)
   }
 
   treeControl = new NestedTreeControl<Location>(node => node.children);
@@ -36,8 +41,6 @@ export class HomeComponent implements OnInit {
       let resultAsJson = JSON.parse(result._body);
       console.log(resultAsJson)
       for (var location in resultAsJson) {
-        console.log(location
-          )
         var outletsInLocation: Outlet[] = [];
 
         for (var outlet in resultAsJson[location]) {
@@ -52,16 +55,17 @@ export class HomeComponent implements OnInit {
       }
       this.dataSource = new ArrayDataSource(this.tree_data);
     });
-    this.userService.initializeWebSocketConnection();
+
     this.initializeLineChart(0);
+    this.userService.getOutletPowerConsumedForLineChart();
     this.userService.initializePieChart();
-    this.userService.startOutletBroadcast();
  
   }
 
   initializeLineChart(name) {
+ 
     this.userService.initializeLineChart(name);
+   
   }
 
- 
 }

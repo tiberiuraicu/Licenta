@@ -70,7 +70,7 @@ export class RightSidePanelComponent implements OnInit {
     let userID = localStorage.getItem("currentId");
     this.stompClient.subscribe("/notification/" + userID, response => {
       this.notifications.push(response.body);
-      console.log(response);
+     
     });
   };
 
@@ -80,14 +80,16 @@ export class RightSidePanelComponent implements OnInit {
     this.userService
       .getAllConsumedPowerFromHomeForTodayAndThisMonth()
       .subscribe(response => {
+        console.log("--------------------------------------------------------------------------------------------------------------------------------------")
+
         console.log(response)
         this.gaugeValueForToday =
           Math.round(
-            (parseFloat(JSON.parse(response._body)[0]["today"]) / 1000) * 100
+            (parseFloat(JSON.parse(response._body)["today"]) / 1000) * 100
           ) / 100;
         this.gaugeValueForThisMonth =
           Math.round(
-            (parseFloat(JSON.parse(response._body)[0]["thisMonth"]) / 1000) *
+            (parseFloat(JSON.parse(response._body)["thisMonth"]) / 1000) *
               100
           ) / 100;
       });

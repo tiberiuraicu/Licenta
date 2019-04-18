@@ -32,54 +32,52 @@ public class DataBroadcaster {
 
 	TimerTask timerTaskOutletPowerConsumed;
 
+	public String sendTotalPowerConsumed(String id) throws ServletException, IOException {
 
+//			try {
+//				timerTaskPowerConsumed.cancel();
+//			} catch (Exception e) {
+//			}
+//			timerTaskPowerConsumed = new TimerTask() {
+//				@Override
+//				public void run() {
+//					try {
+//
+//						template.convertAndSend("/totalPowerConsumed/" + id, homePageFunctions.getTotalPowerConsumed());
+//					} catch (MessagingException | ServletException | IOException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				};
+//			};
+//
+//			timer.schedule(timerTaskPowerConsumed, 1000, 1000);
 
-	public void sendTotalPowerConsumed(String id) {
-		
-			try {
-				timerTaskPowerConsumed.cancel();
-			} catch (Exception e) {
-			}
-			timerTaskPowerConsumed = new TimerTask() {
-				@Override
-				public void run() {
-					try {
-
-						template.convertAndSend("/totalPowerConsumed/" + id, homePageFunctions.getTotalPowerConsumed());
-					} catch (MessagingException | ServletException | IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				};
-			};
-
-			timer.schedule(timerTaskPowerConsumed, 1000, 1000);
-
-
+		return homePageFunctions.getTotalPowerConsumed();
 	}
 
-	public void sendOutletPower(String id) {
-		
-			try {
-				timerTaskOutletPowerConsumed.cancel();
-			} catch (Exception e) {
-				e.getStackTrace();
-			}
-			timerTaskOutletPowerConsumed = new TimerTask() {
+	public String sendOutletPower(String id) {
 
-				@Override
-				public void run() {
-					try {
-
-						template.convertAndSend("/outletPowerConsumed/" + id,
-								homePageFunctions.getLastRegistratedPowerConsumedForEveryOutlet());
-					} catch (MessagingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			};
-			timer.schedule(timerTaskOutletPowerConsumed, 1000, 1000);
-		
+//			try {
+//				timerTaskOutletPowerConsumed.cancel();
+//			} catch (Exception e) {
+//				e.getStackTrace();
+//			}
+//			timerTaskOutletPowerConsumed = new TimerTask() {
+//
+//				@Override
+//				public void run() {
+//					try {
+//
+//						template.convertAndSend("/outletPowerConsumed/" + id,
+//								homePageFunctions.getLastRegistratedPowerConsumedForEveryOutlet());
+//					} catch (MessagingException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				}
+//			};
+//			timer.schedule(timerTaskOutletPowerConsumed, 1000, 1000);
+		return homePageFunctions.getLastRegistratedPowerConsumedForEveryOutlet();
 	}
 }
