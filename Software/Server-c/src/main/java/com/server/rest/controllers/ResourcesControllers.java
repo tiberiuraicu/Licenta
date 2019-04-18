@@ -106,7 +106,7 @@ public class ResourcesControllers {
 		});
 		t.start();
 		t.join();
-	   return restMapPageFunctions.getAllConsumedPowerFromHomeForTodayAndThisMonth();
+	   return x.toString();
 	}
 
 }

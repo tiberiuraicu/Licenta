@@ -59,7 +59,6 @@
       margin-top: 13%;
       margin-right: 20%;
     }
-   
   }
 
   .month-cost {
@@ -75,6 +74,8 @@
       width: 110%;
       margin-top: 13%;
       margin-right: 20%;
+
+    
     }
   }
 }
@@ -90,10 +91,16 @@
     overflow: auto;
     .notification {
       background-color: rgba(5, 10, 40, 0.2);
+      padding-left: 5%;
+      border-radius: 7px 7px 7px 7px;
+      -moz-border-radius: 7px 7px 7px 7px;
+      -webkit-border-radius: 7px 7px 7px 7px;
+      border: 0px solid #000000;
     }
 
     &::-webkit-scrollbar {
       display: none;
     }
+   
   }
 }
