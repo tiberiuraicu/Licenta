@@ -1,105 +1,154 @@
 .user-content {
-    float: right;
-    width: 93%;
-  }
-  
-  @mixin sidePanelElementsShading {
-    -webkit-box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
-    box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
-  }
-  @mixin border-radius {
-    border-radius: 7px 7px 7px 7px;
-    -moz-border-radius: 7px 7px 7px 7px;
-    -webkit-border-radius: 7px 7px 7px 7px;
-    
-  }
-  
-  .pie-chart-container {
-    margin-top: 2%;
-  
-    display: block;
-    float: right;
-    height: 30vh;
-    width: 30vw;
-  }
-  
-  .upper-side {
+  float: right;
+  width: 93%;
+}
+
+@mixin sidePanelElementsShading {
+  -webkit-box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
+  box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
+}
+@mixin border-radius {
+  border-radius: 7px 7px 7px 7px;
+  -moz-border-radius: 7px 7px 7px 7px;
+  -webkit-border-radius: 7px 7px 7px 7px;
+}
+
+.upper-side {
+  width: 73%;
+  height: 40vh;
+  float: left;
+
+  .upper-side-left {
     @include sidePanelElementsShading;
     @include border-radius;
-    width: 73%;
-    height: 40vh;
-    float:left;
-  }
-  .lower-side {
-    margin-top: 1%;
-    @include sidePanelElementsShading;
-    @include border-radius;
-    width: 73%;
-    height: 43vh;
-    float:left;
-    box-shadow: -1px 2px 20px 3px rgba(0, 0, 0, 0.75);
-  }
- 
-  
-  .row {
-    margin-left: 3%;
-    width: 97%;
+    width: 49.5%;
     height: 100%;
-  
-    .treeContainer {
-     
+    float: left;
+    margin-right: 1%;
+
+    .profile-picture {
+      @include sidePanelElementsShading;
       @include border-radius;
-      @keyframes example {
-        from {
-         
-        }
-        to {
-          background-color: #808c99;
-          color: black;
-        }
-      }
+      height: 50%;
+      width: 35%;
       margin-top: 5%;
-      overflow-y: scroll;
-      height: 29.5vh;
-      width: 15vw;
-    
-     
-      border-color: rgba(0, 0, 0, 0.2);
-      &::-webkit-scrollbar {
-        display: none;
-      }
-      .example-tree-invisible {
-        display: none;
-      }
-  
-      .example-tree-node {
-        display: block;
-  
-        .example-tree-node {
-          @include border-radius;
-          cursor: pointer;
-          margin-bottom: 2%;
-          padding-bottom: 2%;
-          padding-left: 6%;
-          margin-left: 19%;
-          margin-right: 50%;
-          &:hover {
-            animation-fill-mode: forwards;
-            animation-name: example;
-            animation-duration: 0.5s;
-          }
-        }
-      }
-      background-color: rgba(248, 249, 250, 0.7);
-    }
-  
-    .line-chart-container {
-      margin-top: 3%;
-      float: right;
       margin-left: 5%;
-      height: 40vh;
-      width: 38vw;
+      float: left;
+    }
+    .nameAttribute {
+      @include sidePanelElementsShading;
+      margin-top: 13%;
+      font-size: 160%;
+      margin-left: 45%;
+      width: 50%;
+    }
+    .locationAttribute {
+      @include sidePanelElementsShading;
+      margin-top: 10%;
+      font-size: 160%;
+      margin-left: 45%;
+      width: 50%;
+    }
+    .phoneNumberAttribute {
+      @include sidePanelElementsShading;
+      float: right;
+      margin-top: 10%;
+      font-size: 130%;
+      width: 45.5%;
+      margin-left: 1%;
+      margin-right:5.5%;
+    }
+    .emailAttribute {
+      @include sidePanelElementsShading;
+      margin-left: 5%;
+      margin-top: 11%;
+      font-size: 130%;
+      padding-left: 1%;
+      width: 40.5%;
     }
   }
-  
+  .upper-side-right {
+    @include sidePanelElementsShading;
+    @include border-radius;
+    width: 49.5%;
+    height: 100%;
+    float: left;
+
+    .pie-chart-container {
+      margin-top: 2%;
+
+      display: block;
+      float: right;
+      height: 30vh;
+      width: 35vw;
+    }
+  }
+}
+.lower-side {
+  margin-top: 1%;
+  @include sidePanelElementsShading;
+  @include border-radius;
+  width: 73%;
+  height: 43vh;
+  float: left;
+  box-shadow: -1px 2px 20px 3px rgba(0, 0, 0, 0.75);
+}
+
+.row {
+  margin-left: 3%;
+  width: 97%;
+  height: 100%;
+
+  .treeContainer {
+    @include border-radius;
+    @keyframes example {
+      from {
+      }
+      to {
+        background-color: #808c99;
+        color: black;
+      }
+    }
+    margin-top: 5%;
+    overflow-y: scroll;
+    height: 29.5vh;
+    width: 15vw;
+
+    border-color: rgba(0, 0, 0, 0.2);
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    .example-tree-invisible {
+      display: none;
+    }
+
+    .example-tree-node {
+      display: block;
+
+      .example-tree-node {
+        @include border-radius;
+        cursor: pointer;
+        margin-bottom: 2%;
+        padding-bottom: 2%;
+        padding-left: 6%;
+        margin-left: 19%;
+        margin-right: 50%;
+        &:hover {
+          animation-fill-mode: forwards;
+          animation-name: example;
+          animation-duration: 0.5s;
+        }
+      }
+    }
+    background-color: rgba(248, 249, 250, 0.7);
+  }
+
+  .line-chart-container {
+    margin-top: 3%;
+    float: right;
+    margin-left: 5%;
+    height: 40vh;
+    width: 38vw;
+  }
+}

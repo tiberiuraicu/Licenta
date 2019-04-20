@@ -24,10 +24,13 @@
         name="password"
         required
       />
-
+     
       <button class="btn btn-lg btn-primary custom-submit-button" type="submit">
         Sign in
       </button>
+      <div [hidden]="!userNotExisting" style="margin-top: 2% "class="alert alert-danger" role="alert">
+       Invalid user or wrong email/password
+      </div>
     </form>
   </mat-card>
 </div>

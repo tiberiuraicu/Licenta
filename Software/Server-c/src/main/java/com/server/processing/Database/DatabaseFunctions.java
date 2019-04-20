@@ -2,6 +2,9 @@ package com.server.processing.Database;
 
 import java.util.Iterator;
 import java.util.List;
+
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.server.database.repositories.CircuitRepository;
@@ -42,7 +45,7 @@ public class DatabaseFunctions {
 
 		// sets the circuit for the specific Consumer
 		consumer.setCircuit(circuit);
-		
+
 		// gets all consumers for the circuit
 		List<Consumer> consumersForCircuit;
 
@@ -145,7 +148,7 @@ public class DatabaseFunctions {
 
 	// used for changing the powerd circuits from the power source
 	// *mostly used for setting the best configuration after calculating it
-
+	@Transactional
 	public PowerSource setNewSetOfCircuitsToPowerSource(PowerSource powerSource, List<Circuit> circuits) {
 
 		// first : get the normal power source entity form the database

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
 
@@ -35,9 +34,7 @@ export class LoginService {
   logout() {
     localStorage.setItem("token", "");
     localStorage.setItem("currentEmail", "")
-    this.router.navigate(['/home'])
-    location.reload();
-    alert("you just logged out.")
+    this.router.navigate(['/login'])
   }
 
   // checkLogin() {

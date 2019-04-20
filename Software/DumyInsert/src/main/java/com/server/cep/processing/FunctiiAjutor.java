@@ -60,9 +60,24 @@ public class FunctiiAjutor {
 		powerSource.setGeneratedPower(25.5);
 
 		User user = new User();
-		user.setEmail("t");
-		user.setPassword("t");
+		user.setEmail("tiberiuraicu2@gmail.com");
+		user.setPassword("parola1234");
+		user.setCountry("Romania");
+		user.setLocality("Brasov");
+		user.setFirstName("Raicu");
+		user.setLastName("Tiberiu");
+		user.setPhoneNumber(Integer.parseInt("0742580789"));
 		userRepository.save(user);
+		
+		User user2 = new User();
+		user2.setEmail("t");
+		user2.setPassword("t");
+		user2.setCountry("Romania");
+		user2.setLocality("Brasov");
+		user2.setFirstName("Raicu");
+		user2.setLastName("Tiberiu");
+		user2.setPhoneNumber(Integer.parseInt("0742580789"));
+		userRepository.save(user2);
 
 		Circuit c1 = new Circuit();
 		Circuit c2 = new Circuit();
@@ -210,6 +225,8 @@ public class FunctiiAjutor {
 
 		user = helperFunctions.makeDeviceAndUserConnection(user, device);
 		userRepository.save(user);
+		user2 = helperFunctions.makeDeviceAndUserConnection(user2, device);
+		userRepository.save(user2);
 
 		NormalPowerSource normalPowerSource=new NormalPowerSource();
 		normalPowerSource.setDevice(device);

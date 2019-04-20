@@ -37,7 +37,6 @@ export class ElectricPowerMapComponent implements OnInit {
 
   ngOnInit() {
     this.electricPowerMapServiceService.getCircuits().subscribe(response => {
-      console.log(this.circuits)
       JSON.parse(response._body).forEach(circuit => {
         circuit["currentState"] = "retracted";
         circuit["hidden"] = "visible";

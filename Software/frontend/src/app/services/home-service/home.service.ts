@@ -7,6 +7,7 @@ import Config from "../../config/config";
   providedIn: "root"
 })
 export class UserService {
+ 
   selectedOutlet: any;
   pieChart: any;
   lineChart: any;
@@ -14,7 +15,8 @@ export class UserService {
   pieChartRequestInterval: any;
   lineChartRequestInterval: any;
 
-  constructor(private http: Http) { }
+  constructor(private http: Http) {
+  }
 
   // the headers of the authentificated user (without this no resource can be obtained from server)
   userAuthentificationHeader = new Headers({
@@ -27,8 +29,12 @@ export class UserService {
       headers: this.userAuthentificationHeader
     });
   }
-
-
+  getUserDetails() {
+    let userId = localStorage.getItem("currentId");
+    return this.http.post(Config.host + "/user/getUserDetails", {userId:userId}, {
+      headers: this.userAuthentificationHeader
+    });
+  }
 
   // initialize the line chart with information fron server about the selected outlet
   initializeLineChart = name => {
@@ -111,11 +117,9 @@ export class UserService {
           }
         });
       });
-   
   };
 
   initializePieChart = () => {
-
     let userID = localStorage.getItem("currentId");
     // this.stompClient.subscribe("/totalPowerConsumed/" + userID, response => {
     //   console.log(response);
@@ -126,7 +130,7 @@ export class UserService {
         { headers: this.userAuthentificationHeader }
       )
       .subscribe(response => {
-        console.log(response)
+        console.log(response);
         var responseAsJson = JSON.parse(response._body);
         let powerConsumedFromSolarPanel =
           responseAsJson.powerConsumedFromSolarPanel;
@@ -145,17 +149,19 @@ export class UserService {
             datasets: [
               {
                 label: "Consumption(kW)",
-                backgroundColor: ["rgba(62, 149, 205, 1)", "rgba(247, 70, 74, 1)"],
+                backgroundColor: [
+                  "rgba(62, 149, 205, 1)",
+                  "rgba(247, 70, 74, 1)"
+                ],
                 data: data,
-                borderColor: "rgba(248, 249, 250, 0.4)",
-
+                borderColor: "rgba(248, 249, 250, 0.4)"
               }
             ]
           },
           options: {
             legend: {
               labels: {
-                fontColor: '#ffffff'
+                fontColor: "#ffffff"
               }
             },
             animation: {
@@ -171,11 +177,7 @@ export class UserService {
       });
 
     this.getTotalPowerconsumedForPieChart();
-
-
   };
-
-
 
   getTotalPowerconsumedForPieChart = () => {
     this.pieChartRequestInterval = setInterval(() => {
@@ -189,7 +191,7 @@ export class UserService {
           { headers: this.userAuthentificationHeader }
         )
         .subscribe(response => {
-          console.log(response)
+          console.log(response);
           var responseAsJson = JSON.parse(response._body);
           let powerConsumedFromSolarPanel =
             responseAsJson.powerConsumedFromSolarPanel;
@@ -202,7 +204,7 @@ export class UserService {
           this.addDataToPieChart(data);
           //});
         });
-    }, 1000)
+    }, 1000);
   };
 
   getOutletPowerConsumedForLineChart = () => {
@@ -216,11 +218,14 @@ export class UserService {
         )
         .subscribe(response => {
           console.log(response);
-          console.log("---------------------------------------------------------------------")
+          console.log(
+            "---------------------------------------------------------------------"
+          );
           var responseAsJson = JSON.parse(response._body);
           for (var outlet in responseAsJson) {
             if (outlet == this.selectedOutlet) {
-              var lastPowerConsumedForOutlet = responseAsJson[outlet].powerConsumed;
+              var lastPowerConsumedForOutlet =
+                responseAsJson[outlet].powerConsumed;
               var lastRecordedTimestampForOutlet = responseAsJson[
                 outlet
               ].timestamp.split(" ")[1]; //just the hour
@@ -256,9 +261,28 @@ export class UserService {
   }
 
   getAllConsumedPowerFromHomeForTodayAndThisMonth() {
+    return this.http.get(
+      Config.host +
+        "/resources/getAllConsumedPowerFromHomeForTodayAndThisMonth",
+      {
+        headers: this.userAuthentificationHeader
+      }
+    );
+  }
 
-    return this.http.get(Config.host + "/resources/getAllConsumedPowerFromHomeForTodayAndThisMonth", {
-      headers: this.userAuthentificationHeader
+  getProfilePicture() {
+    var userAuthentificationHeader = new Headers({
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      userId:localStorage.getItem("currentId")
     });
+    return this.http.get('http://localhost:8080/user/getProfilePicture', { headers: userAuthentificationHeader })
+  }
+
+  checkIfTokenValid(){
+    var userAuthentificationHeader = new Headers({
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      userId:localStorage.getItem("currentId")
+    });
+    return this.http.get('http://localhost:8080/resources/checkIfTokenExpired', { headers: userAuthentificationHeader })
   }
 }

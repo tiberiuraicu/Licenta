@@ -108,5 +108,9 @@ public class ResourcesControllers {
 		t.join();
 	   return x.toString();
 	}
+	@RequestMapping(value = "/checkIfTokenExpired", method = RequestMethod.GET)
+	public String checkIfTokenExpired() {
+		return "valid";
+	}
 
 }

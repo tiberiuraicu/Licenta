@@ -1,36 +1,86 @@
-<div class ="wrapper " >
+<div class="wrapper ">
   <mat-card class="bg-dark text-light registerCard mat-elevation-z24"
     >Register
-<form (ngSubmit) ="register()" class="form-signin custom-style" >
-  <input  
-    type="text" 
-    class="form-control custom-input" 
-    [(ngModel)]="model.email"
-    ngControl="email"
-    name="email"
-    placeholder="Email address" 
-    required autofocus>
-    
-    <input  type="password"
-     id="inputPassword"
-     class="form-control custom-input"  
-     placeholder="Password"
-     [(ngModel)]="model.password" 
-     ngControl="password"
-     name="password"
-     required>
-
-     <input  type="deviceId"
-     id="deviceId"
-     class="form-control custom-input"  
-     placeholder="device Id"
-     [(ngModel)]="model.deviceId"
-     name="deviceId"
-     required>
-   
-   
-    <button class="btn btn-lg btn-primary custom-submit-button" 
-     type="submit">Register</button>
-  </form>
-</mat-card>
+    <form (ngSubmit)="register()" class="form-signin custom-style">
+      <input
+        type="text"
+        class="form-control custom-input"
+        [(ngModel)]="model.firstName"
+        ngControl="firstName"
+        name="firstName"
+        placeholder="First name"
+        required
+        autofocus
+      />
+      <input
+        type="text"
+        class="form-control custom-input"
+        [(ngModel)]="model.lastName"
+        ngControl="lastName"
+        name="lastName"
+        placeholder="Last name"
+        required
+        autofocus
+      />
+      <input
+        type="text"
+        class="form-control custom-input"
+        [(ngModel)]="model.email"
+        ngControl="email"
+        name="email"
+        placeholder="Email address"
+        required
+        autofocus
+      />
+      <input
+        type="password"
+        id="inputPassword"
+        class="form-control custom-input"
+        placeholder="Password"
+        [(ngModel)]="model.password"
+        ngControl="password"
+        name="password"
+        required
+      />
+      <input
+        type="deviceId"
+        id="deviceId"
+        class="form-control custom-input"
+        placeholder="Device id"
+        [(ngModel)]="model.deviceId"
+        name="deviceId"
+        required
+      />
+      <input
+        type="number"
+        id="phoneNumber"
+        class="form-control custom-input"
+        placeholder="Phone number"
+        [(ngModel)]="model.phoneNumber"
+        name="phoneNumber"
+        required
+      />
+      <input
+        type="text"
+        id="country"
+        class="form-control custom-input"
+        placeholder="Country"
+        [(ngModel)]="model.country"
+        name="country"
+        required
+      />
+      <input
+        type="text"
+        id="locality"
+        class="form-control custom-input"
+        placeholder="Locality"
+        [(ngModel)]="model.locality"
+        name="locality"
+        required
+      />
+      <button class="btn btn-lg btn-primary custom-submit-button" type="submit">
+        Register
+      </button>
+    </form>
+  </mat-card>
 </div>

@@ -1,13 +1,30 @@
 <div class="user-content">
   <app-right-side-panel></app-right-side-panel>
 
-  <div class="text-light upper-side" style=" background-color: rgba(52,58,64,0.8)">
-   
-    <div class="pie-chart-container">
-      <canvas id="doughnut-chart"></canvas>
+  <div class="text-light upper-side">
+    <div
+      class="upper-side-left"
+      style=" background-color: rgba(52,58,64,0.8)"
+    >
+    <img class="profile-picture" [src]="'data:image/jpg;base64,'+ userInfo.profilePictureURL" />
+  <h5 class="text-center nameAttribute card text-dark"> {{userInfo.firstName}}   {{userInfo.lastName}}  </h5>
+  <h5 class="text-center locationAttribute card text-dark"> {{userInfo.location}}</h5>
+  <h5 class=" text-center phoneNumberAttribute card text-dark"> +40{{userInfo.phoneNumber}}  </h5>
+  <h5 class=" text-center emailAttribute card text-dark"> {{userInfo.email}}</h5>
+  </div>
+    <div
+      class="upper-side-right "
+      style=" background-color: rgba(52,58,64,0.8)"
+    >
+      <div class="pie-chart-container">
+        <canvas id="doughnut-chart"></canvas>
+      </div>
     </div>
   </div>
-  <div class="text-light lower-side" style=" background-color: rgba(52,58,64,0.8)">
+  <div
+    class="text-light lower-side"
+    style=" background-color: rgba(52,58,64,0.8)"
+  >
     <div class="row">
       <div class="treeContainer  text-dark">
         <cdk-tree [dataSource]="dataSource" [treeControl]="treeControl">

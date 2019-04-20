@@ -24,8 +24,6 @@ public class SocketFunctions {
 	}
 
 	public void sendNewPowerConsumptionNotification(PowerSource solarPowerSource, PowerSource normalPowerSource) {
-		//Double solarPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(solarPowerSource.getCircuits()) * 100) / 100;
-		//Double normalPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(normalPowerSource.getCircuits()) * 100) / 100;
 
 		
 		Double solarPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(powerSourceRepository.getPowerSourceById(1).getCircuits()) * 100) / 100;
@@ -33,8 +31,7 @@ public class SocketFunctions {
 		Double normalPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(powerSourceRepository.getPowerSourceById(2).getCircuits()) * 100) / 100;
 		
 		
-		//System.out.println(solarPowerConsumed.toString() + ' '+ normalPowerConsumed.toString()+ ' '+solarPowerConsumed1.toString()+' '+normalPowerConsumed1.toString());
-		notificationBroadcaster.sendOutletPower("New power consumption : Solar panel : " + solarPowerConsumed
+		notificationBroadcaster.sendNotification("New power consumption : Solar panel : " + solarPowerConsumed
 				+ " kW -> " + calculatePercentage(solarPowerConsumed, solarPowerConsumed + normalPowerConsumed) + "%,"
 				+ " Normal power source : " + normalPowerConsumed + " kW -> "
 				+ calculatePercentage(normalPowerConsumed, solarPowerConsumed + normalPowerConsumed) + "%,",solarPowerSource.getDevice().getUsers().get(0).getId());

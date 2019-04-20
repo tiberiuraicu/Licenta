@@ -1,20 +1,34 @@
 package com.server.processing.REST;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Vector;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -55,6 +69,9 @@ public class AuthentificationFunctions {
 	@Autowired
 	DatabaseFunctions databaseFunctions;
 
+	Properties prop = new Properties();
+	String baseServerStockUrl = "ServerStock";
+
 	public String login(Map<String, String> json) throws ServletException {
 		if (json.get("email") == null || json.get("password") == null) {
 			throw new ServletException("Please fill in username and password");
@@ -74,11 +91,17 @@ public class AuthentificationFunctions {
 		return "nu exista";
 	}
 
-	public String registerUser(Map<String, String> userForm) {
+	public String registerUser(Map<String, String> userForm)
+			throws JsonParseException, JsonMappingException, IOException {
 
 		User user = new User();
 		user.setEmail(userForm.get("email"));
 		user.setPassword(userForm.get("password"));
+		user.setCountry(userForm.get("country"));
+		user.setLocality(userForm.get("locality"));
+		user.setFirstName(userForm.get("firstName"));
+		user.setLastName(userForm.get("lastName"));
+		user.setPhoneNumber(Integer.parseInt(userForm.get("phoneNumber")));
 
 		Device device = new Device();
 		device.setId(Integer.parseInt(userForm.get("deviceId")));
@@ -90,8 +113,66 @@ public class AuthentificationFunctions {
 		return "user inregistrat";
 
 	}
+
 	public int getID(String email) {
 		return userRepository.getUserByEmail(email).getId();
+
+	}
+
+	public String updateUser(Map<String, String> userForm) {
+
+		User user = userRepository.findById(Integer.parseInt(userForm.get("userId")));
+		if (userForm.get("email") != "" && userForm.get("email") != null)
+			user.setEmail(userForm.get("email"));
+		if (userForm.get("password") != "" && userForm.get("password") != null)
+			user.setPassword(userForm.get("password"));
+		if (userForm.get("country") != "" && userForm.get("country") != null)
+			user.setCountry(userForm.get("country"));
+		if (userForm.get("locality") != "" && userForm.get("locality") != null)
+			user.setLocality(userForm.get("locality"));
+		if (userForm.get("firstName") != "" && userForm.get("firstName") != null)
+			user.setFirstName(userForm.get("firstName"));
+		if (userForm.get("lastName") != "" && userForm.get("lastName") != null)
+			user.setLastName(userForm.get("lastName"));
+		if (userForm.get("phoneNumber") != "" && userForm.get("phoneNumber") != null)
+			user.setPhoneNumber(Integer.parseInt(userForm.get("phoneNumber")));
+
+		userRepository.save(user);
+
+		return null;
+	}
+
+	public ResponseEntity<Object> setProfilePicture(MultipartFile file, String userId) throws IOException {
+
+		File profilePicture = new File(baseServerStockUrl + userId + "/" + file.getOriginalFilename());
+		profilePicture.getParentFile().mkdirs();
+		profilePicture.createNewFile();
+		FileOutputStream fout = new FileOutputStream(profilePicture);
+		fout.write(file.getBytes());
+		fout.close();
+
+		FileOutputStream fileOutputStream = new FileOutputStream(
+				new File(baseServerStockUrl + userId + "/profile.properties"));
+		prop.load(new FileInputStream(baseServerStockUrl + userId + "/profile.properties"));
+		prop.setProperty("profile-picture", file.getOriginalFilename());
+		prop.store(fileOutputStream, "Properties");
+
+		return new ResponseEntity<>("File is uploaded successfully", HttpStatus.OK);
+
+	}
+
+	public ResponseEntity<byte[]> getProfilePicture(String userId) throws IOException {
+
+		prop.load(new FileInputStream(baseServerStockUrl + userId + "/profile.properties"));
+		File profilePicture = new File(baseServerStockUrl + userId + "/" + prop.getProperty("profile-picture"));
+
+		FileSystemResource fileResource = new FileSystemResource(profilePicture);
+		byte[] base64ProfilePicture = Base64.getEncoder().encode(IOUtils.toByteArray(fileResource.getInputStream()));
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("profile-picture", fileResource.getFilename());
+
+		return ResponseEntity.ok().headers(headers).body(base64ProfilePicture);
 
 	}
 

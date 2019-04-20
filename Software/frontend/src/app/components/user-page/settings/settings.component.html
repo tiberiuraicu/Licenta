@@ -2,7 +2,7 @@
   <div class="card-header">User settings</div>
   <div class="card-body">
     <mat-form-field>
-      <input matInput  [(ngModel)]="model.firstName"  type="text" />
+      <input matInput [(ngModel)]="model.firstName" type="text" />
       <mat-placeholder class="placeholder">First Name</mat-placeholder>
     </mat-form-field>
     <mat-form-field>
@@ -33,10 +33,17 @@
       <input matInput [(ngModel)]="model.street" type="text" />
       <mat-placeholder class="placeholder">Street</mat-placeholder>
     </mat-form-field>
+    <p style="float:left">Profile picture</p>
+    <button style="float:left" mat-raised-button class="fileButton" (click)="fileInput.click()">
+      <span>Select</span>
+      <input
+        #fileInput
+        type="file"
+        (change)="onFileInput($event)"
+        style="display:none;"
+      />
+    </button>
+
     <button mat-raised-button (click)="onSubmit()">Save</button>
   </div>
-</mat-card>
-
-<mat-card class="smart-home-settings bg-dark text-light mat-elevation-z24">
-  <div class="card-header">Smart home settings</div>
 </mat-card>

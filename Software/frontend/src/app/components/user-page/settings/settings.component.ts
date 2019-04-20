@@ -1,14 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
+import { Http,Headers } from "@angular/http";
+import { modelGroupProvider } from '@angular/forms/src/directives/ng_model_group';
 
 @Component({
-  selector: 'app-settings',
-  templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss']
+  selector: "app-settings",
+  templateUrl: "./settings.component.html",
+  styleUrls: ["./settings.component.scss"]
 })
 export class SettingsComponent implements OnInit {
+ 
 
-  constructor() { }
+  selectedProfilePicture: File;
+
+  constructor(private http: Http) {}
+
   model = {
+    userId: localStorage.getItem("userId"),
     firstName: "",
     lastName: "",
     email: "",
@@ -17,10 +24,55 @@ export class SettingsComponent implements OnInit {
     country: "",
     locality: "",
     street: ""
-  }
-  ngOnInit() {
-  }
+  };
+
+  upload;
+
+  ngOnInit() {}
   onSubmit() {
-    console.log(this.model)
+    this.updateUserProfilePicture();
+    this.updateUserData();
   }
-}
+  onFileInput(event) {
+    this.selectedProfilePicture = <File>event.target.files[0];
+  }
+
+  updateUserProfilePicture() {
+    var userAuthentificationHeader = new Headers({
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      userId:localStorage.getItem("currentId")
+    });
+    if (
+      this.selectedProfilePicture.type == "image/jpeg" ||
+      this.selectedProfilePicture.type == "image/png"
+    ) {
+      const formData = new FormData();
+      formData.append(
+        "file",
+        this.selectedProfilePicture,
+        this.selectedProfilePicture.name
+      );
+      this.http
+        .post("http://localhost:8080/user/updateUserProfilePicture", formData, {
+          headers: userAuthentificationHeader
+        })
+        .subscribe(response => {
+          console.log(response);
+        });
+    }
+  }
+  updateUserData() {
+    var userAuthentificationHeader = new Headers({
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      userId:localStorage.getItem("currentId")
+    });
+      this.http
+        .post("http://localhost:8080/user/updateUserData", this.model, {
+          headers: userAuthentificationHeader
+        })
+        .subscribe(response => {
+          console.log(response);
+        });
+    }
+  }
+

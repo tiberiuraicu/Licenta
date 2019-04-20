@@ -23,6 +23,7 @@ import com.server.devicesInstructionsSender.InstructionsSender;
 import com.server.entites.Circuit;
 import com.server.entites.Consumer;
 import com.server.entites.Sensor;
+import com.server.socket.NotificationBroadcaster;
 
 @Component
 public class RestMapPageFunctions {
@@ -35,12 +36,14 @@ public class RestMapPageFunctions {
 	CircuitRepository circuitRepository;
 	@Autowired
 	InstructionsSender instructionsSender;
+	@Autowired
+	NotificationBroadcaster notificationBroadcaster;
 
 	public String getStateForConsumers() {
 		JsonArray consumersState = new JsonArray();
 
-		for (String consumerName  : consumerRepository.findAllNotNull()) {
-			
+		for (String consumerName : consumerRepository.findAllNotNull()) {
+
 			JsonObject consumer = new JsonObject();
 			consumer.addProperty("name", consumerName);
 			if (consumerName.contains("sensor")) {
@@ -207,6 +210,8 @@ public class RestMapPageFunctions {
 
 	public String changeSensorState(Map<String, String> sensor) {
 		instructionsSender.turnOnOffTheDevice(sensor.get("name"), sensor.get("state"));
+		notificationBroadcaster.sendNotification("Sensor with the name " + sensor.get("name") + " has been turned off",
+				sensorRepository.findTopByNameOrderByIdDesc(sensor.get("name")).getCircuit().getDevice().getUsers().get(0).getId());
 		return "Sensor state saved";
 	}
 
@@ -216,17 +221,17 @@ public class RestMapPageFunctions {
 	}
 
 	public Double getAllConsumedPowerFromHomeForToday() {
-	
+
 		Double consumerPowerConsumedToday = 0.0;
 		Double sensorPowerConsumedToday = 0.0;
-		
+
 		for (int i = 0; i <= Integer.parseInt(LocalDateTime.now().toString().substring(11, 13)); i++) {
 			String hourIndex = Integer.toString(i).length() == 2 ? Integer.toString(i) : "0" + i;
 
 			Double consumersHourlyConsumption = 0.0;
-			
+
 			for (String consumerName : consumerRepository.findAllNotNull()) {
-				
+
 				Double lastHourConsumerAverageConsumption = 0.0;
 				try {
 
@@ -241,8 +246,7 @@ public class RestMapPageFunctions {
 					consumersHourlyConsumption += lastHourConsumerAverageConsumption;
 			}
 			consumerPowerConsumedToday += consumersHourlyConsumption;
-			
-			
+
 			Double sensorsHourlyConsumption = 0.0;
 			for (String sensorName : sensorRepository.findAllNotNull()) {
 				Double lastHourSensorAverageConsumption = 0.0;
@@ -262,15 +266,14 @@ public class RestMapPageFunctions {
 
 		return consumerPowerConsumedToday + sensorPowerConsumedToday;
 	}
-	
+
 	public String getAllConsumedPowerFromHomeForTodayAndThisMonth() {
 
 		JsonObject todayAndThisMonthConsumption = new JsonObject();
-		Double value=getAllConsumedPowerFromHomeForToday();
+		Double value = getAllConsumedPowerFromHomeForToday();
 		todayAndThisMonthConsumption.addProperty("today", value);
-		todayAndThisMonthConsumption.addProperty("thisMonth", value
-				* Integer.parseInt(LocalDateTime.now().toString().substring(8, 10)));
-		System.out.println(todayAndThisMonthConsumption.toString());
+		todayAndThisMonthConsumption.addProperty("thisMonth",
+				value * Integer.parseInt(LocalDateTime.now().toString().substring(8, 10)));
 		return todayAndThisMonthConsumption.toString();
 
 	}
