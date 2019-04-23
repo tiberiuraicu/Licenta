@@ -54,7 +54,7 @@ public class RabbitConfiguration {
 	@Bean
 	@Qualifier("queueOutlet")
 	public Queue queueOutlet() {
-		return new Queue(Constants.QUEUE_OUTLET);
+		return new Queue(c.QUEUE_OUTLET);
 	}
 
 	// create the queue for getting the switch information

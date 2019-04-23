@@ -26,7 +26,7 @@ public class RabbitConfiguration {
 
 	@Bean
 	@Qualifier("queueInstructions")
-	public Queue queueConsumer() {
+	public Queue queueInstructions() {
 		return new Queue(Constants.QUEUE_INSTRUCTION);
 	}
 

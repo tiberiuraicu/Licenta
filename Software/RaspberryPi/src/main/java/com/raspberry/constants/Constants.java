@@ -1,9 +1,11 @@
 package com.raspberry.constants;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 public class Constants {
+	
 	static final Properties prop = new Properties();
 	// the exchange for sending info to server
 	public static String SERVER_EXCHANGE_NAME;
@@ -26,7 +28,7 @@ public class Constants {
 	public static String CONSUMER_KEY;
 
 	// the queues through which is received the data from sensors
-	public static String QUEUE_OUTLET;
+	public  String QUEUE_OUTLET;
 	public static String QUEUE_SWITCH;
 	public static String QUEUE_SENSOR;
 
@@ -40,6 +42,16 @@ public class Constants {
 
 	//the key with which the instrunctions from server are encrypted
 	public static String INSTRUCTION_KEY;
+	
+public Constants() {
+	try {
+		prop.load(new FileInputStream("config.config"));
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	QUEUE_OUTLET=prop.getProperty("QUEUE_OUTLET");
+	}
 
 	static {
 		try {
@@ -59,7 +71,7 @@ public class Constants {
 
 			CONSUMER_KEY = prop.getProperty("CONSUMER_KEY");
 
-			QUEUE_OUTLET = prop.getProperty("QUEUE_OUTLET");
+		
 			QUEUE_SWITCH = prop.getProperty("QUEUE_SWITCH");
 			QUEUE_SENSOR = prop.getProperty("QUEUE_SENSOR");
 

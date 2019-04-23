@@ -5,7 +5,7 @@
 	<groupId>s</groupId>
 	<artifactId>SendSensorData</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-
+	<packaging>jar</packaging>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -18,7 +18,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.7</java.version>
 		<spring-cloud.version>Dalston.SR3</spring-cloud.version>
-		<start-class>senderSpring.Main</start-class>
+		<start-class>com.sender.SendMain</start-class>
 	</properties>
 
 
@@ -93,4 +93,15 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+
+		</plugins>
+	</build>
+
 </project>

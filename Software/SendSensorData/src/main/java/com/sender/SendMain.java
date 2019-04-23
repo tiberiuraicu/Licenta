@@ -3,12 +3,15 @@ package com.sender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import com.sender.rabbitMQSender.DataInfoSenderToRaspberry;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages={
+		"com.sender"})
 @EnableScheduling
+@EnableAutoConfiguration
 public class SendMain implements CommandLineRunner {
 	
 	@Autowired
