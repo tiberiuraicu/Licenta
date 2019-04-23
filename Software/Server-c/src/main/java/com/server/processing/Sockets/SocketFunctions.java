@@ -14,27 +14,36 @@ public class SocketFunctions {
 
 	@Autowired
 	NotificationBroadcaster notificationBroadcaster;
-	
+
 	@Autowired
 	PowerSourceRepository powerSourceRepository;
 
 	public double calculatePercentage(double obtained, double total) {
 
-		return (double) Math.round((obtained * 100 / total)* 100) / 100;
+		return (double) Math.round((obtained * 100 / total) * 100) / 100;
 	}
 
 	public void sendNewPowerConsumptionNotification(PowerSource solarPowerSource, PowerSource normalPowerSource) {
+		Double oldSolarPowerConsumed = 0.0;
 
-		
-		Double solarPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(powerSourceRepository.getPowerSourceById(1).getCircuits()) * 100) / 100;
-		
-		Double normalPowerConsumed = (double) Math.round(calculateConsumedPowerForPowerSource(powerSourceRepository.getPowerSourceById(2).getCircuits()) * 100) / 100;
-		
-		
-		notificationBroadcaster.sendNotification("New power consumption : Solar panel : " + solarPowerConsumed
-				+ " kW -> " + calculatePercentage(solarPowerConsumed, solarPowerConsumed + normalPowerConsumed) + "%,"
-				+ " Normal power source : " + normalPowerConsumed + " kW -> "
-				+ calculatePercentage(normalPowerConsumed, solarPowerConsumed + normalPowerConsumed) + "%,",solarPowerSource.getDevice().getUsers().get(0).getId());
+		Double oldNormalPowerConsumed = 0.0;
+
+		Double solarPowerConsumed = (double) Math.round(
+				calculateConsumedPowerForPowerSource(powerSourceRepository.getPowerSourceById(1).getCircuits()) * 100)
+				/ 100;
+
+		Double normalPowerConsumed = (double) Math.round(
+				calculateConsumedPowerForPowerSource(powerSourceRepository.getPowerSourceById(2).getCircuits()) * 100)
+				/ 100;
+		if (oldSolarPowerConsumed != solarPowerConsumed && oldNormalPowerConsumed != normalPowerConsumed)
+			notificationBroadcaster.sendNotification(
+					"New power consumption : Solar panel : " + solarPowerConsumed + " kW -> "
+							+ calculatePercentage(solarPowerConsumed, solarPowerConsumed + normalPowerConsumed) + "%,"
+							+ " Normal power source : " + normalPowerConsumed + " kW -> "
+							+ calculatePercentage(normalPowerConsumed, solarPowerConsumed + normalPowerConsumed) + "%,",
+					solarPowerSource.getDevice().getUsers().get(0).getId());
+		oldSolarPowerConsumed = solarPowerConsumed;
+		oldNormalPowerConsumed = normalPowerConsumed;
 	}
 
 	public double calculateConsumedPowerForPowerSource(List<Circuit> circuits) {
