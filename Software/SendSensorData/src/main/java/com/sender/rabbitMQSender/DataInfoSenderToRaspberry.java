@@ -13,6 +13,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.Properties;
 
@@ -39,12 +41,13 @@ public class DataInfoSenderToRaspberry {
 	public void sendData() throws JsonProcessingException, InterruptedException {
 
 		String cvsSplitBy = ",";
-
-		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(Constants.SENSOR_DATA_CSV))) {
+		InputStream in = getClass().getResourceAsStream(Constants.SENSOR_DATA_CSV); 
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		try {
 
 			String line = "";
 			// iterate trough every line from CSV
-			while ((line = bufferedReader.readLine()) != null) {
+			while ((line = reader.readLine()) != null) {
 				System.out.println(line);
 				String[] lineValues = line.split(cvsSplitBy);
 				if (lineValues[0].equals("name"))
@@ -74,7 +77,10 @@ public class DataInfoSenderToRaspberry {
 
 	private void sendOutletValues(Double powerConsumed, String outletName) throws FileNotFoundException, IOException {
 
-		prop.load(new FileInputStream("devicesState.config"));
+		InputStream in = getClass().getResourceAsStream("/devicesState.config"); 
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		
+		prop.load(reader);
 
 		Consumer outlet = new Outlet();
 		outlet.setName(outletName);
@@ -95,7 +101,10 @@ public class DataInfoSenderToRaspberry {
 
 	private void sendSwitchValues(Double powerConsumed, String switchName) throws FileNotFoundException, IOException {
 
-		prop.load(new FileInputStream("devicesState.config"));
+		InputStream in = getClass().getResourceAsStream("/devicesState.config"); 
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		
+		prop.load(reader);
 
 		Consumer switcher = new Switch();
 		switcher.setName(switchName);
@@ -118,7 +127,10 @@ public class DataInfoSenderToRaspberry {
 
 	private void sendSensorValues(String motionDetected, String sensorName) throws FileNotFoundException, IOException {
 
-		prop.load(new FileInputStream("devicesState.config"));
+		InputStream in = getClass().getResourceAsStream("/devicesState.config"); 
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		
+		prop.load(reader);
 
 		Sensor sensor = new Sensor();
 		sensor.setName(sensorName);

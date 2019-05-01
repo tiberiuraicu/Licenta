@@ -42,6 +42,7 @@ public class MqReceiverFunctions {
 	ObjectMapper mapper = new ObjectMapper();
 
 	public String consumerDataProcess(byte[] consumerMessageBody) {
+		System.out.println("-------");
 		String returnMessage = null;
 		try {
 			// transform the received message from byte to String
