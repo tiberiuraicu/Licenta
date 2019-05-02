@@ -17,9 +17,9 @@ public class Consumer {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Integer id;
 	
-	protected String type;
+	protected String name;
 
-	protected Integer deviceId;
+	protected String type;
 
 	protected double powerConsumed;
 	
@@ -33,7 +33,6 @@ public class Consumer {
 	@JoinColumn(name = "circuit_id")
 	protected Circuit circuit;
 	
-	protected String name;
 
 	public Consumer(double powerConsumed, int state, String name) {
 		super();
@@ -60,14 +59,6 @@ public class Consumer {
 
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	public Integer getDeviceId() {
-		return deviceId;
-	}
-
-	public void setDeviceId(Integer deviceId) {
-		this.deviceId = deviceId;
 	}
 
 	public double getPowerConsumed() {
