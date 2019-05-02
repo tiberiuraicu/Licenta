@@ -20,7 +20,7 @@ import com.google.gson.JsonObject;
 import com.server.processing.REST.RestMapPageFunctions;
 import com.server.processing.REST.HomePageFunctions;
 import com.server.processing.REST.AuthentificationFunctions;
-import com.server.socket.DataBroadcaster;
+
 
 @RestController
 @RequestMapping("/resources")
@@ -35,8 +35,6 @@ public class ResourcesControllers {
 	@Autowired
 	HomePageFunctions homePageFunctions;
 
-	@Autowired
-	DataBroadcaster dataBroadcaster;
 
 	@RequestMapping(value = "/last60Consumers", method = RequestMethod.POST)
 	public String getTotalPowerConsumed(@RequestBody Map<String, String> json)
@@ -53,13 +51,13 @@ public class ResourcesControllers {
 	@RequestMapping(value = "/getLastRecordForPieChart", method = RequestMethod.POST)
 	public String initializePieChart(@RequestBody Map<String, String> json)
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
-		return dataBroadcaster.sendTotalPowerConsumed(json.get("userId"));
+		return homePageFunctions.getTotalPowerConsumed();
 	}
 
 	@RequestMapping(value = "/getLastRecordOfEveryOutlet", method = RequestMethod.POST)
 	public String initializeLineChart(@RequestBody Map<String, String> json)
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
-		return dataBroadcaster.sendOutletPower(json.get("userId"));
+		return homePageFunctions.getLastRegistratedPowerConsumedForEveryOutlet();
 	}
 
 	@RequestMapping(value = "/getCircuits", method = RequestMethod.GET)
@@ -102,7 +100,7 @@ public class ResourcesControllers {
 			throws JsonParseException, JsonMappingException, IOException, ServletException, InterruptedException {
 		Vector<String> x = new Vector<String>();
 		Thread t = new Thread(() -> {
-			x.add(restMapPageFunctions.getAllConsumedPowerFromHomeForTodayAndThisMonth());
+			x.add(homePageFunctions.getAllConsumedPowerFromHomeForTodayAndThisMonth());
 		});
 		t.start();
 		t.join();

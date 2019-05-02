@@ -31,8 +31,8 @@ public class RestConfig {
 	public FilterRegistrationBean jwtFilter() {
 		final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
 		registrationBean.setFilter(new JwtFilter());
-		//registrationBean.addUrlPatterns("/resources/*");
-		registrationBean.addUrlPatterns("/rest1/*");
+		registrationBean.addUrlPatterns("/resources/*");
+		//registrationBean.addUrlPatterns("/rest1/*");
 		return registrationBean;
 	}
 }

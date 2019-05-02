@@ -1,7 +1,6 @@
 package com.server.rest.controllers;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.Map;
 import javax.servlet.ServletException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,18 +13,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.server.database.repositories.ConsumerRepository;
 import com.server.database.repositories.UserRepository;
 import com.server.entites.User;
 import com.server.processing.Database.DatabaseFunctions;
 import com.server.processing.REST.AuthentificationFunctions;
-import com.server.socket.DataBroadcaster;
 
 @RestController
 @RequestMapping("/user")

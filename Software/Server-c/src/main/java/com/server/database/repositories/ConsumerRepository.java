@@ -4,8 +4,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.scheduling.annotation.Async;
-
 import com.server.entites.Consumer;
 
 // This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
@@ -25,14 +23,16 @@ public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
 	@Query(value = "SELECT name FROM Consumer WHERE circuit != null")
 	List<String> findAllNotNull();
-	
-	@Query(value = "SELECT powerConsumed FROM Consumer WHERE name= :name and timestamp like CONCAT('%',:time,'%')")
-	List<Double> findConsumerRecordAtSpecificHour(@Param("name") String name,@Param("time") String time);
-	
-	
-	List<Consumer> findAllByName(String name);
-	
-	@Query(value = "SELECT sum(powerConsumed)/count(powerConsumed) FROM Consumer WHERE name= :name and timestamp like CONCAT('%',:time,'%')")
-	Double findSumConsumerRecordAtSpecificHour(@Param("name") String name,@Param("time") String time);
 
+	@Query(value = "SELECT powerConsumed FROM Consumer WHERE name= :name and timestamp like CONCAT('%',:time,'%')")
+	List<Double> findConsumerRecordAtSpecificHour(@Param("name") String name, @Param("time") String time);
+
+	List<Consumer> findAllByName(String name);
+
+	@Query(value = "SELECT sum(powerConsumed)/count(powerConsumed) FROM Consumer WHERE name= :name and timestamp like CONCAT('%',:time,'%')")
+	Double findSumConsumerRecordAtSpecificHour(@Param("name") String name, @Param("time") String time);
+
+	@Query(value = "SELECT sum(power_consumed)/count(power_consumed) FROM consumer "
+			+ "WHERE name= :name and timestamp like CONCAT('%',:time,'%')", nativeQuery = true)
+	Double findSumConsumerRecordAtSpecificDay(@Param("name") String name, @Param("time") String time);
 }

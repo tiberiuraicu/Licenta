@@ -22,11 +22,11 @@ public class SocketFunctions {
 
 		return (double) Math.round((obtained * 100 / total) * 100) / 100;
 	}
+	Double oldSolarPowerConsumed = 0.0;
 
+	Double oldNormalPowerConsumed = 0.0;
 	public void sendNewPowerConsumptionNotification(PowerSource solarPowerSource, PowerSource normalPowerSource) {
-		Double oldSolarPowerConsumed = 0.0;
-
-		Double oldNormalPowerConsumed = 0.0;
+		
 
 		Double solarPowerConsumed = (double) Math.round(
 				calculateConsumedPowerForPowerSource(powerSourceRepository.getPowerSourceById(1).getCircuits()) * 100)
@@ -35,6 +35,7 @@ public class SocketFunctions {
 		Double normalPowerConsumed = (double) Math.round(
 				calculateConsumedPowerForPowerSource(powerSourceRepository.getPowerSourceById(2).getCircuits()) * 100)
 				/ 100;
+		
 		if (oldSolarPowerConsumed != solarPowerConsumed && oldNormalPowerConsumed != normalPowerConsumed)
 			notificationBroadcaster.sendNotification(
 					"New power consumption : Solar panel : " + solarPowerConsumed + " kW -> "

@@ -72,7 +72,7 @@ export class UserService {
             datasets: [
               {
                 label: "Outlet power consumed",
-                data: last60RecordsPowerConsumed,
+                data: last60RecordsPowerConsumed.reverse(),
                 backgroundColor: ["rgba(248, 249, 250, 0.2)"],
                 borderColor: ["rgba(60, 148, 150, 1)"],
 

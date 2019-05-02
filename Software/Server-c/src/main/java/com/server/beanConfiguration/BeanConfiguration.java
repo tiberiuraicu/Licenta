@@ -1,7 +1,5 @@
 package com.server.beanConfiguration;
 
-import java.util.concurrent.Executor;
-
 import org.apache.log4j.Logger;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -14,8 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-
 import com.server.constants.Constants;
 import com.server.devicesDataReceiver.Receiver;
 import com.server.devicesInstructionsSender.InstructionsSender;
@@ -25,7 +21,6 @@ import com.server.processing.MqReceiver.MqReceiverFunctions;
 import com.server.processing.REST.RestMapPageFunctions;
 import com.server.processing.REST.HomePageFunctions;
 import com.server.processing.REST.AuthentificationFunctions;
-import com.server.socket.DataBroadcaster;
 import com.server.socket.NotificationBroadcaster;
 
 @Configuration
@@ -34,11 +29,6 @@ import com.server.socket.NotificationBroadcaster;
 public class BeanConfiguration {
 
 	final static Logger logger = Logger.getLogger(BeanConfiguration.class);
-
-	@Bean(name = "threadPoolTaskExecutor")
-	public Executor threadPoolTaskExecutor() {
-		return new ThreadPoolTaskExecutor();
-	}
 
 	@Bean
 	public CachingConnectionFactory connectionFactory() {
@@ -122,11 +112,6 @@ public class BeanConfiguration {
 	@Bean
 	public HomePageFunctions homePageFunctions() {
 		return new HomePageFunctions();
-	}
-
-	@Bean
-	public DataBroadcaster dataBroadcaster() {
-		return new DataBroadcaster();
 	}
 
 	@Bean

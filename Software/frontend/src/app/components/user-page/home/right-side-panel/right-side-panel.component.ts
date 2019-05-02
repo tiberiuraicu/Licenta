@@ -75,24 +75,22 @@ export class RightSidePanelComponent implements OnInit {
   };
 
   getAllConsumedPowerFromHomeForTodayAndThisMonth() {
+
       
     
     this.userService
       .getAllConsumedPowerFromHomeForTodayAndThisMonth()
       .subscribe(response => {
-        console.log("--------------------------------------------------------------------------------------------------------------------------------------")
-
-        console.log(response)
+   
         this.gaugeValueForToday =
           Math.round(
-            (parseFloat(JSON.parse(response._body)[0]["today"]) / 1000) * 100
+            (parseFloat(JSON.parse(response._body)[0]["today"])) * 100
           ) / 100;
         this.gaugeValueForThisMonth =
           Math.round(
-            (parseFloat(JSON.parse(response._body)[0]["thisMonth"]) / 1000) *
+            (parseFloat(JSON.parse(response._body)[0]["thisMonth"])) *
               100
           ) / 100;
       });
-     
   }
 }

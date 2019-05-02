@@ -4,19 +4,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Vector;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -24,28 +18,17 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
 import com.server.database.repositories.SensorRepository;
 import com.server.database.repositories.UserRepository;
-import com.server.entites.Circuit;
-import com.server.entites.Consumer;
 import com.server.entites.Device;
-import com.server.entites.Sensor;
 import com.server.entites.User;
 import com.server.processing.Database.DatabaseFunctions;
-import com.server.socket.DataBroadcaster;
-
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -73,13 +56,9 @@ public class AuthentificationFunctions {
 	String baseServerStockUrl = "ServerStock";
 
 	public String login(Map<String, String> json) throws ServletException {
-		if (json.get("email") == null || json.get("password") == null) {
-			throw new ServletException("Please fill in username and password");
-		}
 
 		String email = json.get("email");
 		String password = json.get("password");
-		System.out.println(email + " " + password);
 
 		User user = userRepository.getUserByEmail(email);
 		if (user != null)
@@ -116,7 +95,6 @@ public class AuthentificationFunctions {
 
 	public int getID(String email) {
 		return userRepository.getUserByEmail(email).getId();
-
 	}
 
 	public String updateUser(Map<String, String> userForm) {
@@ -144,34 +122,42 @@ public class AuthentificationFunctions {
 
 	public ResponseEntity<Object> setProfilePicture(MultipartFile file, String userId) throws IOException {
 
-		File profilePicture = new File(baseServerStockUrl + userId + "/" + file.getOriginalFilename());
-		profilePicture.getParentFile().mkdirs();
-		profilePicture.createNewFile();
-		FileOutputStream fout = new FileOutputStream(profilePicture);
-		fout.write(file.getBytes());
-		fout.close();
+		try {
+			File profilePicture = new File(baseServerStockUrl + userId + "/" + file.getOriginalFilename());
+			profilePicture.getParentFile().mkdirs();
+			profilePicture.createNewFile();
+			FileOutputStream fout = new FileOutputStream(profilePicture);
+			fout.write(file.getBytes());
+			fout.close();
 
-		FileOutputStream fileOutputStream = new FileOutputStream(
-				new File(baseServerStockUrl + userId + "/profile.properties"));
-		prop.load(new FileInputStream(baseServerStockUrl + userId + "/profile.properties"));
-		prop.setProperty("profile-picture", file.getOriginalFilename());
-		prop.store(fileOutputStream, "Properties");
+			FileOutputStream fileOutputStream = new FileOutputStream(
+					new File(baseServerStockUrl + userId + "/profile.properties"));
+			prop.load(new FileInputStream(baseServerStockUrl + userId + "/profile.properties"));
+			prop.setProperty("profile-picture", file.getOriginalFilename());
+			prop.store(fileOutputStream, "Properties");
+		} catch (Exception e) {
 
+		}
 		return new ResponseEntity<>("File is uploaded successfully", HttpStatus.OK);
 
 	}
 
 	public ResponseEntity<byte[]> getProfilePicture(String userId) throws IOException {
+		HttpHeaders headers = null;
+		byte[] base64ProfilePicture = null;
+		try {
 
-		prop.load(new FileInputStream(baseServerStockUrl + userId + "/profile.properties"));
-		File profilePicture = new File(baseServerStockUrl + userId + "/" + prop.getProperty("profile-picture"));
+			prop.load(new FileInputStream(baseServerStockUrl + userId + "/profile.properties"));
+			File profilePicture = new File(baseServerStockUrl + userId + "/" + prop.getProperty("profile-picture"));
 
-		FileSystemResource fileResource = new FileSystemResource(profilePicture);
-		byte[] base64ProfilePicture = Base64.getEncoder().encode(IOUtils.toByteArray(fileResource.getInputStream()));
+			FileSystemResource fileResource = new FileSystemResource(profilePicture);
+			base64ProfilePicture = Base64.getEncoder().encode(IOUtils.toByteArray(fileResource.getInputStream()));
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("profile-picture", fileResource.getFilename());
+			headers = new HttpHeaders();
+			headers.add("profile-picture", fileResource.getFilename());
+		} catch (Exception e) {
 
+		}
 		return ResponseEntity.ok().headers(headers).body(base64ProfilePicture);
 
 	}

@@ -13,8 +13,10 @@ public class Receiver {
 
 	@Autowired
 	MqReceiverFunctions receiverFunctions;
+	
 	@Autowired
 	PowerSourceRepository powerSourceRepository;
+	
 	final static Logger logger = Logger.getLogger(Receiver.class);
 
 	@RabbitListener(queues = "Consumer")

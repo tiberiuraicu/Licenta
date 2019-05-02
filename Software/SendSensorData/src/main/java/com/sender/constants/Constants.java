@@ -6,7 +6,7 @@ public class Constants {
 	static final Properties prop = new Properties();
 
 	// path to CSV which contains sensors and consumers data
-	public static String SENSOR_DATA_CSV="/SensorData.csv";
+	public static String SENSOR_DATA_CSV="/SensorData2.csv";
 
 	// the exchange for sending and receiving info to/from raspberry
 	public static String EXCHANGE_NAME="colector_exchange";

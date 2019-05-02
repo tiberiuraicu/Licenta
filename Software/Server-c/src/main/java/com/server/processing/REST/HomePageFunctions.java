@@ -1,27 +1,27 @@
 package com.server.processing.REST;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-
 import javax.servlet.ServletException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.google.gson.JsonObject;
 import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
+import com.server.database.repositories.SensorRepository;
 import com.server.database.repositories.UserRepository;
 import com.server.entites.Circuit;
 import com.server.entites.Consumer;
 
 @Component
 public class HomePageFunctions {
-	
+	@Autowired
+	SensorRepository sensorRepository;
 	@Autowired
 	UserRepository userRepository;
 	@Autowired
@@ -124,11 +124,38 @@ public class HomePageFunctions {
 
 	}
 
+
+	public Double getAllConsumedPowerFromHomeForToday() {
 	
 
-	
+		Double consumerPowerConsumedToday = 0.0;
+		Double sensorPowerConsumedToday = 0.0;
 
+			for (String consumerName : consumerRepository.findAllNotNull()) {
 	
+				consumerPowerConsumedToday = consumerRepository.findSumConsumerRecordAtSpecificDay(
+							consumerName,
+							LocalDateTime.now().toString().replace("T", " ").substring(0, 10));
+			}
 
-	
+			for (String sensorName : sensorRepository.findAllNotNull()) {
+		
+					sensorPowerConsumedToday = sensorRepository.findAvgOfPowerConsumedSensorAtSpecificHour(
+							sensorName,
+							LocalDateTime.now().toString().replace("T", " ").substring(0, 10));
+		}
+
+		return consumerPowerConsumedToday + sensorPowerConsumedToday;
+	}
+	public String getAllConsumedPowerFromHomeForTodayAndThisMonth() {
+
+		JsonObject todayAndThisMonthConsumption = new JsonObject();
+		Double value = getAllConsumedPowerFromHomeForToday();
+		todayAndThisMonthConsumption.addProperty("today", value);
+		todayAndThisMonthConsumption.addProperty("thisMonth",
+				value * Integer.parseInt(LocalDateTime.now().toString().substring(8, 10)));
+		return todayAndThisMonthConsumption.toString();
+
+	}
+
 }
