@@ -27,6 +27,7 @@ public class RabbitConfiguration {
 		conneFactory.setPort(Constants.RABBITMQ_PORT);
 		conneFactory.setUsername(Constants.RABBITMQ_USERNAME);
 		conneFactory.setPassword(Constants.RABBITMQ_PASSWORD);
+		
 		return conneFactory;
 	}
 
