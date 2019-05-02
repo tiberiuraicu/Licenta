@@ -21,6 +21,7 @@ public class DevicesDataReceiver {
 	//listening for the outlet data
 	@RabbitListener(queues = "queue_outlet")
 	public String outletDataReceiver(byte[] body) throws Exception {
+		System.out.println("outlet");
 		try {
 			// change byte -> String
 			String outletData = new String(body, "UTF-8");
@@ -37,6 +38,8 @@ public class DevicesDataReceiver {
 	//listening for the outlet data
 	@RabbitListener(queues = "queue_switch")
 	public String switchDataReceiver(byte[] body) throws Exception {
+		System.out.println("switch");
+
 		try {
 			// change byte -> String
 			String switchData = new String(body, "UTF-8");
@@ -54,6 +57,8 @@ public class DevicesDataReceiver {
 	//listening for sensor data
 	@RabbitListener(queues = "queue_sensor")
 	public String sensorDataReceiver(byte[] body) throws Exception {
+		System.out.println("sensor");
+
 		try {
 			// change byte -> String
 			String sensorData = new String(body, "UTF-8");

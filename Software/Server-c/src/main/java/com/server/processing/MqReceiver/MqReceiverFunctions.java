@@ -42,7 +42,6 @@ public class MqReceiverFunctions {
 	ObjectMapper mapper = new ObjectMapper();
 
 	public String consumerDataProcess(byte[] consumerMessageBody) {
-		System.out.println("-------");
 		String returnMessage = null;
 		try {
 			// transform the received message from byte to String
@@ -56,14 +55,7 @@ public class MqReceiverFunctions {
 				// get its location from database(by name) and set it
 				outlet.setLocation(consumerRepository.findTopByNameOrderByIdDesc(outlet.getName()).getLocation());
 
-//				// get its state from database(by name) and set it
-//				outlet.setState(consumerRepository.findTopByNameOrderByIdDesc(outlet.getName()).getState());
-
-//				 //if the outlet is off
-//				 if (outlet.getState() == 0)
-//					//it's power consumed is zero
-//					 outlet.setPowerConsumed(0.0);
-
+			
 				// create the link between the new arrived information of the outlet and its
 				// circuit
 				Circuit circuit = databaseFunctions.makeConsumerAndCircuitConnection(outlet,
@@ -88,15 +80,7 @@ public class MqReceiverFunctions {
 
 				// get its location from database(by name) and set it
 				switcher.setLocation(consumerRepository.findTopByNameOrderByIdDesc(switcher.getName()).getLocation());
-
-//				// get its state from database(by name) and set it
-//				switcher.setState(consumerRepository.findTopByNameOrderByIdDesc(switcher.getName()).getState());
-
-//				 //if the switcher is off
-//				 if (switcher.getState() == 0)
-//					 //it's power consumed is zero
-//					 switcher.setPowerConsumed(0.0);
-//				
+			
 
 				// create the link between the new arrived information of the switch and its
 				// circuit

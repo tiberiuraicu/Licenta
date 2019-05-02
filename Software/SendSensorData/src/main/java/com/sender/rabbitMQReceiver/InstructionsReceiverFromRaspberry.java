@@ -36,7 +36,7 @@ public class InstructionsReceiverFromRaspberry {
 		System.out.println(instruction);
 			prop.load(reader);
 			prop.setProperty(instruction.getDeviceName(), instruction.getOnOffValue());
-			prop.store(new FileOutputStream("/devicesState.config"), null);
+			prop.store(new FileOutputStream("devicesState.config"), null);
 			
 		}
 		
