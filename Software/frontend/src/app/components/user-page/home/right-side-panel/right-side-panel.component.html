@@ -1,6 +1,6 @@
 <div class="side-panel ">
   <div class="card text-white statistics" style=" background-color: rgba(52,58,64,0.8)">
-    <div class="card-header">Statistics</div>
+    <div class="card-header" style="background-color:#CC527A">Statistics</div>
     <div class="card-body">
       <div class="container">
         <div class="row">
@@ -45,19 +45,18 @@
   </div>
 
   <div class="card text-white recent-activity" style=" background-color: rgba(52,58,64,0.8)">
-    <div class="card-header">Recent Activity</div>
+    <div class="card-header" style="background-color:#CC527A">Recent Activity</div>
     <div
       class="card-body notifications"
       #notificationsPanel
       [scrollTop]="notificationsPanel.scrollHeight"
     >
-      <p
+     <mat-card
         *ngFor="let notification of notifications"
-        class="card-text notification"
+        class="card-text notification text-light"
       >
         {{ notification }}
-      </p>
+     </mat-card>
     </div>
   </div>
-  <!-- <button (click)="this.notifications=[]">Clear</button> -->
 </div>

@@ -1,0 +1,40 @@
+.user-settings {
+  height: 82%;
+  width: 40%;
+  margin-left: 10%;
+  float: left;
+  margin-top: 1%;
+  border-radius: 13px 13px 13px 13px;
+  -moz-border-radius: 13px 13px 13px 13px;
+  -webkit-border-radius: 13px 13px 13px 13px;
+  border: 0px solid #000000;
+  background-color: rgba(52, 58, 64, 0.8);
+}
+
+.user-settings .mat-focused .placeholder {
+  color: #00d318;
+}
+
+.user-settings .mat-form-field .placeholder {
+  color: aliceblue;
+}
+
+.user-settings .mat-form-field {
+  width: 90%;
+}
+
+.user-settings .card-body {
+  margin-top: 5%;
+}
+
+.user-settings .mat-raised-button {
+  width: 50%;
+  margin-left: 48%;
+  margin-top: 10%;
+}
+
+.user-settings .fileButton {
+  margin-left: 5%;
+  margin-top: 0%;
+}
+/*# sourceMappingURL=settings.component.css.map */

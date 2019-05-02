@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,iBAAiB,CAAC;EACd,UAAU,EAAC,EAAE;EACb,WAAW,EAAE,EAAE;CAChB;;AACD,AAAA,MAAM,CAAA;EACJ,UAAU,EAAE,EAAE;EACd,WAAW,EAAE,EAAE;EACf,SAAS,EAAE,IAAI;CAGhB",
+    "sources": [
+        "electric-map-right-side-panel.component.scss"
+    ],
+    "names": [],
+    "file": "electric-map-right-side-panel.component.css"
+}

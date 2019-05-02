@@ -7,10 +7,10 @@
       style=" background-color: rgba(52,58,64,0.8)"
     >
     <img class="profile-picture" [src]="'data:image/jpg;base64,'+ userInfo.profilePictureURL" />
-  <h5 class="text-center nameAttribute card text-dark"> {{userInfo.firstName}}   {{userInfo.lastName}}  </h5>
-  <h5 class="text-center locationAttribute card text-dark"> {{userInfo.location}}</h5>
-  <h5 class=" text-center phoneNumberAttribute card text-dark"> +40{{userInfo.phoneNumber}}  </h5>
-  <h5 class=" text-center emailAttribute card text-dark"> {{userInfo.email}}</h5>
+  <mat-card class="text-center nameAttribute card text-light"> {{userInfo.firstName}}   {{userInfo.lastName}}  </mat-card>
+  <mat-card class="text-center locationAttribute card text-light"> {{userInfo.location}}</mat-card>
+  <mat-card class="text-center phoneNumberAttribute card text-light"> +40{{userInfo.phoneNumber}}  </mat-card>
+  <mat-card class="text-center emailAttribute card text-light"> {{userInfo.email}}</mat-card>
   </div>
     <div
       class="upper-side-right "
@@ -26,7 +26,7 @@
     style=" background-color: rgba(52,58,64,0.8)"
   >
     <div class="row">
-      <div class="treeContainer  text-dark">
+      <mat-card class="treeContainer">
         <cdk-tree [dataSource]="dataSource" [treeControl]="treeControl">
           <!-- This is the tree node template for leaf nodes -->
           <cdk-nested-tree-node
@@ -58,7 +58,7 @@
             </div>
           </cdk-nested-tree-node>
         </cdk-tree>
-      </div>
+      </mat-card>
       <div class="line-chart-container">
         <canvas id="line-chart"></canvas>
       </div>

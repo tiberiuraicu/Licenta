@@ -73,8 +73,8 @@ export class UserService {
               {
                 label: "Outlet power consumed",
                 data: last60RecordsPowerConsumed.reverse(),
-                backgroundColor: ["rgba(248, 249, 250, 0.2)"],
-                borderColor: ["rgba(60, 148, 150, 1)"],
+                backgroundColor: ["rgba(232, 23, 93, 0.2)"],
+                borderColor: ["#E8175D"],
 
                 borderWidth: 2
               }
@@ -150,8 +150,8 @@ export class UserService {
               {
                 label: "Consumption(kW)",
                 backgroundColor: [
-                  "rgba(62, 149, 205, 1)",
-                  "rgba(247, 70, 74, 1)"
+                  "#A8A7A8",
+                  "#E8175D"
                 ],
                 data: data,
                 borderColor: "rgba(248, 249, 250, 0.4)"

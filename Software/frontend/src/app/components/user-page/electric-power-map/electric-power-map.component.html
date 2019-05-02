@@ -13,8 +13,8 @@
 
     <div
       *ngFor="let circuit of circuits"
-      class="card text-dark circuit mat-elevation-z24 "
-      style="background-color: rgba(248,249,250,1)"
+      class="card text-light circuit mat-elevation-z24 "
+      style="background-color: #474747;"
       [@fade]="circuit.hidden"
       [@extend]="{
         value: circuit.currentState,

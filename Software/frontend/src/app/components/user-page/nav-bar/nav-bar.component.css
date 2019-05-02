@@ -1,0 +1,65 @@
+ul {
+  -webkit-box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
+  box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
+  border-radius: 7px;
+  float: right;
+  list-style-type: none;
+  margin-right: 1%;
+  margin-top: 1%;
+  padding: 0;
+  overflow: hidden;
+  width: 92%;
+}
+
+li {
+  float: right;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+@-webkit-keyframes hover {
+  from {
+  }
+  to {
+    border: 0px solid #000000;
+    background-color: rgba(189, 201, 229, 0.2);
+  }
+}
+
+@keyframes hover {
+  from {
+  }
+  to {
+    border: 0px solid #000000;
+    background-color: rgba(189, 201, 229, 0.2);
+  }
+}
+
+li a:hover {
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+  -webkit-animation-name: hover;
+          animation-name: hover;
+  -webkit-animation-duration: 0.2s;
+          animation-duration: 0.2s;
+  border-radius: 10px 10px 10px 10px;
+  -moz-border-radius: 10px 10px 10px 10px;
+  -webkit-border-radius: 10px 10px 10px 10px;
+}
+
+.currency-select-li {
+  width: 7%;
+}
+
+.currency-select-li .currency-select {
+  background-color: #343A40;
+  margin-top: 6%;
+  width: 100%;
+}
+/*# sourceMappingURL=nav-bar.component.css.map */

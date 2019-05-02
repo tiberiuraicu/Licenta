@@ -55,9 +55,11 @@
       margin-top: 10%;
     }
     mat-card {
+      background-color: #474747;
       width: 110%;
       margin-top: 13%;
       margin-right: 20%;
+      color: white;
     }
   }
 
@@ -71,11 +73,11 @@
       margin-top: 10%;
     }
     mat-card {
+      background-color: #474747;
       width: 110%;
       margin-top: 13%;
       margin-right: 20%;
-
-    
+      color: white;
     }
   }
 }
@@ -90,7 +92,8 @@
   .notifications {
     overflow: auto;
     .notification {
-      background-color: rgba(5, 10, 40, 0.2);
+      margin-bottom: 2%;
+      background-color: #474747;
       padding-left: 5%;
       border-radius: 7px 7px 7px 7px;
       -moz-border-radius: 7px 7px 7px 7px;
@@ -101,6 +104,5 @@
     &::-webkit-scrollbar {
       display: none;
     }
-   
   }
 }

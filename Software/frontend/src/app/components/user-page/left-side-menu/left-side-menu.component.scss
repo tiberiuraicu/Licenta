@@ -2,7 +2,7 @@
   from {
   }
   to {
-    background-color: rgba(189, 201, 229, 0.2);
+    background-color: rgba(71, 71, 71, 0.5);
   }
 }
 
@@ -25,7 +25,16 @@
     animation-duration: 0.2s;
   }
 }
+
+@mixin sidePanelElementsShading {
+  -webkit-box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
+  box-shadow: -2px 0px 29px -8px rgba(0, 0, 0, 0.75);
+}
+
 .left-main-menu {
+  @include border-radius;
+  @include sidePanelElementsShading;
   background-color: #4c4c4c;
   margin-left: 1%;
   width: 5%;
