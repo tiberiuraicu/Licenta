@@ -190,7 +190,7 @@ export class ElectricPowerMapComponent implements OnInit {
         return d.children ? -20 : 20;
       })
       .style("text-anchor", "middle")
-      .style("color", "white")
+      .style("fill", "white")
       .text(function(d) {
         return d.data.name;
       });
