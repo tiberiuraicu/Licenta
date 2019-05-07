@@ -1,12 +1,12 @@
-<div class="card text-white right-size-consumers " style=" background-color: rgba(52,58,64,0.8)">
-  <h6 class="title">Circuit consumers</h6>
-  <div class="card-body " style="padding-top: 2%;">
-    <mat-card @cardEnter *ngFor="let card of cards" class="mat-elevation-z24 right-consumer">
+<div class="card text-light right-side-consumers " style=" background-color: rgba(52,58,64,0)">
+
+  <div class="card-body " >
+    <mat-card @cardEnter *ngFor="let card of cards" class="mat-elevation-z8 text-light right-consumer " style="background-color: rgba(52,58,64,0.8);">
       <h5>{{ card.name }}</h5>
       On/Off
       <mat-slide-toggle (change)="changeState(card)" width="10%" color="primary" checked={{card.state}}>
       </mat-slide-toggle>
-      <div style="height:5vh; width: 12vw; float: right; margin-right: 5%;">
+      <div style="height:5vh; width: 12vw; float: right; margin-right: 5%; color: white">
         <canvas id="{{card.name}}line-chart"></canvas></div>
     </mat-card>
   </div>

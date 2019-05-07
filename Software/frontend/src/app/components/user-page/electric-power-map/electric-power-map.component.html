@@ -1,5 +1,5 @@
-<div class="card power-map mat-elevation-z24" style=" background-color: rgba(52,58,64,0.8)">
-  <div class="card-body ">
+<div class="card power-map " style=" background-color: rgba(52,58,64,0)">
+  <div >
     <div class="info-panel">
       <app-power-source [circuit]="selectedCircuit"></app-power-source>
       <app-info-box
@@ -13,8 +13,8 @@
 
     <div
       *ngFor="let circuit of circuits"
-      class="card text-light circuit mat-elevation-z24 "
-      style="background-color: #474747;"
+      class="card text-light circuit mat-elevation-z8 "
+      style="background-color: rgba(52,58,64,0.8);"
       [@fade]="circuit.hidden"
       [@extend]="{
         value: circuit.currentState,

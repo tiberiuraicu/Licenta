@@ -21,7 +21,6 @@ export let extend = trigger("extend", [
     "expanded",
     style({
       transform: "translate(calc(0%), calc(-{{offsetTop}}px))",
-      marginTop: "20px",
       width: "73%",
       float: "right",
       marginLeft: "1%",

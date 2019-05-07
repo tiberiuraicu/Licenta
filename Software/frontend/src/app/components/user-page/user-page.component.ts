@@ -24,6 +24,6 @@ export class UserPageComponent implements OnInit, OnDestroy {
           clearInterval(this.interval);
         }
       );
-    }, 500);
+    }, 2000);
   }
 }

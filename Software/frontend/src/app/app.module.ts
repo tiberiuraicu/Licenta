@@ -26,6 +26,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { NgxGaugeModule } from 'ngx-gauge';
 import { SettingsComponent } from './components/user-page/settings/settings.component';
 import {MatInputModule} from '@angular/material/input';
+import { StatisticsComponent } from './components/user-page/home/right-side-panel/statistics/statistics.component';
+import { RecentActivityComponent } from './components/user-page/home/right-side-panel/recent-activity/recent-activity.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,9 @@ import {MatInputModule} from '@angular/material/input';
     InfoBoxComponent,
     PowerSourceComponent,
     ElectricMapRightSidePanelComponent,
-    SettingsComponent
+    SettingsComponent,
+    StatisticsComponent,
+    RecentActivityComponent
   ],
   imports: [
     BrowserModule,

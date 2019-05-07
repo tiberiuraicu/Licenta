@@ -9,7 +9,9 @@ import java.util.Vector;
 import javax.servlet.ServletException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,8 +51,9 @@ public class ResourcesControllers {
 	}
 
 	@RequestMapping(value = "/getLastRecordForPieChart", method = RequestMethod.POST)
-	public String initializePieChart(@RequestBody Map<String, String> json)
+	public String initializePieChart(@RequestBody Map<String, String> json,@RequestHeader HttpHeaders headers)
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
+		System.out.println(headers);
 		return homePageFunctions.getTotalPowerConsumed();
 	}
 

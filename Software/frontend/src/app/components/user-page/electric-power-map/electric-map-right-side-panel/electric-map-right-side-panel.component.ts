@@ -79,14 +79,20 @@ export class ElectricMapRightSidePanelComponent implements OnInit {
         datasets: [
           {
             label: label,
-            borderColor: "blue",
+            borderColor: "#E8175D",
             borderWidth: 1,
             fill: false,
-            data: data
+            data: data,
+            fillStyle: "white",
           }
         ]
       },
       options: {
+        legend: {
+          labels: {
+            fontColor: '#ffffff'
+         }
+      },
         scales: {
           xAxes: [
             {

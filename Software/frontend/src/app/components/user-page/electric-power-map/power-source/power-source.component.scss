@@ -1,10 +1,8 @@
 .power-source {
-  background-color: #474747;
-  height: 394.5px;
+  height: 424.5px;
   width: 167%;
   .title {
-    margin-top: 2.5%;
-    margin-left: 2.5%;
+   color : white;
   }
   .power-source-image {
     height: 30%;
@@ -16,6 +14,7 @@
     margin-left: 5%;
     font-size: 110%;
     margin-bottom: 10%;
+    color : white;
    
   }
   .main-propertyMS {
@@ -23,13 +22,13 @@
     margin-left: 5%;
     font-size: 100%;
     margin-bottom: 10%;
-  
-   
+    color : white;
   }
   .main-propertyType {
     margin-top: 12%;
     margin-left: 5%;
     font-size: 110%;
     margin-bottom: 10%;
+    color : white;
   }
 }

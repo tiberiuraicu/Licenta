@@ -1,6 +1,7 @@
 .power-map {
+  border: none;
   width: 65%;
-  height: 85%;
+  height: 90%;
   margin-left: 1%;
   float: left;
   overflow: hidden;
@@ -43,27 +44,8 @@
 
 .link {
   fill: none;
-  stroke: #A8A7A8;
+  stroke: #474747;
   stroke-width: 4px;
 }
 
-.right-size-consumers{
- 
-  .card-body{
-    color: aliceblue;
-    overflow-y:scroll;
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
-  float:right;
-  width:26.2%;
-  height: 85%;
 
-  margin-right: 1%;
-  .right-consumer{
-    background-color: #474747;
-    height: 20%;
-    margin-bottom: 2%;
-  }
-}
