@@ -13,8 +13,8 @@ public class UnusedOutletSubscriber {
 	InstructionsSender instructionsSender;
 
 	public String getStatement() {
-		String crtiticalEventExpression = " select outlet.name " + "from Outlet.win:time_batch(1 sec) as outlet having"
-				+ " avg(outlet.powerConsumed)<0.44 and avg(outlet.state)=1";
+		String crtiticalEventExpression = " select outlet.name " + "from Outlet.win:time_batch(3 sec) as outlet having"
+				+ " avg(outlet.powerConsumed)<0.44 and outlet.state=1";
 
 		return crtiticalEventExpression;
 	}

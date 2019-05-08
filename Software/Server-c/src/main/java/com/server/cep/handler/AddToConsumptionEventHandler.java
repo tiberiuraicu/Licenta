@@ -26,16 +26,22 @@ public class AddToConsumptionEventHandler implements InitializingBean {
 	private AddToConsumptionSubscriber addToConsumptionSubscriber;
 
 	public void initService() {
+		Thread thread = new Thread() {
+			public void run() {
+				Configuration config = new Configuration();
 
-		Configuration config = new Configuration();
+				// Specifying from which package to get the necessary objects for Query
+				config.addEventTypeAutoName("com.server.entites");
 
-		// Specifying from which package to get the necessary objects for Query
-		config.addEventTypeAutoName("com.server.entites");
+				// Specifying which configuration to follow
+				epService = EPServiceProviderManager.getDefaultProvider(config);
 
-		// Specifying which configuration to follow
-		epService = EPServiceProviderManager.getDefaultProvider(config);
+				createAddToConsumptionCheckExpression();
 
-		createAddToConsumptionCheckExpression();
+			}
+		};
+
+		thread.start();
 	}
 
 	private void createAddToConsumptionCheckExpression() {
@@ -52,7 +58,7 @@ public class AddToConsumptionEventHandler implements InitializingBean {
 		initService();
 	}
 
-	//Send the event to query
+	// Send the event to query
 	public void handle(Consumer consumer) {
 
 		epService.getEPRuntime().sendEvent(consumer);

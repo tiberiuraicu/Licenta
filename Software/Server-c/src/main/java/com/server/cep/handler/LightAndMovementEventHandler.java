@@ -33,21 +33,27 @@ public class LightAndMovementEventHandler implements InitializingBean {
 	private ScenarioRepository scenarioRepository;
 
 	public void initService() {
+		Thread thread = new Thread() {
+			public void run() {
+				Configuration config = new Configuration();
 
-		Configuration config = new Configuration();
+				// Specifying from which package to get the necessary objects for Query
+				config.addEventTypeAutoName("com.server.entites");
 
-		// Specifying from which package to get the necessary objects for Query
-		config.addEventTypeAutoName("com.server.entites");
+				// Specifying which configuration to follow
+				epService = EPServiceProviderManager.getDefaultProvider(config);
 
-		// Specifying which configuration to follow
-		epService = EPServiceProviderManager.getDefaultProvider(config);
+				List<Scenario> scenarios = scenarioRepository.findAll();
 
-		List<Scenario> scenarios = scenarioRepository.findAll();
+				for (Scenario scenario : scenarios) {
+					createLightAndMovementCheckExpression(scenario.getSensorName(), scenario.getSwitchName(),
+							scenario.getSensorRegisterTime(), scenario.getSwitchRegisterTime());
+				}
 
-		for (Scenario scenario : scenarios) {
-			createLightAndMovementCheckExpression(scenario.getSensorName(), scenario.getSwitchName(),
-					scenario.getSensorRegisterTime(), scenario.getSwitchRegisterTime());
-		}
+			}
+		};
+
+		thread.start();
 
 	}
 
@@ -57,7 +63,6 @@ public class LightAndMovementEventHandler implements InitializingBean {
 		// create the the actual statement
 		lightAndMovementStatement = epService.getEPAdministrator().createEPL(lightAndMovementSubscriber
 				.getStatement(sensorName, switchName, sensorRegisterTime, switchRegisterTime));
-	
 
 		// adding a method to get the result in case the query gives one
 		lightAndMovementStatement.setSubscriber(lightAndMovementSubscriber);
