@@ -9,6 +9,7 @@ import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.EPStatement;
 import com.server.cep.subscriber.UnusedOutletSubscriber;
+import com.server.database.repositories.ConsumerRepository;
 import com.server.entites.Consumer;
 
 @Component
@@ -20,34 +21,39 @@ public class UnusedOutletEventHandler implements InitializingBean {
 	// CEP query for detecting a increase in power consumed
 	private EPStatement unusedOutletStatement;
 
+	@Autowired
+	ConsumerRepository consumerRepository;
+
 	// Auto initialized (by Spring) -> the class who contains the statement
 	@Autowired
 	private UnusedOutletSubscriber unusedOutletSubscriber;
 
 	public void initService() {
 
-		Thread thread = new Thread() {
-			public void run() {
-				Configuration config = new Configuration();
+		Configuration config = new Configuration();
 
-				// Specifying from which package to get the necessary objects for Query
-				config.addEventTypeAutoName("com.server.entites");
+		// Specifying from which package to get the necessary objects for Query
+		config.addEventTypeAutoName("com.server.entites");
 
-				// Specifying which configuration to follow
-				epService = EPServiceProviderManager.getDefaultProvider(config);
+		// Specifying which configuration to follow
+		epService = EPServiceProviderManager.getDefaultProvider(config);
 
-				createUnusedOutletCheckExpression();
-			}
-		};
-
-		thread.start();
+		for (String consumerName : consumerRepository.findAllNotNull()) {
+			Thread thread = new Thread() {
+				public void run() {
+					createUnusedOutletCheckExpression(consumerName);
+				}
+			};
+			thread.start();
+		}
 
 	}
 
-	private void createUnusedOutletCheckExpression() {
+	private void createUnusedOutletCheckExpression(String consumerName) {
 
 		// create the the actual statement
-		unusedOutletStatement = epService.getEPAdministrator().createEPL(unusedOutletSubscriber.getStatement());
+		unusedOutletStatement = epService.getEPAdministrator()
+				.createEPL(unusedOutletSubscriber.getStatement(consumerName));
 
 		// adding a method to get the result in case the query gives one
 		unusedOutletStatement.setSubscriber(unusedOutletSubscriber);
