@@ -53,7 +53,6 @@ public class ResourcesControllers {
 	@RequestMapping(value = "/getLastRecordForPieChart", method = RequestMethod.POST)
 	public String initializePieChart(@RequestBody Map<String, String> json,@RequestHeader HttpHeaders headers)
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
-		System.out.println(headers);
 		return homePageFunctions.getTotalPowerConsumed();
 	}
 

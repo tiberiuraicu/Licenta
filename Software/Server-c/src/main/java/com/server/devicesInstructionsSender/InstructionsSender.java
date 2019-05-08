@@ -11,6 +11,7 @@ import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
 import com.server.database.repositories.ScenarioRepository;
 import com.server.entites.Circuit;
+import com.server.entites.Consumer;
 import com.server.entites.Instruction;
 
 @Component
@@ -28,7 +29,7 @@ public class InstructionsSender {
 
 	ObjectMapper mapper = new ObjectMapper();
 
-	public void sendInstruction(Instruction instruction)  {
+	public void sendInstruction(Instruction instruction) {
 
 		// transform Object to JSON
 		String instructionAsJSON = null;
@@ -41,10 +42,10 @@ public class InstructionsSender {
 
 		// send the JSON to devices
 		// TODO
-		String callBackMessage = (String) this.template.convertSendAndReceive(exchange.getName(), Constants.INSTRUCTION_KEY,
-				instructionAsJSON.getBytes());
+		String callBackMessage = (String) this.template.convertSendAndReceive(exchange.getName(),
+				Constants.INSTRUCTION_KEY, instructionAsJSON.getBytes());
 
-		// System.out.println(callBackMessage);
+		 //System.out.println(callBackMessage);
 	}
 
 	public void turnOffTheLight(String sensorName) {
@@ -62,16 +63,19 @@ public class InstructionsSender {
 			sendInstruction(switchStop);
 		}
 	}
-	
-	public void turnOnOffTheDevice(String deviceName,String onOffValue) {
-		
+
+	public void turnOnOffTheDevice(String deviceName, String onOffValue) {
+
 		Instruction outletStop = new Instruction();
 		outletStop.setType("OnOff");
 		outletStop.setDeviceName(deviceName);
 		outletStop.setOnOffValue(onOffValue);
-
+		Consumer consumer = consumerRepository.findTopByNameOrderByIdDesc(deviceName);
+		consumer.setState(Integer.parseInt(onOffValue));
+		consumerRepository.save(consumer);
 		sendInstruction(outletStop);
 	}
+
 	public void changeCircuitPowerSource() {
 
 		// for every circuit from home
@@ -95,7 +99,7 @@ public class InstructionsSender {
 				instruction.setPowerSource("normalPowerSource");
 			}
 
-				sendInstruction(instruction);	
+			sendInstruction(instruction);
 		}
 	}
 }

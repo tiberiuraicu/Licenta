@@ -48,14 +48,14 @@ public class DataInfoSenderToRaspberry {
 			String line = "";
 			// iterate trough every line from CSV
 			while ((line = reader.readLine()) != null) {
-				System.out.println(line);
+		
 				String[] lineValues = line.split(cvsSplitBy);
 				if (lineValues[0].equals("name"))
 					tableHeadValues = lineValues;
 				if (lineValues[0].equals("values"))
 					sendOneLine(lineValues);
 				// send every 1s
-				Thread.sleep(1000);
+				Thread.sleep(2000);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -77,8 +77,8 @@ public class DataInfoSenderToRaspberry {
 
 	private void sendOutletValues(Double powerConsumed, String outletName) throws FileNotFoundException, IOException {
 
-		InputStream in = getClass().getResourceAsStream("/devicesState.config"); 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		
+		FileReader reader = new FileReader("devicesState.config");
 		
 		prop.load(reader);
 
@@ -101,8 +101,8 @@ public class DataInfoSenderToRaspberry {
 
 	private void sendSwitchValues(Double powerConsumed, String switchName) throws FileNotFoundException, IOException {
 
-		InputStream in = getClass().getResourceAsStream("/devicesState.config"); 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		FileReader reader = new FileReader("devicesState.config");
+
 		
 		prop.load(reader);
 
@@ -127,8 +127,8 @@ public class DataInfoSenderToRaspberry {
 
 	private void sendSensorValues(String motionDetected, String sensorName) throws FileNotFoundException, IOException {
 
-		InputStream in = getClass().getResourceAsStream("/devicesState.config"); 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		FileReader reader = new FileReader("devicesState.config");
+
 		
 		prop.load(reader);
 

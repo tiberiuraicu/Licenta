@@ -17,7 +17,7 @@ public class LightAndMovementSubscriber {
 
 		String crtiticalEventExpression = " select distinct movement.name as sensorName  " + "from Sensor(name='"
 				+ sensorName + "').win:time_batch(" + sensorRegisterTime + " sec) as movement having"
-				+ " avg(movement.state)=1 and avg(movement.triggered)=0";
+				+ " avg(movement.state)=1 and avg(movement.triggered)=1";
 
 		return crtiticalEventExpression;
 	}

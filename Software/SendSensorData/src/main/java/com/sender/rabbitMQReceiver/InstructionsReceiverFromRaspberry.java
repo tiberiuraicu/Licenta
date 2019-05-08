@@ -1,9 +1,7 @@
 package com.sender.rabbitMQReceiver;
 
-import java.io.BufferedReader;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.FileReader;
 import java.util.Properties;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
@@ -20,8 +18,8 @@ public class InstructionsReceiverFromRaspberry {
 	@RabbitListener(queues = "queue_instruction")
 	public String consumerDataReceiver(byte[] body) throws Exception {
 
-		InputStream in = getClass().getResourceAsStream("/devicesState.config"); 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		FileReader reader = new FileReader("devicesState.config");
+
 		
 //		InputStream in1 = getClass().getResourceAsStream("/circuitState.config"); 
 //		BufferedReader reader1 = new BufferedReader(new InputStreamReader(in1));
@@ -35,7 +33,9 @@ public class InstructionsReceiverFromRaspberry {
 		if (instruction.getType().equals("OnOff")) {
 		System.out.println(instruction);
 			prop.load(reader);
+			
 			prop.setProperty(instruction.getDeviceName(), instruction.getOnOffValue());
+			
 			prop.store(new FileOutputStream("devicesState.config"), null);
 			
 		}
