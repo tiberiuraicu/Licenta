@@ -1,13 +1,13 @@
 <div class=" card text-dark info mat-elevation-z8 " style="background-color: rgba(52,58,64,0.8);">
-  <div class="card-header title" style="background-color:#CC527A">Info Box</div>
-<div style="margin-top:8%" *ngIf="!infoBox.consumer"> <h6 class="no-information-text "><img class="info-icon" src="../../../../../assets/resources/info-icon.png"> Click on a node to find out more information about it</h6></div>
+  <div class="card-header title" style="background-color:#CC527A">Info </div>
+<div style="margin-top:8%" *ngIf="!infoBox.consumer"> <h6 class="no-information-text "><img class="info-icon" src="../../../../../assets/resources/info-icon.png"> Click pe un nod pentru a vedea informații despre el</h6></div>
   <div *ngIf="infoBox.consumer">
     <img src="{{ icon }}" alt="" class="info-box-image" />
-    <h6 class="main-property">Name {{ name }}</h6>
+    <h6 class="main-property">Nume    {{ name }}</h6>
     <h6 class="main-property">
-      Consumption
-      <h6 class="secondary-property">Last hour &nbsp; {{ lastHourConsumption }} &nbsp;  kW -> {{value.lastHourConsumptionMoneyValue}} &nbsp; {{value.currency}}</h6>
-      <h6 class="secondary-property">Today &nbsp; {{ todayConsumption }} &nbsp;  kW -> {{value.todayConsumptionMoneyValue}} &nbsp; {{value.currency}}</h6>
+      Consum
+      <h6 class="secondary-property">Ultima oră &nbsp; {{ lastHourConsumption }} &nbsp;  kW -> {{value.lastHourConsumptionMoneyValue}} &nbsp; {{value.currency}}</h6>
+      <h6 class="secondary-property">Astăzi &nbsp; {{ todayConsumption }} &nbsp;  kW -> {{value.todayConsumptionMoneyValue}} &nbsp; {{value.currency}}</h6>
     </h6>
   </div>
 </div>

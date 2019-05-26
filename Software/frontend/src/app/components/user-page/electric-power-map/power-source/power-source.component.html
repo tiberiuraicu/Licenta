@@ -1,15 +1,15 @@
 <div class=" card text-dark power-source mat-elevation-z8 " style="background-color: rgba(52,58,64,0.8);">
-  <div class="card-header title" style="background-color:#CC527A">Power Source</div>
+  <div class="card-header title" style="background-color:#CC527A">Alimentator</div>
   <img src="./assets/resources/powerSource.png" alt="" class="power-source-image">
   <div *ngIf="circuit!=undefined && circuit.currentState=='expanded'">
 
-    <h6  class="main-propertyType">Type  &nbsp;
+    <h6  class="main-propertyType">Tip  &nbsp;
       {{powerSourceType}}</h6>
 
-    <h6 *ngIf="circuit.powerSource=='solarPanel'" class="main-propertyGP">Generated power &nbsp;
+    <h6 *ngIf="circuit.powerSource=='solarPanel'" class="main-propertyGP">Putere genarată &nbsp;
       {{circuit.powerSourceGeneratedPower}} {{x}} kW</h6>
 
-    <h6 *ngIf="circuit.powerSource=='solarPanel'" class="main-propertyMS">Money worth &nbsp; {{moneyWorth}} {{globalCurrencyLabel}}</h6>
+    <h6 *ngIf="circuit.powerSource=='solarPanel'" class="main-propertyMS">Valoare monetară &nbsp; {{moneyWorth}} {{globalCurrencyLabel}}</h6>
 
   </div>
 </div>

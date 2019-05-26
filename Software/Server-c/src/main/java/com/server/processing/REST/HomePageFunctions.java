@@ -80,7 +80,6 @@ public class HomePageFunctions {
 				}
 			}
 		}
-
 		JsonObject outletsAndLocationJson = new JsonObject();
 		Iterator it = outletsLocation.entrySet().iterator();
 		while (it.hasNext()) {
@@ -88,7 +87,7 @@ public class HomePageFunctions {
 			List<String> listOfOutletsNames = (List<String>) pair.getValue();
 			JsonObject oneOutletLocationJson = new JsonObject();
 			for (int i = 0; i < listOfOutletsNames.size(); i++) {
-				oneOutletLocationJson.addProperty(Integer.toString(i), listOfOutletsNames.get(i));
+				oneOutletLocationJson.addProperty(Integer.toString(i), listOfOutletsNames.get(i).replace("outlet", "Priză "));
 			}
 			outletsAndLocationJson.add(pair.getKey().toString(), oneOutletLocationJson);
 		}

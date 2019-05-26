@@ -68,17 +68,19 @@ export class HomeComponent implements OnInit, OnDestroy {
           name: location,
           children: outletsInLocation
         };
+        console.log(locationForTree)
         this.tree_data.push(locationForTree);
       }
       this.dataSource = new ArrayDataSource(this.tree_data);
     });
-
     this.initializeLineChart(0);
     this.userService.getOutletPowerConsumedForLineChart();
     this.userService.initializePieChart();
   }
 
   initializeLineChart(name) {
+    if(String(name).includes("Priză "))
+    name=String(name).replace("Priză ","outlet");
     this.userService.initializeLineChart(name);
   }
 }

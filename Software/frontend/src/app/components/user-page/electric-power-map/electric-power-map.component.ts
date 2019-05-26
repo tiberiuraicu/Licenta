@@ -1,15 +1,10 @@
-import {
-  Component,
-  OnInit,
-  ViewEncapsulation, 
-  ViewChild
-} from "@angular/core";
+import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import * as $ from "jquery";
 import * as d3 from "d3";
 import { ElectricPowerMapServiceService } from "src/app/services/electric-power-map-service/electric-power-map-service.service";
 import { extend, fade } from "src/app/animations/electric-power-map.animations";
-import { PowerSourceComponent } from './power-source/power-source.component';
-import { InfoBoxComponent } from './info-box/info-box.component';
+import { PowerSourceComponent } from "./power-source/power-source.component";
+import { InfoBoxComponent } from "./info-box/info-box.component";
 
 @Component({
   selector: "app-electric-power-map",
@@ -23,8 +18,8 @@ export class ElectricPowerMapComponent implements OnInit {
     private electricPowerMapServiceService: ElectricPowerMapServiceService
   ) {}
 
-  @ViewChild(PowerSourceComponent) powerSourceComponent: PowerSourceComponent
-  @ViewChild(InfoBoxComponent) infoBoxComponent: InfoBoxComponent
+  @ViewChild(PowerSourceComponent) powerSourceComponent: PowerSourceComponent;
+  @ViewChild(InfoBoxComponent) infoBoxComponent: InfoBoxComponent;
 
   selectedCircuit;
   infoBoxIcon;
@@ -51,14 +46,22 @@ export class ElectricPowerMapComponent implements OnInit {
     } else if (node.depth == 1) {
     } else if (node.depth == 2) {
       this.infoBox.consumer = true;
-      if (node.data.name.includes("outlet"))
+      if (node.data.name.includes("Priză"))
         this.infoBoxIcon = "./assets/resources/outlet.png";
-      if (node.data.name.includes("sensor"))
+      if (node.data.name.includes("Senzor"))
         this.infoBoxIcon = "./assets/resources/sensor.png";
-      if (node.data.name.includes("switch"))
+      if (node.data.name.includes("Întrerupător"))
         this.infoBoxIcon = "./assets/resources/switch.png";
+      var nume;
+      if (node.data.name.includes("Priză"))
+        nume=node.data.name.replace("Priză ","outlet")
+      if (node.data.name.includes("Senzor"))
+      nume=node.data.name.replace("Senzor ","sensor")
+      if (node.data.name.includes("Întrerupător"))
+      nume=node.data.name.replace("Întrerupător ","switch")
+
       this.electricPowerMapServiceService
-        .getTodayConsumptionForConsumer(node.data.name)
+        .getTodayConsumptionForConsumer(nume)
         .subscribe(response => {
           let consumerInfo = JSON.parse(response._body);
           this.lastHourConsumption = Math.round(consumerInfo["lastHour"]);
@@ -69,8 +72,8 @@ export class ElectricPowerMapComponent implements OnInit {
     }
   }
   changeSize(circuit) {
-    this.selectedCircuit=circuit;
-    
+    this.selectedCircuit = circuit;
+
     if (circuit.currentState === "retracted") {
       circuit.currentState = "expanded";
       this.electricPowerMapServiceService
@@ -80,9 +83,8 @@ export class ElectricPowerMapComponent implements OnInit {
 
           this.createTree(treeData, circuit.circuitId);
 
-            this.powerSourceComponent.startCurrencyMonitoring();
+          this.powerSourceComponent.startCurrencyMonitoring();
         });
-
     } else {
       circuit.currentState = "retracted";
       $("svg").remove();
@@ -92,6 +94,7 @@ export class ElectricPowerMapComponent implements OnInit {
     }
 
     this.circuits.map(mappedCircuit => {
+      console.log(this.circuits);
       if (
         circuit.circuitId != mappedCircuit.circuitId &&
         circuit.currentState === "retracted"

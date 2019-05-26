@@ -1,9 +1,9 @@
 
 <ul class=" bg-dark text-light ">
-  <li style="cursor: pointer;"><a class="active" (click)="logOut()" >Log out</a></li>
-  <li><a href="#news" style="float: right">Language</a></li>
+  <li style="cursor: pointer;"><a class="active" (click)="logOut()" >Ieșire</a></li>
+  <!-- <li><a href="#news" style="float: right">Language</a></li> -->
   <li class="currency-select-li">  <select  class="form-control text-light bg-dark currency-select"  #ceva  (change)="changedValue(ceva.value)" >
-      <option value="">Currency</option>
+      <option value="">Monedă</option>
       <option *ngFor="let currency of currencies" value="{{currency}}">{{currency}}</option>
  
     </select></li>

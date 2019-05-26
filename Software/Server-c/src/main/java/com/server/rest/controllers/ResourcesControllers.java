@@ -1,13 +1,9 @@
 package com.server.rest.controllers;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-
 import javax.servlet.ServletException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,10 +11,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.google.gson.JsonObject;
 import com.server.processing.REST.RestMapPageFunctions;
 import com.server.processing.REST.HomePageFunctions;
 import com.server.processing.REST.AuthentificationFunctions;

@@ -45,7 +45,12 @@ public class RestMapPageFunctions {
 		for (String consumerName : consumerRepository.findAllNotNull()) {
 
 			JsonObject consumer = new JsonObject();
-			consumer.addProperty("name", consumerName);
+			if (consumerName.contains("sensor")) 
+			consumer.addProperty("name", consumerName.replace("sensor", "Senzor "));
+			if (consumerName.contains("outlet")) 
+				consumer.addProperty("name", consumerName.replace("outlet", "Priza "));
+			if (consumerName.contains("switch")) 
+				consumer.addProperty("name", consumerName.replace("switch", "Întrerupător "));
 			if (consumerName.contains("sensor")) {
 				consumer.addProperty("value", getLast60ValuesForSensor(consumerName));
 				int state = sensorRepository.findTopByNameOrderByIdDesc(consumerName).getState();
@@ -173,6 +178,7 @@ public class RestMapPageFunctions {
 			if (outletsLocation.get(sensor.getLocation()) == null) {
 
 				Vector<String> sensors = new Vector<String>();
+				
 				sensors.add(sensor.getName());
 				outletsLocation.put(sensor.getLocation(), sensors);
 			} else {
@@ -195,7 +201,13 @@ public class RestMapPageFunctions {
 
 			for (int i = 0; i < listOfOutletsNames.size(); i++) {
 				JsonObject consumer = new JsonObject();
-				consumer.addProperty("name", listOfOutletsNames.get(i));
+				if(listOfOutletsNames.get(i).contains("outlet"))
+					consumer.addProperty("name",listOfOutletsNames.get(i).replace("outlet", "Priză "));
+				if(listOfOutletsNames.get(i).contains("sensor"))
+					consumer.addProperty("name",listOfOutletsNames.get(i).replace("sensor", "Senzor "));
+				if(listOfOutletsNames.get(i).contains("switch"))
+					consumer.addProperty("name",listOfOutletsNames.get(i).replace("switch", "Întrerupător "));
+				
 				consumers.add(consumer);
 			}
 			location.addProperty("name", pair.getKey().toString());

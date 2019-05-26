@@ -22,9 +22,9 @@ export class PowerSourceComponent implements OnInit {
 
   startCurrencyMonitoring() {
     if (this.circuit.powerSource == "solarPanel")
-      this.powerSourceType = "Solar panel";
+      this.powerSourceType = "Panou solar";
     else if (this.circuit.powerSource == "normalPowerSource")
-      this.powerSourceType = "Standard power supply";
+      this.powerSourceType = "Alimentarea normală";
     var powerSourceGeneratedPower = this.circuit.powerSourceGeneratedPower;
     this.interval = setInterval(() => {
 

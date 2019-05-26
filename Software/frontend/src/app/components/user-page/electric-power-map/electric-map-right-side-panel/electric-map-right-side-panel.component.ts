@@ -26,6 +26,8 @@ export class ElectricMapRightSidePanelComponent implements OnInit {
       setTimeout(() => {
         this.cards.forEach(card => {
           card["animationState"]="visible";
+          console.log(card)
+        
           this.makeLineChart(card);
         });
       }, 20);
@@ -33,12 +35,15 @@ export class ElectricMapRightSidePanelComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.electricPowerMapServiceService
-            .getStateForConsumers()
-            .subscribe(response => {
-              this.cards = JSON.parse(response._body);
-              console.log(this.cards)
-            });
+    
+      this.electricPowerMapServiceService
+      .getStateForConsumers()
+      .subscribe(response => {
+        this.cards = JSON.parse(response._body);
+        console.log(this.cards)
+      });
+ 
+  
    }
 
   changeState(card) {
@@ -70,7 +75,7 @@ export class ElectricMapRightSidePanelComponent implements OnInit {
 
     var label;
     if (card.name.includes("sensor")) label = "Triggerd";
-    else label = "Last half hour ";
+    else label = "Ultima jumatate de oră ";
     var data = [];
     data.push(card.value);
     new Chart(document.getElementById(card.name + "line-chart"), {

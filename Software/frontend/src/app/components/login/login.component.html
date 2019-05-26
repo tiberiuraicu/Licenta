@@ -9,7 +9,7 @@
         [(ngModel)]="model.email"
         ngControl="email"
         name="email"
-        placeholder="Email address"
+        placeholder="Email"
         required
         autofocus
       />
@@ -18,7 +18,7 @@
         type="password"
         id="inputPassword"
         class="form-control custom-input"
-        placeholder="Password"
+        placeholder="Parolă"
         [(ngModel)]="model.password"
         ngControl="password"
         name="password"
@@ -26,11 +26,10 @@
       />
      
       <button class="btn btn-lg btn-primary custom-submit-button" type="submit">
-        Sign in
+        Intră
       </button>
       <div [hidden]="!userNotExisting" style="margin-top: 2% "class="alert alert-danger" role="alert">
-       Invalid user or wrong email/password
-      </div>
+Email/parolă invalidă      </div>
     </form>
   </mat-card>
 </div>

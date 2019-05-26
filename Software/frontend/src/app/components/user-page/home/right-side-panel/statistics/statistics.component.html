@@ -1,10 +1,10 @@
  <div class="card text-white statistics" style=" background-color: rgba(52,58,64,0.8)">
-    <div class="card-header" style="background-color:#CC527A">Statistics</div>
+    <div class="card-header" style="background-color:#CC527A">Statistici</div>
     <div class="card-body">
       <div class="container">
         <div class="row">
           <div class="col today-consumption ">
-            <h6 style="font-size:100%">Today consumption</h6>
+            <h6 style="font-size:100%">Consum astăzi</h6>
             <ngx-gauge
               [type]="gaugeType"
               [value]="gaugeValueForToday"
@@ -17,7 +17,7 @@
             </ngx-gauge>
           </div>
           <div class="col month-consumption">
-              <h6 style="font-size:100%; margin-left: 15%;">This month</h6>
+              <h6 style="font-size:100%; margin-left: 15%;">Luna aceasta</h6>
             <ngx-gauge
               [type]="gaugeType"
               [value]="gaugeValueForThisMonth"
@@ -31,11 +31,11 @@
           </div>
           <div class="w-100"></div>
           <div class="col today-cost text-center">
-              <h6 >Today cost</h6>
+              <h6 >Cost astăzi</h6>
               <mat-card  >  {{gaugeCostForToday}} {{gaugeCostAppendText}} </mat-card>
           </div>
           <div class="col month-cost text-center">
-              <h6 >This month cost</h6>
+              <h6 >Cost luna aceasta</h6>
               <mat-card  >  {{gaugeCostForThisMonth}} {{gaugeCostAppendText}} </mat-card>
           </div>
         </div>

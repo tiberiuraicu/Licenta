@@ -71,7 +71,7 @@ export class UserService {
             labels: last60RecordsTimestamp,
             datasets: [
               {
-                label: "Outlet power consumed",
+                label: "Putere consumată de priză",
                 data: last60RecordsPowerConsumed.reverse(),
                 backgroundColor: ["rgba(232, 23, 93, 0.2)"],
                 borderColor: ["#E8175D"],
@@ -92,7 +92,7 @@ export class UserService {
                   scaleLabel: {
                     fontColor: "rgba(248, 249, 250, 0.9)",
                     display: true,
-                    labelString: "Power Consumed"
+                    labelString: "Putere Consumată"
                   },
                   ticks: {
                     beginAtZero: true,
@@ -104,7 +104,7 @@ export class UserService {
                 {
                   scaleLabel: {
                     display: true,
-                    labelString: "TimeStamp",
+                    labelString: "Data",
                     fontColor: "rgba(248, 249, 250, 0.9)"
                   },
                   ticks: {
@@ -145,10 +145,10 @@ export class UserService {
         this.pieChart = new Chart(document.getElementById("doughnut-chart"), {
           type: "doughnut",
           data: {
-            labels: ["Solar Panel", "Normal Power Source"],
+            labels: ["Panou Solar", "Alimentare normală"],
             datasets: [
               {
-                label: "Consumption(kW)",
+                label: "Consum(kW)",
                 backgroundColor: [
                   "#A8A7A8",
                   "#E8175D"
@@ -169,7 +169,7 @@ export class UserService {
             },
             title: {
               display: true,
-              text: "Power consumption",
+              text: "Consum de putere casă",
               fontColor: "rgba(248, 249, 250, 0.9)"
             }
           }
@@ -217,10 +217,6 @@ export class UserService {
           { headers: this.userAuthentificationHeader }
         )
         .subscribe(response => {
-          console.log(response);
-          console.log(
-            "---------------------------------------------------------------------"
-          );
           var responseAsJson = JSON.parse(response._body);
           for (var outlet in responseAsJson) {
             if (outlet == this.selectedOutlet) {
