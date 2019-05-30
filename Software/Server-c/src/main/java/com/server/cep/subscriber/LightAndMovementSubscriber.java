@@ -14,7 +14,7 @@ public class LightAndMovementSubscriber {
 
 	public String getStatement(String sensorName, String switchName, double sensorRegisterTime,
 			double switchRegisterTime) {
-
+System.out.println(sensorRegisterTime);
 		String crtiticalEventExpression = " select distinct movement.name as sensorName  " + "from Sensor(name='"
 				+ sensorName + "').win:time_batch(" + sensorRegisterTime + " sec) as movement having"
 				+ " avg(movement.state)=1 and avg(movement.triggered)=1";

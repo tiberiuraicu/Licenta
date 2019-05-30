@@ -14,5 +14,9 @@ public class NotificationBroadcaster {
 		this.template.convertAndSend("/notification/"+id, notification);
 
 	}
+	public void sendState(String state, String consumerName)  {
+		this.template.convertAndSend("/state/"+consumerName, state);
+
+	}
 	
 }

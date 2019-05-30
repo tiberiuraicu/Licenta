@@ -13,6 +13,7 @@ import com.server.database.repositories.ScenarioRepository;
 import com.server.entites.Circuit;
 import com.server.entites.Consumer;
 import com.server.entites.Instruction;
+import com.server.socket.NotificationBroadcaster;
 
 @Component
 public class InstructionsSender {
@@ -26,7 +27,9 @@ public class InstructionsSender {
 	ConsumerRepository consumerRepository;
 	@Autowired
 	CircuitRepository circuitRepository;
-
+	@Autowired
+	NotificationBroadcaster notificationBroadcaster;
+	
 	ObjectMapper mapper = new ObjectMapper();
 
 	public void sendInstruction(Instruction instruction) {
@@ -51,8 +54,10 @@ public class InstructionsSender {
 	public void turnOffTheLight(String sensorName) {
 		String switchName = scenarioRepository.getScenarioBySensorName(sensorName).getSwitchName();
 
+		notificationBroadcaster.sendState("0", switchName);
+		
 		Double powerConsumed = consumerRepository.findTopByNameOrderByIdDesc(switchName).getPowerConsumed();
-
+		
 		if (powerConsumed > 0) {
 
 			Instruction switchStop = new Instruction();
@@ -71,6 +76,7 @@ public class InstructionsSender {
 		outletStop.setDeviceName(deviceName);
 		outletStop.setOnOffValue(onOffValue);
 		Consumer consumer = consumerRepository.findTopByNameOrderByIdDesc(deviceName);
+		System.out.println(deviceName);
 		consumer.setState(Integer.parseInt(onOffValue));
 		consumerRepository.save(consumer);
 		sendInstruction(outletStop);

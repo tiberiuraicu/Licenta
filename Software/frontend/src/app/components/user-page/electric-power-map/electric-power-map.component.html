@@ -1,46 +1,25 @@
 <div class="card power-map " style=" background-color: rgba(52,58,64,0)">
-  <div >
+  <div>
     <div class="info-panel">
       <app-power-source [circuit]="selectedCircuit"></app-power-source>
-      <app-info-box
-        [icon]="infoBoxIcon"
-        [name]="name"
-        [lastHourConsumption]="lastHourConsumption"
-        [todayConsumption]="todayConsumption"
-        [infoBox]="infoBox"
-      ></app-info-box>
+      <app-info-box [icon]="infoBoxIcon" [name]="name" [lastHourConsumption]="lastHourConsumption"
+        [todayConsumption]="todayConsumption" [infoBox]="infoBox"></app-info-box>
     </div>
 
-    <div
-      *ngFor="let circuit of circuits"
-      class="card text-light circuit mat-elevation-z8 "
-      style="background-color: rgba(52,58,64,0.8);"
-      [@fade]="circuit.hidden"
-      [@extend]="{
+    <div *ngFor="let circuit of circuits" class="card text-light circuit mat-elevation-z8 "
+      style="background-color: rgba(52,58,64,0.8);" [@fade]="circuit.hidden" [@extend]="{
         value: circuit.currentState,
         params: { offsetTop: circuit.offsetTop }
-      }"
-      id="circuit{{ circuit.circuitId }}"
-    >
-      <h5
-        (click)="changeSize(circuit)"
-        (click)="repositionCircuit(circuit)"
-        class="title"
-      >
-        <img
-          id="expand-retract-icon"
-          [src]="
+      }" id="circuit{{ circuit.circuitId }}">
+      <h5 (click)="changeSize(circuit)" (click)="repositionCircuit(circuit)" class="title">
+        <img id="expand-retract-icon" [src]="
             circuit.currentState == 'retracted'
               ? './assets/resources/expand.png'
               : './assets/resources/retract.png'
-          "
-        />
+          " />
         &nbsp;&nbsp; Circuit {{ circuit.circuitId }}
       </h5>
     </div>
   </div>
 </div>
-  <app-electric-map-right-side-panel
-    [cards]="circuitChildren"
-  ></app-electric-map-right-side-panel>
-
+<app-electric-map-right-side-panel></app-electric-map-right-side-panel>

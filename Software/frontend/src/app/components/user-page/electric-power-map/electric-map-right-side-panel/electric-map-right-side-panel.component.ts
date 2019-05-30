@@ -10,7 +10,7 @@ import { cardEnter } from "src/app/animations/electric-power-map.animations";
   animations:[cardEnter]
 })
 export class ElectricMapRightSidePanelComponent implements OnInit {
-  @Input("cards") cards = [];
+  cards = [];
 
   iterableDiffer;
   constructor(
@@ -42,34 +42,8 @@ export class ElectricMapRightSidePanelComponent implements OnInit {
         this.cards = JSON.parse(response._body);
         console.log(this.cards)
       });
- 
-  
    }
 
-  changeState(card) {
-    var state;
-    if (card.state) {
-      state = 0;
-      card.state = false;
-    }
-    else if (!card.state) {
-      state = 1;
-      card.state = true;
-    }
-
-    if (card.name.includes("sensor"))
-      this.electricPowerMapServiceService
-        .changeSensorState({ state: state, name: card.name })
-        .subscribe(response => {
-          console.log(response);
-        });
-    if (card.name.includes("outlet") || card.name.includes("switch"))
-      this.electricPowerMapServiceService
-        .changeConsumerState({ state: state, name: card.name })
-        .subscribe(response => {
-          console.log(response);
-        });
-  }
 
   makeLineChart(card) {
 
@@ -140,4 +114,25 @@ export class ElectricMapRightSidePanelComponent implements OnInit {
       }
     });
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
 }

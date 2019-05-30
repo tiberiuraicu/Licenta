@@ -78,6 +78,12 @@ public class ResourcesControllers {
 			throws JsonParseException, JsonMappingException, IOException, ServletException {
 		return restMapPageFunctions.getStateForConsumers();
 	}
+	
+	@RequestMapping(value = "/getStateForConsumer", method = RequestMethod.POST)
+	public int getStateForConsumer(@RequestBody Map<String, String> json)
+			throws JsonParseException, JsonMappingException, IOException, ServletException {
+		return restMapPageFunctions.getStateForConsumer(json.get("consumerName"));
+	}
 
 	@RequestMapping(value = "/changeSensorState", method = RequestMethod.POST)
 	public String changeSensorState(@RequestBody Map<String, String> sensor)

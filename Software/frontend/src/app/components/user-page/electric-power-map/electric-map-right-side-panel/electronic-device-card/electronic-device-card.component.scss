@@ -1,0 +1,20 @@
+.mat-slide-toggle {
+    margin-top: 5%;
+    margin-left: 5%;
+    animation: shadow-pulse 1s infinite;
+    border-radius:50%;
+  }
+  @keyframes shadow-pulse
+{
+     0% {
+          box-shadow: 0 0 0 0px rgba(126, 18, 18, 1);
+     }
+     100% {
+          box-shadow: 0 0 0 35px rgba(0, 0, 0, 0);
+     }
+     
+}
+.right-consumer {
+    height: 20%;
+    margin-bottom: 2%;
+  }

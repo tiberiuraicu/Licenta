@@ -16,7 +16,7 @@ import { InfoBoxComponent } from "./info-box/info-box.component";
 export class ElectricPowerMapComponent implements OnInit {
   constructor(
     private electricPowerMapServiceService: ElectricPowerMapServiceService
-  ) {}
+  ) { }
 
   @ViewChild(PowerSourceComponent) powerSourceComponent: PowerSourceComponent;
   @ViewChild(InfoBoxComponent) infoBoxComponent: InfoBoxComponent;
@@ -27,7 +27,6 @@ export class ElectricPowerMapComponent implements OnInit {
   lastHourConsumption;
   todayConsumption;
   circuits = [];
-  circuitChildren = [];
   infoBox = { circuit: false, location: false, consumer: false };
 
   ngOnInit() {
@@ -54,11 +53,11 @@ export class ElectricPowerMapComponent implements OnInit {
         this.infoBoxIcon = "./assets/resources/switch.png";
       var nume;
       if (node.data.name.includes("Priză"))
-        nume=node.data.name.replace("Priză ","outlet")
+        nume = node.data.name.replace("Priză ", "outlet")
       if (node.data.name.includes("Senzor"))
-      nume=node.data.name.replace("Senzor ","sensor")
+        nume = node.data.name.replace("Senzor ", "sensor")
       if (node.data.name.includes("Întrerupător"))
-      nume=node.data.name.replace("Întrerupător ","switch")
+        nume = node.data.name.replace("Întrerupător ", "switch")
 
       this.electricPowerMapServiceService
         .getTodayConsumptionForConsumer(nume)
@@ -132,10 +131,10 @@ export class ElectricPowerMapComponent implements OnInit {
     // appends a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
     var svg = d3
-        .select("#circuit" + circuitId)
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom),
+      .select("#circuit" + circuitId)
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom),
       g = svg
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -147,7 +146,7 @@ export class ElectricPowerMapComponent implements OnInit {
       .enter()
       .append("path")
       .attr("class", "link")
-      .attr("d", function(d) {
+      .attr("d", function (d) {
         return (
           "M" +
           d.x +
@@ -174,10 +173,10 @@ export class ElectricPowerMapComponent implements OnInit {
       .data(nodes.descendants())
       .enter()
       .append("g")
-      .attr("class", function(d) {
+      .attr("class", function (d) {
         return "node" + (d.children ? " node--internal" : " node--leaf");
       })
-      .attr("transform", function(d) {
+      .attr("transform", function (d) {
         return "translate(" + d.x + "," + d.y + ")";
       });
 
@@ -189,12 +188,12 @@ export class ElectricPowerMapComponent implements OnInit {
     node
       .append("text")
       .attr("dy", ".35em")
-      .attr("y", function(d) {
+      .attr("y", function (d) {
         return d.children ? -20 : 20;
       })
       .style("text-anchor", "middle")
       .style("fill", "white")
-      .text(function(d) {
+      .text(function (d) {
         return d.data.name;
       });
   };

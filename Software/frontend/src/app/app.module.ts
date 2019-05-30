@@ -28,6 +28,7 @@ import { SettingsComponent } from './components/user-page/settings/settings.comp
 import {MatInputModule} from '@angular/material/input';
 import { StatisticsComponent } from './components/user-page/home/right-side-panel/statistics/statistics.component';
 import { RecentActivityComponent } from './components/user-page/home/right-side-panel/recent-activity/recent-activity.component';
+import { ElectronicDeviceCardComponent } from './components/user-page/electric-power-map/electric-map-right-side-panel/electronic-device-card/electronic-device-card.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { RecentActivityComponent } from './components/user-page/home/right-side-
     ElectricMapRightSidePanelComponent,
     SettingsComponent,
     StatisticsComponent,
-    RecentActivityComponent
+    RecentActivityComponent,
+    ElectronicDeviceCardComponent
   ],
   imports: [
     BrowserModule,

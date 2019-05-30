@@ -45,12 +45,27 @@ public class RestMapPageFunctions {
 		for (String consumerName : consumerRepository.findAllNotNull()) {
 
 			JsonObject consumer = new JsonObject();
-			if (consumerName.contains("sensor")) 
-			consumer.addProperty("name", consumerName.replace("sensor", "Senzor "));
-			if (consumerName.contains("outlet")) 
+			
+			if (consumerName.contains("outlet")) {
 				consumer.addProperty("name", consumerName.replace("outlet", "Priza "));
-			if (consumerName.contains("switch")) 
+				consumer.addProperty("value", getHalfHourValues(consumerName));
+				int state = consumerRepository.findTopByNameOrderByIdDesc(consumerName).getState();
+				if (state == 0) {
+					consumer.addProperty("state", false);
+				} else if (state == 1) {
+					consumer.addProperty("state", true);
+				}
+			}
+			if (consumerName.contains("switch")) {
 				consumer.addProperty("name", consumerName.replace("switch", "Întrerupător "));
+				consumer.addProperty("value", getHalfHourValues(consumerName));
+				int state = consumerRepository.findTopByNameOrderByIdDesc(consumerName).getState();
+				if (state == 0) {
+					consumer.addProperty("state", false);
+				} else if (state == 1) {
+					consumer.addProperty("state", true);
+				}
+			}
 			if (consumerName.contains("sensor")) {
 				consumer.addProperty("value", getLast60ValuesForSensor(consumerName));
 				int state = sensorRepository.findTopByNameOrderByIdDesc(consumerName).getState();
@@ -60,15 +75,7 @@ public class RestMapPageFunctions {
 					consumer.addProperty("state", true);
 				}
 
-			} else if (consumerName.contains("outlet") || consumerName.contains("switch")) {
-				consumer.addProperty("value", getHalfHourValues(consumerName));
-				int state = consumerRepository.findTopByNameOrderByIdDesc(consumerName).getState();
-				if (state == 0) {
-					consumer.addProperty("state", false);
-				} else if (state == 1) {
-					consumer.addProperty("state", true);
-				}
-			}
+			} 
 			consumersState.add(consumer);
 		}
 		return consumersState.toString();
@@ -230,6 +237,11 @@ public class RestMapPageFunctions {
 	public String changeConsumerState(Map<String, String> consumer) {
 		instructionsSender.turnOnOffTheDevice(consumer.get("name"), consumer.get("state"));
 		return "Consumer state saved";
+	}
+
+	public int getStateForConsumer(String consumerName) {
+		// TODO Auto-generated method stub
+		return consumerRepository.findTopByNameOrderByIdDesc(consumerName).getState();
 	}
 
 	
