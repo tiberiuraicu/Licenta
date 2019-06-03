@@ -10,12 +10,12 @@ import com.server.processing.MqReceiver.MqReceiverFunctions;
 
 @Component
 public class Receiver {
-
-	@Autowired
-	MqReceiverFunctions receiverFunctions;
 	
 	@Autowired
 	PowerSourceRepository powerSourceRepository;
+
+	@Autowired
+	MqReceiverFunctions receiverFunctions;
 	
 	final static Logger logger = Logger.getLogger(Receiver.class);
 
