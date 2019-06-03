@@ -75,10 +75,10 @@ public class InstructionsSender {
 		outletStop.setType("OnOff");
 		outletStop.setDeviceName(deviceName);
 		outletStop.setOnOffValue(onOffValue);
-		Consumer consumer = consumerRepository.findTopByNameOrderByIdDesc(deviceName);
-		System.out.println(deviceName);
-		consumer.setState(Integer.parseInt(onOffValue));
-		consumerRepository.save(consumer);
+//		Consumer consumer = consumerRepository.findTopByNameOrderByIdDesc(deviceName);
+//		System.out.println(deviceName);
+//		consumer.setState(Integer.parseInt(onOffValue));
+//		consumerRepository.save(consumer);
 		sendInstruction(outletStop);
 	}
 

@@ -57,12 +57,4 @@ export class ElectricPowerMapServiceService {
       { headers: this.userAuthentificationHeader }
     );
   }
-
-  getConsumerState = consumer =>{
-    return this.http.post(
-      Config.host + "/resources/getStateForConsumer",
-      {consumerName:consumer},
-      { headers: this.userAuthentificationHeader }
-    );
-  }
 }

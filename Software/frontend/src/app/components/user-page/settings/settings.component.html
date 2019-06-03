@@ -1,13 +1,13 @@
 <mat-card class="user-settings text-light mat-elevation-z24">
-  <div class="card-header">User settings</div>
+  <div class="card-header">Setări</div>
   <div class="card-body">
     <mat-form-field>
       <input matInput [(ngModel)]="model.firstName" type="text" />
-      <mat-placeholder class="placeholder">First Name</mat-placeholder>
+      <mat-placeholder class="placeholder">Nume</mat-placeholder>
     </mat-form-field>
     <mat-form-field>
       <input matInput [(ngModel)]="model.lastName" type="text" />
-      <mat-placeholder class="placeholder">Last Name</mat-placeholder>
+      <mat-placeholder class="placeholder">Prenume</mat-placeholder>
     </mat-form-field>
     <mat-form-field>
       <input matInput [(ngModel)]="model.email" type="email" />
@@ -15,27 +15,27 @@
     </mat-form-field>
     <mat-form-field>
       <input matInput [(ngModel)]="model.password" type="password" />
-      <mat-placeholder class="placeholder">Password</mat-placeholder>
+      <mat-placeholder class="placeholder">Parolă</mat-placeholder>
     </mat-form-field>
     <mat-form-field>
       <input matInput [(ngModel)]="model.phoneNumber" type="number" />
-      <mat-placeholder class="placeholder">Phone Number</mat-placeholder>
+      <mat-placeholder class="placeholder">Număr de telefon</mat-placeholder>
     </mat-form-field>
     <mat-form-field>
       <input matInput [(ngModel)]="model.country" type="text" />
-      <mat-placeholder class="placeholder">Country</mat-placeholder>
+      <mat-placeholder class="placeholder">Țară</mat-placeholder>
     </mat-form-field>
     <mat-form-field>
       <input matInput [(ngModel)]="model.locality" type="text" />
-      <mat-placeholder class="placeholder">Locality</mat-placeholder>
+      <mat-placeholder class="placeholder">Localitate</mat-placeholder>
     </mat-form-field>
     <mat-form-field>
       <input matInput [(ngModel)]="model.street" type="text" />
-      <mat-placeholder class="placeholder">Street</mat-placeholder>
+      <mat-placeholder class="placeholder">Strada</mat-placeholder>
     </mat-form-field>
-    <p style="float:left">Profile picture</p>
+    <p style="float:left">Fotografie de profil</p>
     <button style="float:left" mat-raised-button class="fileButton" (click)="fileInput.click()">
-      <span>Select</span>
+      <span>Selectează</span>
       <input
         #fileInput
         type="file"
@@ -44,6 +44,6 @@
       />
     </button>
 
-    <button mat-raised-button (click)="onSubmit()">Save</button>
+    <button mat-raised-button (click)="onSubmit()">Salvează datele</button>
   </div>
 </mat-card>

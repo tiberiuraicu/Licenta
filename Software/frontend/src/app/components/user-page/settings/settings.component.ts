@@ -1,14 +1,13 @@
-import { Component, OnInit } from "@angular/core";
+import { Component} from "@angular/core";
 import { Http,Headers } from "@angular/http";
-import { modelGroupProvider } from '@angular/forms/src/directives/ng_model_group';
 
 @Component({
   selector: "app-settings",
   templateUrl: "./settings.component.html",
   styleUrls: ["./settings.component.scss"]
 })
-export class SettingsComponent implements OnInit {
- 
+export class SettingsComponent {
+
 
   selectedProfilePicture: File;
 
@@ -26,13 +25,12 @@ export class SettingsComponent implements OnInit {
     street: ""
   };
 
-  upload;
 
-  ngOnInit() {}
   onSubmit() {
     this.updateUserProfilePicture();
     this.updateUserData();
   }
+
   onFileInput(event) {
     this.selectedProfilePicture = <File>event.target.files[0];
   }

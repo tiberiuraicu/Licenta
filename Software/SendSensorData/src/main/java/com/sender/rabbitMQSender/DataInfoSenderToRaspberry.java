@@ -41,14 +41,14 @@ public class DataInfoSenderToRaspberry {
 	public void sendData() throws JsonProcessingException, InterruptedException {
 
 		String cvsSplitBy = ",";
-		InputStream in = getClass().getResourceAsStream(Constants.SENSOR_DATA_CSV); 
+		InputStream in = getClass().getResourceAsStream(Constants.SENSOR_DATA_CSV);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		try {
 
 			String line = "";
 			// iterate trough every line from CSV
 			while ((line = reader.readLine()) != null) {
-		
+
 				String[] lineValues = line.split(cvsSplitBy);
 				if (lineValues[0].equals("name"))
 					tableHeadValues = lineValues;
@@ -77,9 +77,8 @@ public class DataInfoSenderToRaspberry {
 
 	private void sendOutletValues(Double powerConsumed, String outletName) throws FileNotFoundException, IOException {
 
-		
 		FileReader reader = new FileReader("devicesState.config");
-		
+
 		prop.load(reader);
 
 		Consumer outlet = new Outlet();
@@ -103,7 +102,6 @@ public class DataInfoSenderToRaspberry {
 
 		FileReader reader = new FileReader("devicesState.config");
 
-		
 		prop.load(reader);
 
 		Consumer switcher = new Switch();
@@ -115,7 +113,7 @@ public class DataInfoSenderToRaspberry {
 			switcher.setPowerConsumed(0.0);
 		else
 			switcher.setPowerConsumed(powerConsumed);
-		
+
 		String switchAsJSON = mapper.writeValueAsString(switcher);
 
 		String callBackMessage = (String) this.template.convertSendAndReceive(this.exchange.getName(),
@@ -129,21 +127,19 @@ public class DataInfoSenderToRaspberry {
 
 		FileReader reader = new FileReader("devicesState.config");
 
-		
 		prop.load(reader);
-
 		Sensor sensor = new Sensor();
 		sensor.setName(sensorName);
 		sensor.setTimestamp(new Date());
 		sensor.setTriggered(Integer.parseInt(motionDetected));
-		sensor.setState(Integer.parseInt(prop.getProperty(sensorName)));	
+		sensor.setState(Integer.parseInt(prop.getProperty(sensorName)));
 		sensor.setType("movement");
-		
+
 		if (Integer.parseInt(prop.getProperty(sensorName)) == 0)
 			sensor.setPowerConsumed(0.0);
 		else
 			sensor.setPowerConsumed(0.9);
-		
+
 		String sensorAsJSON = mapper.writeValueAsString(sensor);
 
 		String callBackMessage = (String) this.template.convertSendAndReceive(this.exchange.getName(),
@@ -152,4 +148,5 @@ public class DataInfoSenderToRaspberry {
 		// System.out.println(callBackMessage);
 
 	}
+
 }

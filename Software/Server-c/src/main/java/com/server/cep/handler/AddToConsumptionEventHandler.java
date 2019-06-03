@@ -26,6 +26,7 @@ public class AddToConsumptionEventHandler implements InitializingBean {
 	private AddToConsumptionSubscriber addToConsumptionSubscriber;
 
 	public void initService() {
+		System.out.println("1");
 		Thread thread = new Thread() {
 			public void run() {
 				Configuration config = new Configuration();

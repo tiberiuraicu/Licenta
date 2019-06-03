@@ -1,7 +1,9 @@
 <mat-card class="mat-elevation-z8 text-light right-consumer " style="background-color: rgba(52,58,64,0.8);">
     <h5>{{ card.name }}</h5>
     On/Off
-    <mat-slide-toggle (change)="changeState(card)" width="10%" color="primary" checked={{card.state}}>
+    <mat-slide-toggle [ngClass]="{
+      'mat-slide-toggle-warning-animation' : powerConsumedUnderTreshold
+    }" (change)="changeState(card)" width="10%" color="primary" checked={{card.state}}>
     </mat-slide-toggle>
     <div style="height:5vh; width: 12vw; float: right; margin-right: 5%; color: white">
       <canvas id="{{card.name}}line-chart"></canvas></div>

@@ -18,5 +18,9 @@ public class NotificationBroadcaster {
 		this.template.convertAndSend("/state/"+consumerName, state);
 
 	}
+	public void sendValue(Double value, String consumerName)  {
+		this.template.convertAndSend("/powerConsumed/"+consumerName, value);
+
+	}
 	
 }

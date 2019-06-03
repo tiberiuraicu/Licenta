@@ -1,6 +1,6 @@
 <div class="wrapper ">
   <mat-card class="bg-dark text-light registerCard mat-elevation-z24"
-    >Register
+    >Înregistrare
     <form (ngSubmit)="register()" class="form-signin custom-style">
       <input
         type="text"
@@ -8,7 +8,7 @@
         [(ngModel)]="model.firstName"
         ngControl="firstName"
         name="firstName"
-        placeholder="First name"
+        placeholder="Nume"
         required
         autofocus
       />
@@ -18,7 +18,7 @@
         [(ngModel)]="model.lastName"
         ngControl="lastName"
         name="lastName"
-        placeholder="Last name"
+        placeholder="Prenume"
         required
         autofocus
       />
@@ -28,7 +28,7 @@
         [(ngModel)]="model.email"
         ngControl="email"
         name="email"
-        placeholder="Email address"
+        placeholder="Email"
         required
         autofocus
       />
@@ -36,7 +36,7 @@
         type="password"
         id="inputPassword"
         class="form-control custom-input"
-        placeholder="Password"
+        placeholder="Parolă"
         [(ngModel)]="model.password"
         ngControl="password"
         name="password"
@@ -46,7 +46,7 @@
         type="deviceId"
         id="deviceId"
         class="form-control custom-input"
-        placeholder="Device id"
+        placeholder="ID Dispozitiv"
         [(ngModel)]="model.deviceId"
         name="deviceId"
         required
@@ -55,7 +55,7 @@
         type="number"
         id="phoneNumber"
         class="form-control custom-input"
-        placeholder="Phone number"
+        placeholder="Număr de telefon"
         [(ngModel)]="model.phoneNumber"
         name="phoneNumber"
         required
@@ -64,7 +64,7 @@
         type="text"
         id="country"
         class="form-control custom-input"
-        placeholder="Country"
+        placeholder="Țară"
         [(ngModel)]="model.country"
         name="country"
         required
@@ -73,13 +73,13 @@
         type="text"
         id="locality"
         class="form-control custom-input"
-        placeholder="Locality"
+        placeholder="Localitate"
         [(ngModel)]="model.locality"
         name="locality"
         required
       />
       <button class="btn btn-lg btn-primary custom-submit-button" type="submit">
-        Register
+        Înregistrare
       </button>
     </form>
   </mat-card>

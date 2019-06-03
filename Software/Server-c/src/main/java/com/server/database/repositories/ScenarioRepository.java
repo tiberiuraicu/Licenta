@@ -5,6 +5,7 @@ import com.server.entites.Scenario;
 
 public interface ScenarioRepository extends JpaRepository<Scenario, Integer> {
 	Scenario getScenarioBySensorName(String sensorName);
+	Scenario getScenarioBySwitchName(String switchName);
 } 
 
 

@@ -22,6 +22,7 @@ import com.server.database.repositories.SensorRepository;
 import com.server.devicesInstructionsSender.InstructionsSender;
 import com.server.entites.Circuit;
 import com.server.entites.Consumer;
+import com.server.entites.Instruction;
 import com.server.entites.Sensor;
 import com.server.socket.NotificationBroadcaster;
 
@@ -236,6 +237,7 @@ public class RestMapPageFunctions {
 
 	public String changeConsumerState(Map<String, String> consumer) {
 		instructionsSender.turnOnOffTheDevice(consumer.get("name"), consumer.get("state"));
+		
 		return "Consumer state saved";
 	}
 

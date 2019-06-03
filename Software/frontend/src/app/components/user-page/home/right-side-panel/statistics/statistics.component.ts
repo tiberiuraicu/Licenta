@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/home-service/home.service';
+;
 
 @Component({
   selector: 'app-statistics',
@@ -12,7 +13,7 @@ export class StatisticsComponent implements OnInit {
   gaugeLabel = "Today Consumption";
   gaugeConsumptionAppendText = "kW";
   gaugeCostAppendText = "";
-  animation = true;
+  animation = false;
   size = 130;
   thick = 6;
 
@@ -24,7 +25,7 @@ export class StatisticsComponent implements OnInit {
 
   gaugeCostForThisMonth = 0.0;
   constructor(private userService: UserService) {
-   
+
 
     setInterval(() => {
       this.gaugeCostForToday =
@@ -51,21 +52,18 @@ export class StatisticsComponent implements OnInit {
     this.getAllConsumedPowerFromHomeForTodayAndThisMonth();
   }
 
-  
   getAllConsumedPowerFromHomeForTodayAndThisMonth() {
 
-      
-    
     this.userService
       .getAllConsumedPowerFromHomeForTodayAndThisMonth()
       .subscribe(response => {
-   
+      console.log(response)
         this.gaugeValueForToday =
           Math.round(
             (parseFloat(JSON.parse(response._body)[0]["today"])) * 100
           ) / 100;
         this.gaugeValueForThisMonth =
-          Math.round(
+          8* Math.round(
             (parseFloat(JSON.parse(response._body)[0]["thisMonth"])) *
               100
           ) / 100;

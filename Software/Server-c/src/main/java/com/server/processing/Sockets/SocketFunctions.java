@@ -38,9 +38,9 @@ public class SocketFunctions {
 		
 		if (oldSolarPowerConsumed != solarPowerConsumed && oldNormalPowerConsumed != normalPowerConsumed)
 			notificationBroadcaster.sendNotification(
-					"New power consumption : Solar panel : " + solarPowerConsumed + " kW -> "
-							+ calculatePercentage(solarPowerConsumed, solarPowerConsumed + normalPowerConsumed) + "%,"
-							+ " Normal power source : " + normalPowerConsumed + " kW -> "
+					"Noua configurare a consumului  :\r\n Panou Solar : " + solarPowerConsumed + " kW -> "
+							+ calculatePercentage(solarPowerConsumed, solarPowerConsumed + normalPowerConsumed) + "%,\r\n"
+							+ " Alimentarea normală : " + normalPowerConsumed + " kW -> "
 							+ calculatePercentage(normalPowerConsumed, solarPowerConsumed + normalPowerConsumed) + "%,",
 					solarPowerSource.getDevice().getUsers().get(0).getId());
 		oldSolarPowerConsumed = solarPowerConsumed;

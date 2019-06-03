@@ -14,6 +14,7 @@ import com.server.cep.handler.LightAndMovementEventHandler;
 import com.server.cep.handler.UnusedOutletEventHandler;
 import com.server.database.repositories.CircuitRepository;
 import com.server.database.repositories.ConsumerRepository;
+import com.server.database.repositories.ScenarioRepository;
 import com.server.database.repositories.SensorRepository;
 import com.server.entites.Circuit;
 import com.server.entites.Consumer;
@@ -22,6 +23,7 @@ import com.server.entites.Sensor;
 import com.server.entites.Switch;
 import com.server.processing.CEP.CEPFunctions;
 import com.server.processing.Database.DatabaseFunctions;
+import com.server.socket.NotificationBroadcaster;
 
 @Component
 public class MqReceiverFunctions {
@@ -40,7 +42,10 @@ public class MqReceiverFunctions {
 
 	@Autowired
 	CircuitRepository circuitRepository;
-	
+
+	@Autowired
+	ScenarioRepository scenarioRepository;
+
 	@Autowired
 	UnusedOutletEventHandler unusedOutletEventHandler;
 
@@ -49,6 +54,8 @@ public class MqReceiverFunctions {
 	@Autowired
 	CEPFunctions cepFunctions;
 
+	@Autowired
+	NotificationBroadcaster notificationBroadcaster;
 	ObjectMapper mapper = new ObjectMapper();
 
 	public String consumerDataProcess(byte[] consumerMessageBody) {
@@ -82,27 +89,32 @@ public class MqReceiverFunctions {
 							e.printStackTrace();
 						}
 
-						// get its location from database(by name) and set it
-						outlet.setLocation(
-								consumerRepository.findTopByNameOrderByIdDesc(outlet.getName()).getLocation());
+						if (!(consumerRepository.findTopByNameOrderByIdDesc(outlet.getName()).getState() == 0
+								&& outlet.getState() == 0)) {
+							System.out.println(outlet);
+							notificationBroadcaster.sendValue(outlet.getPowerConsumed(), outlet.getName());
+							notificationBroadcaster.sendState(Integer.toString(outlet.getState()), outlet.getName());
+							// get its location from database(by name) and set it
+							outlet.setLocation(
+									consumerRepository.findTopByNameOrderByIdDesc(outlet.getName()).getLocation());
 
-						// create the link between the new arrived information of the outlet and its
-						// circuit
-						Circuit circuit = databaseFunctions.makeConsumerAndCircuitConnection(outlet,
-								consumerRepository.findTopByNameOrderByIdDesc(outlet.getName()).getCircuit());
+							// create the link between the new arrived information of the outlet and its
+							// circuit
+							Circuit circuit = databaseFunctions.makeConsumerAndCircuitConnection(outlet,
+									consumerRepository.findTopByNameOrderByIdDesc(outlet.getName()).getCircuit());
 
-						// calculate the circuit new power consumed
-						circuit = databaseFunctions.calculateAndSetCircuitPowerConsumed(circuit);
+							// calculate the circuit new power consumed
+							circuit = databaseFunctions.calculateAndSetCircuitPowerConsumed(circuit);
 
-						// save the new circuit configuration in database
-						circuitRepository.save(circuit);
+							// save the new circuit configuration in database
+							circuitRepository.save(circuit);
 
-						// add the object to be handled by CEP
-						addToConsumptionEventHandler.handle(outlet);
-						
-						unusedOutletEventHandler.handle(outlet);
+							// add the object to be handled by CEP
+							addToConsumptionEventHandler.handle(outlet);
 
-						
+							unusedOutletEventHandler.handle(outlet);
+
+						}
 					}
 					// if the message is from an switch
 					if (consumerMessage.contains("switch")) {
@@ -121,25 +133,36 @@ public class MqReceiverFunctions {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+						if (!(consumerRepository.findTopByNameOrderByIdDesc(switcher.getName()).getState() == 0
+								&& switcher.getState() == 0)) {
+							Sensor sensor = sensorRepository.findTopByNameOrderByIdDesc(
+									scenarioRepository.getScenarioBySwitchName(switcher.getName()).getSensorName());
 
-						// get its location from database(by name) and set it
-						switcher.setLocation(
-								consumerRepository.findTopByNameOrderByIdDesc(switcher.getName()).getLocation());
+							notificationBroadcaster.sendValue(Double.valueOf(sensorRepository
+									.findTopByNameOrderByIdDesc(scenarioRepository
+											.getScenarioBySwitchName(switcher.getName()).getSensorName())
+									.getTriggered()), switcher.getName());
+							notificationBroadcaster.sendState(Integer.toString(switcher.getState()),
+									switcher.getName());
 
-						// create the link between the new arrived information of the switch and its
-						// circuit
-						Circuit circuit = databaseFunctions.makeConsumerAndCircuitConnection(switcher,
-								consumerRepository.findTopByNameOrderByIdDesc(switcher.getName()).getCircuit());
+							// get its location from database(by name) and set it
+							switcher.setLocation(
+									consumerRepository.findTopByNameOrderByIdDesc(switcher.getName()).getLocation());
 
-						// calculate the circuit new power consumed
-						circuit = databaseFunctions.calculateAndSetCircuitPowerConsumed(circuit);
+							// create the link between the new arrived information of the switch and its
+							// circuit
+							Circuit circuit = databaseFunctions.makeConsumerAndCircuitConnection(switcher,
+									consumerRepository.findTopByNameOrderByIdDesc(switcher.getName()).getCircuit());
 
-						// save the new circuit configuration in database
-						circuitRepository.save(circuit);
+							// calculate the circuit new power consumed
+							circuit = databaseFunctions.calculateAndSetCircuitPowerConsumed(circuit);
 
-						// add the object to be handled by CEP
-						addToConsumptionEventHandler.handle(switcher);
+							// save the new circuit configuration in database
+							circuitRepository.save(circuit);
 
+							// add the object to be handled by CEP
+							addToConsumptionEventHandler.handle(switcher);
+						}
 					}
 				}
 			};

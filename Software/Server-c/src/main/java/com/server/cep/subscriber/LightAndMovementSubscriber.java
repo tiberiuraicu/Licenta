@@ -16,8 +16,8 @@ public class LightAndMovementSubscriber {
 			double switchRegisterTime) {
 System.out.println(sensorRegisterTime);
 		String crtiticalEventExpression = " select distinct movement.name as sensorName  " + "from Sensor(name='"
-				+ sensorName + "').win:time_batch(" + sensorRegisterTime + " sec) as movement having"
-				+ " avg(movement.state)=1 and avg(movement.triggered)=1";
+				+ sensorName + "').win:time_batch(" + (int)sensorRegisterTime + " sec ) as movement having"
+				+ " avg(movement.state)=1 and avg(movement.triggered)=0";
 
 		return crtiticalEventExpression;
 	}

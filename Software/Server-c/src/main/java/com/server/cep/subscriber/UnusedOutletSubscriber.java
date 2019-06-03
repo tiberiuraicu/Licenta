@@ -18,7 +18,7 @@ public class UnusedOutletSubscriber {
 	NotificationBroadcaster notificationBroadcaster;
 	
 	public String getStatement(String consumerName) {
-		String crtiticalEventExpression = " select outlet.name " + "from Outlet(name='"+consumerName+"').win:length_batch(3) as outlet having"
+		String crtiticalEventExpression = " select outlet.name " + "from Outlet(name='"+consumerName+"').win:time_batch(5 sec) as outlet having"
 				+ " avg(outlet.powerConsumed)<0.44 and avg(outlet.state)=1";
 
 		return crtiticalEventExpression;

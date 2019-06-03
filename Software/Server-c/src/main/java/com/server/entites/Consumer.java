@@ -111,8 +111,10 @@ public class Consumer {
 
 	@Override
 	public String toString() {
-		return "Consumer [" + powerConsumed + "]";
+		return "Consumer [name=" + name + ", powerConsumed=" + powerConsumed + ", state=" + state + "]";
 	}
+
+	
 
 	
 	

@@ -19,7 +19,7 @@ public class WebSocketConfiguration extends AbstractWebSocketMessageBrokerConfig
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app")
-                .enableSimpleBroker("/notification","/state");
+                .enableSimpleBroker("/notification","/state","/powerConsumed");
         
         
         

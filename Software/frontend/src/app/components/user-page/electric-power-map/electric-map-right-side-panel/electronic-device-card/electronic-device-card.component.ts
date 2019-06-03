@@ -11,14 +11,12 @@ import * as SockJS from "sockjs-client";
   styleUrls: ['./electronic-device-card.component.scss']
 })
 export class ElectronicDeviceCardComponent implements OnInit {
-
+  powerConsumedUnderTreshold = false;
   @Input() card;
   constructor(private electricPowerMapServiceService: ElectricPowerMapServiceService
   ) { }
 
   ngOnInit() {
- 
-   
 
     delay(50)
     var consumerName;
@@ -26,22 +24,8 @@ export class ElectronicDeviceCardComponent implements OnInit {
       consumerName = this.card.name.replace("Priza ", "outlet");
     if (this.card.name.includes("Întrerupător"))
       consumerName = this.card.name.replace("Întrerupător ", "switch")
-    console.log(consumerName)
+
     this.initializeWebSocketConnection(consumerName);
-    
-    // setInterval(() => {
-    //   this.electricPowerMapServiceService.getConsumerState(consumerName).subscribe(response => {
-    //     console.log(response)
-    //     if (response._body == "0") {
-
-    //       this.card.state = false;
-    //     }
-    //     else if (response._body == "1") {
-
-    //       this.card.state = true;
-    //     }
-    //   })
-    // }, 500)
 
   }
 
@@ -79,34 +63,46 @@ export class ElectronicDeviceCardComponent implements OnInit {
       });
   }
 
-
-
-
-
-
   stompClient;
   initializeWebSocketConnection = (consumerName) => {
     const ws = new SockJS(SocketConfig.serverSocketURL);
     this.stompClient = Stomp.over(ws);
     let that = this;
-    this.stompClient.connect({}, function(frame) {
-      that.getNotifications(consumerName);
+    this.stompClient.connect({}, function (frame) {
+      that.getConsumerState(consumerName);
+      that.getConsumerLastPowerConsumedValue(consumerName);
     });
   };
-  getNotifications = (consumerName) => {
+  getConsumerState = (consumerName) => {
 
     this.stompClient.subscribe("/state/" + consumerName, response => {
-console.log(response)
+      console.log(response.body)
       if (response.body == "0") {
 
-              this.card.state = false;
-            }
-            else if (response.body == "1") {
-    
-              this.card.state = true;
-            }
-      
-     
+        this.card.state = false;
+        this.powerConsumedUnderTreshold = false;
+
+      }
+      else if (response.body == "1") {
+
+        this.card.state = true;
+      }
+    });
+  };
+
+  getConsumerLastPowerConsumedValue = (consumerName) => {
+
+    this.stompClient.subscribe("/powerConsumed/" + consumerName, response => {
+      console.log(response.body)
+      if (response.body > 0.44) {
+
+        this.powerConsumedUnderTreshold = false;
+      }
+      else if (response.body < 0.44) {
+
+        this.powerConsumedUnderTreshold = true;
+      }
+
     });
   };
 }
