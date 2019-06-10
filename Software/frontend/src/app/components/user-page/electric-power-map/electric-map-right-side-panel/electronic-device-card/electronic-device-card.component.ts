@@ -13,7 +13,7 @@ import * as SockJS from "sockjs-client";
 export class ElectronicDeviceCardComponent implements OnInit {
   powerConsumedUnderTreshold = false;
   @Input() card;
-  constructor(private electricPowerMapServiceService: ElectricPowerMapServiceService
+  constructor(private electricPowerMapService: ElectricPowerMapServiceService
   ) { }
 
   ngOnInit() {
@@ -48,7 +48,7 @@ export class ElectronicDeviceCardComponent implements OnInit {
 
     // if (card.name.includes("outlet"))
     if (card.name.includes("Priza"))
-      this.electricPowerMapServiceService
+      this.electricPowerMapService
         .changeConsumerState({ state: state, name: consumerName })
         .subscribe(response => {
           console.log(response);
@@ -56,11 +56,14 @@ export class ElectronicDeviceCardComponent implements OnInit {
 
     // if ( card.name.includes("switch"))
 
-    this.electricPowerMapServiceService
+    this.electricPowerMapService
       .changeConsumerState({ state: state, name: consumerName })
       .subscribe(response => {
-        console.log(response);
+        this.showConfirmationOnInterface(response)
       });
+  }
+  showConfirmationOnInterface(response: import("@angular/http").Response) {
+    throw new Error("Method not implemented.");
   }
 
   stompClient;
